@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Source/cstore/module/Backend/view/layout/sidebar.phtml</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageLogs.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/config/module.config.php</file>
+            <file>file:/D:/Source/cstore/library/My/Search/Logs.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/layout/layout.phtml</file>
+            <file>file:/D:/Source/cstore/config/autoload/global.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/layout/header.phtml</file>
+            <file>file:/D:/Source/cstore/library/My/Models/Logs.php</file>
+            <file>file:/D:/Source/cstore/README.md</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/IndexController.php</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageUser.php</file>
+            <file>file:/D:/Source/cstore/public/index.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/CategoryController.php</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageGeneral.php</file>
+            <file>file:/D:/Source/cstore/config/application.config.php</file>
+            <file>file:/D:/Source/cstore/library/My/Models/User.php</file>
+            <file>file:/D:/Source/cstore/library/My/Models/Category.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/ConsoleController.php</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageCity.php</file>
+            <file>file:/D:/Source/cstore/composer.json</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/UserController.php</file>
+            <file>file:/D:/Source/cstore/library/My/Models/City.php</file>
+            <file>file:/D:/Source/cstore/library/My/Search/Keywords.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/user/edit.phtml</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/GroupController.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/CityController.php</file>
+            <file>file:/D:/Source/cstore/config/autoload/local.php</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageCategory.php</file>
+            <file>file:/D:/Source/cstore/library/My/Controller/MyController.php</file>
+            <file>file:/D:/Source/cstore/library/My/General.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/city/index.phtml</file>
+            <file>file:/D:/Source/cstore/static/b/js/my/city.js</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageGroup.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/layout/auth.phtml</file>
+        </group>
+    </open-files>
+</project-private>
