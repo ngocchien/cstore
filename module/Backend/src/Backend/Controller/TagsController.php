@@ -32,15 +32,14 @@ class TagsController extends MyController {
 
     public function indexAction() {
         $params = array_merge($this->params()->fromPost(), $this->params()->fromRoute());
-        ;
         $intPage = $this->params()->fromRoute('page', 1);
         $arrCondition = array(
             'not_tags_status' => -1,
             'tags_name_like' => General::clean(trim($this->params()->fromQuery('s'))));
-        $intLimit = $this->params()->fromRoute('limit', 15);
+        $intLimit = $this->params()->fromRoute('limit', 30);
         $serviceTags = $this->serviceLocator->get('My\Models\Tags');
         $intTotal = $serviceTags->getTotal($arrCondition);
-        $arrTagsList = $serviceTags->getListLimit($arrCondition, $intPage, $intLimit, 'tags_sort ASC');
+        $arrTagsList = $serviceTags->getListLimit($arrCondition, $intPage, $intLimit, 'tags_order ASC');
         $helper = $this->serviceLocator->get('viewhelpermanager')->get('Paging');
         $paging = $helper($params['module'], $params['__CONTROLLER__'], $params['action'], $intTotal, $intPage, $intLimit, $route, $params);
         $params = array_merge($params, $this->params()->fromQuery());
@@ -132,17 +131,19 @@ class TagsController extends MyController {
     }
 
     public function editAction() {
-        $params = $this->params()->fromRoute();
+        $paramsRoute = $params = $this->params()->fromRoute();
+
         if (empty($params['id'])) {
             return $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
         }
+
+        $intTagsId = (int) $params['id'];
         $serviceTags = $this->serviceLocator->get('My\Models\Tags');
-        $detailTags = $serviceTags->getDetail(array('tags_id' => $params['id']));
+        $detailTags = $serviceTags->getDetail(array('tags_id' => $intTagsId));
+
         if (empty($detailTags)) {
             return $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
         }
-        $arrCondition = array('not_tags_status' => -1, 'tags_grade' => $detailTags['tags_id']);
-        $arrTagsList = $serviceTags->getListUnlike($arrCondition);
 
         if ($this->request->isPost()) {
             $params = $this->params()->fromPost();
@@ -155,90 +156,69 @@ class TagsController extends MyController {
                 $errors['TagsName'] = 'Tên Tags không được để trống !';
             }
 
-            $strTagsSlug = (empty($params['TagsSlug'])) ? General::getSlug(trim($params['TagsName'])) : General::getSlug(trim($params['TagsSlug']));
-            $isNotExist = $serviceTags->getTotal(array('tags_slug' => $strTagsSlug, 'not_tags_id' => $detailTags['tags_id'], 'not_tags_status' => -1));
-
-            if ($isNotExist > 0) {
-                $errors['tags_name'] = 'Tags này đã tồn tại trong hệ thống!';
-            }
-            $strParent = empty($params['parentID']) ? 0 : $params['parentID'];
             if (empty($errors)) {
-                $arrData = array(
-                    'tags_name' => trim($params['TagsName']),
+                $strTagsName = trim($params['TagsName']);
+                $strTagsSlug = General::getSlug($strTagsName);
+
+                $arrCondition = array(
                     'tags_slug' => $strTagsSlug,
-                    'tags_order' => $params['TagsOrder'],
-                    'tags_parent' => $strParent,
-                    'tags_description' => trim($params['tags_description']),
-                    'tags_meta_title' => trim(strip_tags($params['TagsMetaTitle'])),
-                    'tags_meta_keyword' => trim(strip_tags($params['TagsMetaKeyword'])),
-                    'tags_meta_description' => trim(strip_tags($params['TagsMetaDescription'])),
-                    'tags_meta_social' => trim(strip_tags($params['TagsMetaSocial'])),
-                    'user_updated' => UID,
-                    'tags_status' => $params['tags_status'],
-                    'tags_position' => $params['tags_position'],
-                    'tags_updated' => time()
+                    'not_tags_status' => -1,
+                    'not_tags_id' => $intTagsId
                 );
-                $intResult = $serviceTags->edit($arrData, $detailTags['tags_id']);
-                if ($intResult) {
-                    if ($detailTags['tags_parent'] != $strParent || $detailTags['tags_order'] != $params['TagsOrder']) {
-                        $detailParent = $serviceTags->getDetail(array('tags_id' => $strParent));
-                        if (!empty($detailParent)) {
-                            $dataUpdate = array(
-                                'tags_id' => $detailTags['tags_id'],
-                                'tags_grade' => $detailTags['tags_grade'],
-                                'grade_update' => $detailParent['tags_grade'] . $detailTags['tags_id'] . ':',
-                                'sort_update' => $detailParent['tags_sort'] . sprintf("%04d", $params['TagsOrder']) . '-' . $detailTags['tags_id'] . ':',
-                                'tags_sort' => $detailTags['tags_sort'],
-                                'tags_status' => $detailParent['tags_status'],
-                                'parentID' => $params['parentID'],
-                            );
-                        } else {
-                            $dataUpdate = array(
-                                'tags_id' => $detailTags['tags_id'],
-                                'tags_grade' => $detailTags['tags_grade'],
-                                'grade_update' => $detailTags['tags_id'] . ':',
-                                'sort_update' => sprintf("%04d", $params['TagsOrder']) . '-' . $detailTags['tags_id'] . ':',
-                                'tags_sort' => $detailTags['tags_sort'],
-                                'tags_status' => $params['tags_status'],
-                                'parentID' => $params['parentID'],
-                            );
-                        }
-                        $serviceTags->updateTree($dataUpdate);
-                    }
-                    if ($detailTags['tags_status'] != $params['tags_status']) {
-                        $dataUpdate = array(
-                            'tags_status' => $params['tags_status'],
-                            'grade_update' => $detailTags['tags_grade'],
-                        );
-                        $serviceTags->updateStatusTree($dataUpdate);
-                    }
 
-                    $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                    $arrLogs = array(
-                        'user_id' => UID,
-                        'logs_controller' => 'Tags',
-                        'logs_action' => 'edit',
-                        'logs_time' => time(),
-                        'logs_detail' => 'Chỉnh sửa Tags có id = ' . $detailTags['tags_id'],
-                    );
-                    $serviceLogs->add($arrLogs);
+                $arrTagsExist = $serviceTags->getDetail($arrCondition);
 
-                    $this->flashMessenger()->setNamespace('success-edit-tags')->addMessage('Chỉnh sửa Tags thành công !');
-                    if ($params['is_close'] == 1) {
-                        $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
-                    } else {
-                        $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'edit', 'id' => $detailTags['tags_id']));
-                    }
-                    // $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
+                if (!empty($arrTagsExist)) {
+                    $errors['tags_name'] = 'Tags này đã tồn tại trong hệ thống!';
                 }
-                $errors[] = 'Không thể chỉnh sửa dữ liệu. Hoặc tên Tags đã tồn tại. Xin vui lòng kiểm tra lại';
+
+                if (empty($errors)) {
+                    $arrData = array(
+                        'tags_name' => trim($params['TagsName']),
+                        'tags_slug' => $strTagsSlug,
+                        'tags_order' => $params['TagsOrder'],
+                        'tags_description' => trim($params['tags_description']),
+                        'tags_meta_title' => trim(strip_tags($params['TagsMetaTitle'])),
+                        'tags_meta_keyword' => trim(strip_tags($params['TagsMetaKeyword'])),
+                        'tags_meta_description' => trim(strip_tags($params['TagsMetaDescription'])),
+                        'tags_meta_social' => trim(strip_tags($params['TagsMetaSocial'])),
+                        'user_updated' => UID,
+                        'tags_status' => $params['tags_status'],
+                        'tags_updated' => time()
+                    );
+                    $intResult = $serviceTags->edit($arrData, $intTagsId);
+
+                    if ($intResult) {
+
+                        /*
+                         * Write to Logs
+                         */
+
+                        $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
+                        $arrLogs = array(
+                            'user_id' => UID,
+                            'logs_controller' => $paramsRoute['__CONTROLLER__'],
+                            'logs_action' => $paramsRoute['action'],
+                            'logs_time' => time(),
+                            'logs_detail' => 'Chỉnh sửa Tags có id = ' . $intTagsId,
+                        );
+                        $serviceLogs->add($arrLogs);
+
+                        $this->flashMessenger()->setNamespace('success-edit-tags')->addMessage('Chỉnh sửa Tags thành công !');
+                        if ($params['is_close'] == 1) {
+                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
+                        } else {
+                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'edit', 'id' => $intTagsId));
+                        }
+                    }
+                    $errors[] = 'Không thể chỉnh sửa dữ liệu. Hoặc tên Tags đã tồn tại. Xin vui lòng kiểm tra lại';
+                }
             }
         }
         return array(
             'params' => $params,
             'errors' => $errors,
             'detailTags' => $detailTags,
-            'arrTagsList' => $arrTagsList,
         );
     }
 
@@ -429,6 +409,7 @@ class TagsController extends MyController {
     }
 
     public function deleteAction() {
+        $paramsRoute = $this->params()->fromRoute();
         if ($this->request->isPost()) {
             $params = $this->params()->fromPost();
 
@@ -436,24 +417,47 @@ class TagsController extends MyController {
                 return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
             }
 
+            $intTagId = (int) $params['TagsID'];
+
+            /*
+             *  Kiểm tra có tồn tại tag với id truyền với trong DB hay không
+             */
+
             $serviceTags = $this->serviceLocator->get('My\Models\Tags');
-            $arrCondition = array('tags_status' => 1, 'tagsgrade' => $params['TagsID']);
-            $arrTagsList = $serviceTags->getListUnlike($arrCondition);
-            if (count($arrTagsList) > 1) {
-                return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Không xóa được! Tags này có nhiều tags con! Vui lòng xóa các tags con trước !')));
+            $arrCondition = array(
+                'not_tags_status' => -1,
+                'tags_id' => $intTagId
+            );
+            $arrTags = $serviceTags->getDetail($arrCondition);
+
+            if (empty($arrTags)) {
+                return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Không tìm thấy thông tin Tag này trong hệ thống !')));
             }
-            $arrData = array('tags_status' => -1, 'user_updated' => UID, 'tags_updated' => time());
-            $intResult = $serviceTags->edit($arrData, $params['TagsID']);
+
+            $arrData = array(
+                'tags_status' => -1,
+                'user_updated' => UID,
+                'tags_updated' => time()
+            );
+
+            $intResult = $serviceTags->edit($arrData, $intTagId);
+
             if ($intResult) {
+
+                /*
+                 * Write to Logs
+                 */
+
                 $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
                 $arrLogs = array(
                     'user_id' => UID,
-                    'logs_controller' => 'Tags',
-                    'logs_action' => 'delete',
+                    'logs_controller' => $paramsRoute['__CONTROLLER__'],
+                    'logs_action' => $paramsRoute['action'],
                     'logs_time' => time(),
-                    'logs_detail' => 'Xóa tags có id = ' . $params['TagsID'],
+                    'logs_detail' => 'Xóa tags có id = ' . $intTagId,
                 );
                 $serviceLogs->add($arrLogs);
+                
                 return $this->getResponse()->setContent(json_encode(array('st' => 1, 'ms' => 'Xóa Tags hoàn tất')));
             }
             return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));

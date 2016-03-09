@@ -1,15 +1,7 @@
-
 <?php
-//$optionBrand = "";
-//$optionCategory = "";
-//foreach ($this->arrCategoryList as $cate) {
-//    if ($cate["cate_type"] == 0) {
-//        $optionMainCategory.= '<option ' . (($this->params["main_cate_id"] == $cate['cate_id']) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
-//        $optionCategory.= '<option ' . ((in_array($cate['cate_id'], $this->params["cate_id"])) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
-//    } else if ($cate["cate_type"] == 1) {
-//        $optionBrand.= '<option  ' . (($this->params["bran_id"] == $cate['cate_id']) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
-//    }
-//}
+$params = $this->params;
+$arrCategorList = $this->arrCategoryList;
+$arrTagList = $this->arrTagList;
 ?>
 
 <section class="wrapper site-min-height">
@@ -94,29 +86,9 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="main_cate_id" class="col-lg-2 control-label">Thuộc danh mục chính</label>
+                                            <label for="cate_id" class="col-lg-2 control-label">Thuộc danh mục</label>
                                             <div class="col-lg-10 width-fix">
-                                                <select name="main_cate_id" class="selectbox selectpicker" data-live-search="true" title="Chọn một danh mục chính" >
-                                                    <?php
-                                                    $mainCate = $this->params['main_cate_id'];
-                                                    foreach ($this->arrCategoryList as $category) {
-                                                        if ($category["cate_type"] == 0) {
-                                                            $depth = substr_count($category['cate_grade'], ':') - 1;
-                                                            $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
-                                                            ?>
-                                                            <option <?php echo ($category['cate_id'] == $mainCate) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
-                                                            <?php
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="cate_id" class="col-lg-2 control-label">Thuộc danh mục phụ</label>
-                                            <div class="col-lg-10 width-fix">
-                                                <select name="cate_id[]"  multiple="multiple"  class="selectbox selectpicker" data-live-search="true" title="Chọn các danh mục phụ">
+                                                <select name="cate_id" class="selectbox selectpicker" data-live-search="true" title="Chọn danh mục">
                                                     <?php
                                                     if (is_array($this->params['cate_id']))
                                                         $listCate = $this->params['cate_id'];

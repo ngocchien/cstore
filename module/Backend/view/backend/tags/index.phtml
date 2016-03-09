@@ -56,7 +56,6 @@
                                 <th class="visible-xs visible-sm visible-md visible-lg"><i class="icon-list-alt"></i> Tên Tags</th>
                                 <th class="text-center hidden-xs"><i class="icon-ok"></i> Ngày tạo</th>
                                 <th class="text-center"><i class="icon-check"></i> Trạng thái </th>
-                                <th class="text-center"><i class="icon-check"></i> Vị trí </th>
                                 <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
                             </tr>
                         </thead>
@@ -71,19 +70,12 @@
                                         </td>
                                         <td class="visible-xs visible-sm visible-md visible-lg">
                                             <a class="tooltips" data-placement="top" >
-                                                <?php
-                                                if($arrTagsList['tags_parent']==0){
-                                                    echo $arrTagsList['tags_name'];
-                                                }else{
-                                                $temp = substr_count($arrTagsList['tags_grade'], ':');
-                                                echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $temp);
-                                                echo '&#x21b3;&nbsp;&nbsp;';
-                                                echo $arrTagsList['tags_name']; }?>
+                                                <?php echo $arrTagsList['tags_name']; ?>
                                             </a>
                                         </td>
                                         <td  class="text-center hidden-xs"><?php echo date('d/m/Y', $arrTagsList['tags_created']); ?></td>
-                                        <td  class="text-center"><?php if($arrTagsList['tags_status']==1):?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang hiện"><i class="icon-ok color-success"></a><?php endif;if($arrTagsList['tags_status']==0):?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang ẩn"><i class="icon-minus-sign color-danger"></i></a><?php endif;?></td>
-                                        <td  class="text-center"><?php echo ($arrTagsList['tags_position']==1) ? 'Dưới' : 'Trên'; ?> </td>
+                                        <td  class="text-center"><?php if ($arrTagsList['tags_status'] == 1): ?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang hiện"><i class="icon-ok color-success"></a><?php endif;
+                                        if ($arrTagsList['tags_status'] == 0):?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang ẩn"><i class="icon-minus-sign color-danger"></i></a><?php endif; ?></td>
                                         <td class="text-center" width="200">
                                             <a  href="<?php echo $this->serverUrl() . $this->Url('tags', array('controller' => 'tags', 'action' => 'index', 'tagsSlug' => $arrTagsList["tags_slug"], 'tagsID' => $arrTagsList["tags_id"])); ?>" target="_bank"  class="btn btn-primary btn-xs"><i class="icon-eye-open"></i> Xem</a>
                                             <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'edit', 'id' => $arrTagsList['tags_id'])); ?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Sửa danh mục"  rel="<?php echo $arrTagsList['tags_id'] ?>"><i class="icon-pencil"></i> Sửa</a>
@@ -92,9 +84,9 @@
                                     </tr>
 
                                 <?php endforeach; ?>
-                                <?php else: ?>
+                            <?php else: ?>
                                 <tr><td colspan="6" class="text-center">Hiện tại chưa có Tags sản phẩm nào.</td></tr>
-                                <?php endif; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </section>
@@ -105,7 +97,6 @@
                         <div class="form-group">
                             <div  class="col-sm-3 col-md-2 col-xs-3 col-lg-3">
                                 <select name="limit" class="form-control" onchange="window.location.href = this.value">
-                                    <option value="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
                                     <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'index', 'limit' => 30, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
                                     <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'index', 'limit' => 100, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
                                     <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'index', 'limit' => 300, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 300 ? "selected" : "" ?>>300</option>

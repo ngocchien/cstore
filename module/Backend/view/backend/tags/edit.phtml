@@ -45,28 +45,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Thuộc Nhóm :</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <select name="parentID" class="selectbox selectpicker" data-live-search="true" title="Chọn tag">
-                                    <option value="0">Tags cha</option>
-                                    <?php foreach ($this->arrTagsList as $arrTagsList) { ?>
-                                        <option value="<?php echo $arrTagsList['tags_id'] ?>"<?php if ($arrTagsList['tags_id'] == $this->detailTags['tags_parent']) { ?> selected<?php } ?>>
-                                            <?php
-                                            $temp = substr_count($arrTagsList['tags_grade'], ':');
-                                            if ($temp > 0) {
-                                                if ($arrTagsList['tags_parent'] != 0) {
-                                                    echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $temp);
-                                                    echo '&#x21b3;&nbsp;&nbsp;';
-                                                }
-                                            }
-                                            echo $arrTagsList['tags_name'];
-                                            ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="tags_order" class="col-lg-2 col-md-2 col-sm-2 control-label">Độ ưu tiên</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
                                 <input class="form-control" type="text" name="TagsOrder" value="<?php echo $this->detailTags['tags_order']; ?>">
@@ -83,16 +61,6 @@
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label for="tags_position" class="col-lg-2 col-md-2 col-sm-2 col-sm-2 control-label" value="">Vị trí</label>
-                            <div class="col-lg-10">
-                                <select name="tags_position" class="multi-select form-control sumo-select-box">
-                                    <option value="1" <?php if ($this->detailTags['tags_position'] == 1): ?>selected="selected"<?php endif; ?>>Dưới</option>
-                                    <option value="0" <?php if ($this->detailTags['tags_position'] == 0): ?>selected="selected"<?php endif; ?>>Trên</option>
-                                </select>
-                            </div>
-                        </div>
-
                         <div class="form-group">
                             <label for="tags_description" class="col-lg-2 col-md-2 col-sm-2 control-label">Mô tả ngắn về Tags</label>
                             <div class="col-lg-10">
@@ -162,7 +130,6 @@
     </div>
 </section>
 <script>
-
 
     search_product = '';    //để search = null để phân trang
     search_producttags = '';

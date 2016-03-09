@@ -120,14 +120,27 @@ class ProductController extends MyController {
     }
 
     public function addAction() {
-        $params = $this->params()->fromRoute();
+
+        $paramsRoute = $params = $this->params()->fromRoute();
+
+        /*
+         * get Category
+         */
         $serviceCategory = $this->serviceLocator->get('My\Models\Category');
-        $arrCategoryList = $serviceCategory->getList(array('cate_status' => 1, 'or_cate_type' => array(1, 0)));
+        $arrConditionCategory = array(
+            'not_cate_status' => -1,
+        );
+        $arrCategoryList = $serviceCategory->getList($arrConditionCategory);
+
+        /*
+         * get Tags
+         */
         $serviceTags = $this->serviceLocator->get('My\Models\Tags');
-        $TagList = $serviceTags->getList(array('tags_status' => 1));
-        $serviceProperties = $this->serviceLocator->get('My\Models\Properties');
-        $arrProperties = $serviceProperties->getList(array('prop_status' => 1));
-        $request = $this->getRequest();
+        $arrConditionTag = array(
+            'not_tags_status' => -1
+        );
+        $arrTagList = $serviceTags->getList($arrConditionTag);
+        
         if ($this->request->isPost()) {
             $params = $this->params()->fromPost();
             $errors = array();
@@ -316,8 +329,7 @@ class ProductController extends MyController {
             'params' => $params,
             'errors' => $errors,
             'arrCategoryList' => $arrCategoryList,
-            'arrProperties' => $arrProperties,
-            'TagList' => $TagList
+            'arrTagList' => $arrTagList
         );
     }
 

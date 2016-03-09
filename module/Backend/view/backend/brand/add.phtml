@@ -31,52 +31,30 @@
                 <div class="panel-body">
                     <form id="frm" role="form" class="form-horizontal tasi-form" method="POST">
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Tên Thương hiệu</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CategoryName" placeholder="Nhập tên thương hiệu " value="<?php echo $this->params['CategoryName'] ?>">
+                            <label class="col-lg-2 control-label"> Tên Thương hiệu</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandName" placeholder="Nhập tên Thương hiệu" value="<?php echo $this->params['brandName'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_slug" class="col-lg-2 col-md-2 col-sm-2 control-label">URL</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CateSlug" placeholder="Nhập URL" value="<?php echo $this->params['CateSlug'] ?>">
-                            </div>
-                        </div>
-
-<!--                        <div class="form-group">
-                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Thuộc Nhóm :</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <select  name="parentID" class="form-control">
-                                    <option value="0">Chọn Nhóm</option>
-                                    <?php foreach ($this->arrCategoryList as $arrCategoryList) { ?>
-                                        <option value="<?php echo $arrCategoryList['cate_id'] ?>" <?php if ($arrCategoryList['cate_id'] == $this->params['parentID']) { ?>selected<?php } ?>>
-                                            <?php $temp = substr_count($arrCategoryList['cate_grade'], ':'); ?>
-                                            <?php
-                                            if ($temp > 0) {
-                                                if ($arrCategoryList['cate_parent'] != 0) {
-                                                    echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $temp);
-                                                    echo '&#x21b3;&nbsp;&nbsp;';
-                                                }
-                                            }
-                                            ?><?php echo $arrCategoryList['cate_name']; ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>-->
-
-                        <div class="form-group">
-                            <label for="cate_order" class="col-lg-2 col-md-2 col-sm-2 control-label">Độ ưu tiên</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CateOrder" placeholder="Nhập Độ ưu tiên " value="<?php echo $this->params['CateOrder'] ?>">
+                            <label for="brandSlug" class="col-lg-2 control-label">URL</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandSlug" placeholder="Nhập URL" value="<?php echo $this->params['brandSlug'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_status" class="col-lg-2 col-md-2 col-sm-2 col-sm-2 control-label" value="">Tình trạng</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <select name="cate_status" class="multi-select form-control sumo-select-box">
+                            <label for="brandSort" class="col-lg-2 control-label">Độ ưu tiên</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandSort" placeholder="Nhập Độ ưu tiên" value="<?php echo $this->params['brandSort'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="brandStatus" class="col-lg-2 col-md-2 col-sm-2 col-sm-2 control-label" value="">Tình trạng</label>
+                            <div class="col-lg-10 col-md-10 col-sm-10 tabselect" tabindex= "3">
+                                <select name="brandStatus" class="multi-select form-control sumo-select-box">
                                     <option value="1">Hiển thị</option>
                                     <option value="0">Ẩn</option>
                                 </select>
@@ -84,74 +62,42 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_detail" class="col-lg-2 col-md-2 col-sm-2 control-label">Bài viết cho thương hiệu</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <textarea rows="20" value="" name="cate_detail" class="form-control editor">
-<?php echo $this->params['cate_detail']; ?>
-                                </textarea>
+                            <label for="brandDescription" class="col-lg-2 control-label">Mô tả ngắn về Thương hiệu</label>
+                            <div class="col-lg-10 textedit" tabindex="4" >
+                                <textarea rows="6" name="brandDescription" id="Sumary" class="form-control editor" style=""><?php echo $this->params['brandDescription']; ?></textarea>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_meta_title" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Title</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CateMetaTitle" placeholder="Nhập SEO Meta Title" value="<?php echo $this->params['CateMetaTitle'] ?>">
+                            <label for=brandMetaTitle" class="col-lg-2 control-label">SEO Meta Title</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandMetaTitle" placeholder="Nhập SEO Meta Title" value="<?php echo $this->params['brandMetaTitle'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_meta_keyword" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Keyword</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CateMetaKeyword" placeholder="Nhập SEO Meta Keyword" value="<?php echo $this->params['CateMetaKeyword'] ?>">
+                            <label for="brandMetaKeyword" class="col-lg-2 control-label">SEO Meta Keyword</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandMetaKeyword" placeholder="Nhập SEO Meta Keyword" value="<?php echo $this->params['brandMetaKeyword'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_meta_description" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Description</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CateMetaDescription" placeholder="Nhập SEO Meta Description" value="<?php echo $this->params['CateMetaDescription'] ?>">
+                            <label for="brandMetaDescription" class="col-lg-2 control-label">SEO Meta Description</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandMetaDescription" placeholder="Nhập SEO Meta Description" value="<?php echo $this->params['brandMetaDescription'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="cate_meta_social" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Social</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="CateMetaSocial" placeholder="Nhập SEO Meta Social" value="<?php echo $this->params['CateMetaSocial'] ?>">
+                            <label for="brandMetaSocial" class="col-lg-2 control-label">SEO Meta Social</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="brandMetaSocial" placeholder="Nhập SEO Meta Social" value="<?php echo $this->params['brandMetaSocial'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="prod_meta_description" class="col-lg-2 col-md-2 col-sm-2 control-label">Chọn hình cho thương hiệu: </label>
-                            <div class="col-lg-9">
-                                <div class="form">
-                                    <div class="form-group">                                                       
-                                        <div class="col-lg-12">
-                                            <div>
-                                                <input type="file" name="cate_image" id="cate_image" class="ignore"/>
-                                            </div>
-                                            <div id="progress"></div>
-                                            <ul class="image-list">
-                                                <?php
-                                                $arr = json_decode($this->params['cate_image'], true);
-                                                if (isset($arr["sourceImage"]) && isset($arr["thumbImage"]["120x120"])) {
-                                                    ?>
-                                                    <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
-                                                        <img class="image" src="<?php echo $arr["thumbImage"]["50x50"] ?>" alt="" style="display: block;margin-bottom: 10px;">
-                                                        <span style="display: block;text-align: right;">
-                                                            <a title="Xem" class="view" href="<?php echo $arr["sourceImage"] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a><a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
-                                                            <div id="jsonData"><input name="cate_image" type="hidden" value="<?php echo htmlentities($this->params['cate_image']); ?>"></div>
-                                                        </span>
-                                                    </li>
-<?php } ?>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-lg-offset-3 col-lg-10 col-md-10 col-sm-10">
+                            <div class="col-lg-offset-3 col-lg-10">
                                 <button type="button" onclick="document.getElementById('frm').submit();" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
                                 <button type="button" onclick="document.getElementById('frm').submit();" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
                                 <input value="0" name="is_close" class="is_close" type="hidden" />
@@ -165,5 +111,4 @@
 </section>
 <script>
     Brand.index();
-    Brand.upload();
 </script>

@@ -1,17 +1,38 @@
 <?php
-$arrProductList = $this->arrProductList;
+$arrProducttbody = $this->arrProductList;
 $params = $this->params;
-$id_brand = $params['id_brand'];
+$id_cate = $params['id_cate'];
 ?>
 <div class="col-lg-12">
     <section id="unseen">
+        <?php $url = $this->serverUrl() . $this->Url('backend', array('controller' => 'category', 'action' => 'product')); ?>
+        <input type="hidden" name="isUpdateOrd" value="1">
+        <input type="hidden" name="id_cate" value="<?php echo $id_cate ?>">
+        <div class="col-lg-12">          
+            <div class="col-lg-6">
+                <label for="sort" class="col-lg-4 control-label">Sắp xếp theo:</label>
+                <select name="sort" class="sumo-multiple-select-box" data-placeholder="Chọn cách sắp xếp" >
+                    <option <?php echo ($params['sort']=='sort.sort_ordering DESC') ? 'selected' : ''?>sort_ordering DESC value="sort.sort_ordering DESC">Độ ưu tiên</option>
+                    <option <?php echo ($params['sort']=='prod.prod_id DESC') ? 'selected' : ''?> value="prod.prod_id DESC">Sản phẩm mới nhất</option> '?>
+                </select>
+            </div>
+            <div class="col-xs-4 no-padding">
+                <div class="dataTables_filter no-padding per-100">
+                    <label><input  name="s"  value="<?php echo $params['s']; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                </div>
+            </div>
+            <div class="col-xs-2 no-padding-right">
+                <button class="btn btn-search btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+            </div>
+            </form>
+        </div>
         <table class="table table-bordered table-striped table-condensed cf">
             <thead class="cf">
                 <tr>
                     <th class="text-center">#</th>
                     <th class="text-center"><i class="icon-list"></i> ID</th>
                     <th><i class="icon-list-alt"></i> Tên sản phẩm</th>
-                    <th class="text-center visible-xs visible-sm visible-md visible-lg"><i class="icon-list-alt"></i> Sắp xếp</th>
+                    <th class="text-center"><i class="icon-list-alt"></i> Độ ưu tiên</th>
                     <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
                 </tr>
             </thead>
@@ -30,11 +51,11 @@ $id_brand = $params['id_brand'];
                             <td>
                                 <?php echo $val['prod_name']; ?>
                             </td>
-                            <td class="visible-xs visible-sm visible-md visible-lg">
-                                <input class="form-control input-sm sort" name="sort[<?php echo $val['prod_id']; ?>]" type="text" size="1" style="text-align: center" value="<?php echo (($val['sort_ordering']) ? $val['sort_ordering'] : 0 ) ?>" />
+                            <td class="text-center">
+                                <input style="text-align: center" size="2" class="data-ord" type="text" data-id ="<?php echo $val['prod_id']; ?>" name="ord[<?php echo $val['prod_id']; ?>]" value="<?php echo (!empty($val['sort_ordering']) ? $val['sort_ordering'] : 0 ) ?>">
                             </td>
                             <td class="text-center">
-                                <a onclick="deleteProduct(<?php echo $id_brand . ',\'' . $val['prod_id'] . '\',' . $params['page']; ?>)" class="btn btn-danger btn-xs remove tooltips" data-placement="top" data-original-title="Xóa sản phẩm">
+                                <a onclick="deleteProduct(<?php echo $id_cate . ',\'' . $val['prod_id'] . '\',' . $params['page']; ?>)" class="btn btn-danger btn-xs remove tooltips" data-placement="top" data-original-title="Xóa sản phẩm">
                                     <i class="icon-trash "></i> Xóa
                                 </a>
                             </td>
@@ -50,10 +71,16 @@ $id_brand = $params['id_brand'];
                     </tr>
                 <?php } ?>
             </tbody>
-        </table>
+        </table>           
+        <a style="float: right;margin: 0px 200px 15px auto" class="btn btn-success icon-sort-by-order-alt bt-update-ord" href="javascript:;" >Cập nhật</a>
     </section>
 </div>
 <div class = "col-lg-12">
     <?php echo $this->paging;
     ?>
 </div>
+<script type="text/javascript">
+    var sort = $('select[name="sort"]').val();
+    var s = $('input[name="s"]').val();
+    Category.index();
+</script>

@@ -42,4 +42,5 @@ return array(
     'Backend\Controller\ShippingFeeController' => __DIR__ . '/src/Backend/Controller/ShippingFeeController.php',
     'Backend\Controller\ProviderController' => __DIR__ . '/src/Backend/Controller/ProviderController.php',
     'Backend\Controller\StoreController' => __DIR__ . '/src/Backend/Controller/StoreController.php',
+    'Backend\Controller\BranchController' => __DIR__ . '/src/Backend/Controller/BranchController.php',
 );

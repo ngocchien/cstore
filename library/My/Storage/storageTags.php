@@ -28,7 +28,7 @@ class storageTags extends AbstractTableGateway {
             $sql = new Sql($adapter);
             $select = $sql->Select($this->table)
                     ->where('1=1' . $strWhere)
-                    ->order(array('tags_sort ASC'));
+                    ->order(array('tags_order ASC'));
            $query = $sql->getSqlStringForSqlObject($select);
             return $adapter->query($query, $adapter::QUERY_MODE_EXECUTE)->toArray();
         } catch (\Zend\Http\Exception $exc) {
