@@ -88,7 +88,7 @@ and then **restart Nginx Web Server** through the command
 ## Sample Database
 ---
 1. create new database named `cstore`
-2. Import `megavitaV2.sql` database file in DATA directory
+2. Import `cstore.sql` database file in DATA directory
 
 ## modify hosts and access the website
 ---
