@@ -2,6 +2,25 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/TagsController.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/config/module.config.php</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageTags.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/brand/add.phtml</file>
+            <file>file:/D:/Source/cstore/module/Backend/Module.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/BrandController.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/tags/edit.phtml</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/tags/index.phtml</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/ProductController.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/product/add.phtml</file>
+            <file>file:/D:/Source/cstore/library/My/Models/Tags.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/src/Backend/Controller/CategoryController.php</file>
+            <file>file:/D:/Source/cstore/static/b/js/my/brand.js</file>
+            <file>file:/D:/Source/cstore/module/Backend/autoload_classmap.php</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/brand/index.phtml</file>
+            <file>file:/D:/Source/cstore/module/Backend/view/backend/brand/edit.phtml</file>
+            <file>file:/D:/Source/cstore/library/My/Storage/storageBrand.php</file>
+            <file>file:/D:/Source/cstore/library/My/Models/Brand.php</file>
+        </group>
     </open-files>
 </project-private>

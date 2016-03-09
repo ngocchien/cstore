@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2016-03-09 15:12:04
+Date: 2016-03-09 18:21:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,6 +27,33 @@ CREATE TABLE `tbl_banners` (
 -- ----------------------------
 -- Records of tbl_banners
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for tbl_brands
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_brands`;
+CREATE TABLE `tbl_brands` (
+  `bran_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bran_name` varchar(255) NOT NULL,
+  `bran_status` int(11) NOT NULL DEFAULT '1',
+  `bran_created` int(11) NOT NULL,
+  `user_created` int(11) NOT NULL,
+  `bran_updated` int(11) DEFAULT NULL,
+  `user_updated` int(11) DEFAULT NULL,
+  `bran_sort` int(11) DEFAULT NULL,
+  `bran_slug` varchar(255) DEFAULT NULL,
+  `bran_meta_title` varchar(255) DEFAULT NULL,
+  `bran_meta_keyword` varchar(255) DEFAULT NULL,
+  `bran_meta_description` varchar(255) DEFAULT NULL,
+  `bran_meta_social` varchar(255) DEFAULT NULL,
+  `bran_description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`bran_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tbl_brands
+-- ----------------------------
+INSERT INTO `tbl_brands` VALUES ('1', 'Samsung', '0', '1457542193', '50', '1457543904', '50', '1', 'samsung', 'Các sản phẩm mang của Samsung sản xuất', 'Samsung, tai phone samsung, usb Samsung, hdd Sam sung , SSD Sam sung , ram sam sung, pin dự phòng sam sung', 'Các sản phẩm mang của Samsung sản xuất', '', 'Các sản phẩm mang của Samsung sản xuất');
 
 -- ----------------------------
 -- Table structure for tbl_categorys
@@ -1455,11 +1482,12 @@ CREATE TABLE `tbl_tags` (
   `tags_order` int(11) DEFAULT NULL,
   `tags_meta_social` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`tags_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tbl_tags
 -- ----------------------------
+INSERT INTO `tbl_tags` VALUES ('1', 'Điện thoại di động', 'dien-thoai-di-dong', '<p>C&aacute;c sản phẩm li&ecirc;n quan đến điện thoại di động, smartphone, android, iphone ...</p>', 'Các sản phẩm liên quan đến điện thoại di động, smartphone, android, iphone ...', 'điện thoại di động, smartphone. iphone, android', 'Các sản phẩm liên quan đến điện thoại di động, smartphone, android, iphone ...', '1457535597', '1457537795', '-1', null, '50', '50', '1', '');
 
 -- ----------------------------
 -- Table structure for tbl_user_logs
@@ -1473,7 +1501,7 @@ CREATE TABLE `tbl_user_logs` (
   `logs_time` int(11) DEFAULT NULL,
   `logs_detail` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`logs_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tbl_user_logs
@@ -1539,6 +1567,17 @@ INSERT INTO `tbl_user_logs` VALUES ('58', '50', 'category', 'add', '1457515382',
 INSERT INTO `tbl_user_logs` VALUES ('59', '50', 'category', 'add', '1457515629', 'Thêm Danh mục có id = 9');
 INSERT INTO `tbl_user_logs` VALUES ('60', '50', 'tags', 'add', '1457517141', 'Thêm Tags có id = 1');
 INSERT INTO `tbl_user_logs` VALUES ('61', '50', 'tags', 'add', '1457517238', 'Thêm Tags có id = 2');
+INSERT INTO `tbl_user_logs` VALUES ('62', '50', 'tags', 'add', '1457535597', 'Thêm Tags có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('63', '50', 'tags', 'edit', '1457536512', 'Chỉnh sửa Tags có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('64', '50', 'tags', 'edit', '1457536518', 'Chỉnh sửa Tags có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('65', '50', 'tags', 'edit', '1457536520', 'Chỉnh sửa Tags có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('66', '50', 'tags', 'edit', '1457536531', 'Chỉnh sửa Tags có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('67', '50', 'tags', 'delete', '1457537795', 'Xóa tags có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('68', '50', 'brand', 'add', '1457542193', 'Thêm Thương hiệu có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('69', '50', 'brand', 'edit', '1457543890', 'Chỉnh sửa Thương hiệu có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('70', '50', 'brand', 'edit', '1457543895', 'Chỉnh sửa Thương hiệu có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('71', '50', 'brand', 'edit', '1457543899', 'Chỉnh sửa Thương hiệu có id = 1');
+INSERT INTO `tbl_user_logs` VALUES ('72', '50', 'brand', 'edit', '1457543904', 'Chỉnh sửa Thương hiệu có id = 1');
 
 -- ----------------------------
 -- Table structure for tbl_users
@@ -1571,7 +1610,7 @@ CREATE TABLE `tbl_users` (
 -- Records of tbl_users
 -- ----------------------------
 INSERT INTO `tbl_users` VALUES ('1', 'admin', '4297f44b13955235245b2497399d7a93', 'Chiến', '638902800', '1', '0973531618', 'admin@gmail.com', '1', 'lò rượu nhân dân', '9', '68', null, '1457446642', '1457441973', '[{\"sourceImage\":\"http:\\/\\/dev.st.megavitav2.vn\\/uploads\\/profile\\/2015\\/03\\/30\\/1427657612.702.jpg\",\"thumbImage\":[]}]', '192.168.1.61', '1');
-INSERT INTO `tbl_users` VALUES ('50', null, '4297f44b13955235245b2497399d7a93', 'admin', '638902800', '1', '0989771721', 'admin@cstore.com', '1', 'Chợ Bình Long - Xã Mỹ Hiệp', '9', '68', '1457447027', null, '1457510417', null, '192.168.1.61', '1');
+INSERT INTO `tbl_users` VALUES ('50', null, '4297f44b13955235245b2497399d7a93', 'admin', '638902800', '1', '0989771721', 'admin@cstore.com', '1', 'Chợ Bình Long - Xã Mỹ Hiệp', '9', '68', '1457447027', null, '1457535337', null, '192.168.1.61', '1');
 
 -- ----------------------------
 -- Table structure for tbl_wards
