@@ -1,0 +1,55 @@
+<?php
+$arrContentList = $this->arrContentList;
+$params = $this->params;
+$id_news_cate = $params['id_news_cate'];
+?>
+<div class="col-lg-12">
+    <section id="unseen">
+        <table class="table table-bordered table-striped table-condensed cf">
+            <thead class="cf">
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center visible-xs  visible-sm  visible-md  visible-lg"><i class="icon-list"></i> ID</th>
+                    <th><i class="icon-list-alt"></i> Tên bài viết</th>
+                    <th class="text-center visible-xs  visible-sm  visible-md  visible-lg"><i class="icon-edit"></i> Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($arrContentList) {
+                    foreach ($arrContentList as $val) {
+                        ?>
+                        <tr id="<?php echo $val['cont_id']; ?>">
+                            <td class="text-center" width="">
+                                <input type="checkbox" value="<?php echo $val['cont_id']; ?>" name="cont_id[]" />
+                            </td>
+                            <td class="text-center visible-xs  visible-sm  visible-md  visible-lg" width="80">
+                                <?php echo $val['cont_id']; ?>                                 
+                            </td>
+                            <td>
+                                <?php echo $val['cont_title']; ?>
+                            </td>
+                            <td class="text-center visible-xs  visible-sm  visible-md  visible-lg">
+                                <a onclick="deleteContent(<?php echo $id_news_cate . ',\'' . $val['cont_id'] . '\',' . $params['page']; ?>)" class="btn btn-danger btn-xs remove tooltips" data-placement="top" data-original-title="Xóa bài viết">
+                                    <i class="icon-trash "></i> Xóa
+                                </a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Hiện tại chưa có sản phẩm nào.
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </section>
+</div>
+<div class = "col-lg-12">
+    <?php echo $this->paging;
+    ?>
+</div>

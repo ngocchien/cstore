@@ -1,0 +1,60 @@
+
+<?php
+$generalDetail = $this->generalDetail;
+$mainMenu = json_decode(unserialize(ARR_MENU)['json_menu'], true)['left'];
+?>
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <div class="br-hidden">
+                <div class="item">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a><?php echo $generalDetail['gene_title'] ?></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <div class="left">
+            <div class="box">
+                <div class="head box-head">
+                    Tất cả danh mục
+                </div>
+                <div class="cont">
+                    <ul class="menu ">
+                        <?php foreach ($mainMenu as $key => $value): ?>
+                            <li class="item unopened">
+                                <a href="<?php echo $value['url'] ?>"> <?php echo $value['title'] ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <h1 class="title co-title"><?php echo $generalDetail['gene_title'] ?></h1>
+            <div>
+                <?php echo $generalDetail['gene_content'] ?>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div><!-- End block-content -->
+<script>
+    //Tags.index();
+</script>
+

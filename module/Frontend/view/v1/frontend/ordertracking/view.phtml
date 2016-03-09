@@ -1,0 +1,116 @@
+<?php
+use My\General;
+$arrPaymentList = General::getPaymentMethod();
+?>
+<div id="content">
+    <section class="wrapper site-min-height">
+        <div class="row">
+            <div class="col-lg-12">
+                <section class="panel">
+                    <header class="panel-heading"></header>
+                    <table>
+                        <tr>
+                            <td><b>Mã hóa đơn :</b></td>
+                            <td><?php echo $this->params['id']; ?></td>
+                        </tr>
+                        <tr>
+                            <td><b>Ngày lập hóa đơn :</b></td>
+                            <td><?php echo $this->getdetailOrder['orde_created'] ? date('d/m/Y', $this->getdetailOrder['orde_created']) : 'Không xác định'; ?></td>
+                        </tr>
+                        <tr>
+                            <td><b>Trạng thái đơn hàng hiện tại :</b></td>
+                            <td>
+                                <?php
+                                if ($this->getdetailOrder['is_payment'] == 1)
+                                    echo "Đã xử lý";
+                                else if ($this->getdetailOrder['is_payment'] == 0)
+                                    echo "Đang chờ xử lý";
+                                else if ($this->getdetailOrder['is_payment'] == -1)
+                                    echo "Đã hủy";
+                                else
+                                    echo "Không xác định";
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Phương thức thanh toán :</b></td>
+                            <td>
+                                <?php
+                                foreach ($arrPaymentList as $key => $val) {
+                                    if ($key == $this->getdetailOrder['orde_payment']) {
+                                        $Payment = $val;
+                                        break;
+                                    }
+                                }
+                                echo $Payment ? $Payment : "Không xác định";
+                                ?>
+                            </td>
+                        </tr>                      
+                    </table>
+                    </header>
+                    <div class="panel-body">
+                        <table class="table-bordered width_100">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="10%">Hình</th>
+                                    <th class="text-center" width="50%">Tên sản phẩm</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-center">Trạng thái đơn hàng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <input type="hidden" id="OrderID" value="<?php echo $this->getdetailOrder['orde_id']; ?>" />
+                            <?php
+                            if ($this->arrProductOrderList):
+                                foreach ($this->arrProductOrderList as $key => $arrProductOrderList):
+                                    ?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <?php
+                                            foreach ($this->arrDetailProduct as $val) {
+                                                if ($val['prod_id'] == $arrProductOrderList['prod_id']) {
+                                                    $prod_image = json_decode($val['prod_image'], TRUE);
+                                                    //p($prod_image);die;
+                                                    $prod_slug = $val['prod_slug'];
+                                                    break;
+                                                }
+                                            }
+//                                            p($this->arrDetailProduct);die();
+                                            ?>
+                                            <a href="<?php echo $this->serverUrl() . $this->Url('product', array('productslug' => $prod_slug, 'productId' => $arrProductOrderList['prod_id'])); ?>">
+                                                <img src="<?php echo $prod_image['thumbImage']['50x50'] ?>" />
+                                            </a>
+                                        </td>
+                                        <td class="text-left" width="80"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('productslug' => $prod_slug, 'productId' => $arrProductOrderList['prod_id'])); ?>" margin-left="10px"><?php echo $arrProductOrderList['prod_name']; ?></a></td>
+                                        <td class="text-center prodQuantity"><?php echo $arrProductOrderList['prod_quantity']; ?></td>
+                                        <?php if ($key == 0) { ?>
+                                            <td class="text-center" rowspan="<?php echo count($this->arrProductOrderList); ?>">
+                                                <?php
+                                                if ($this->arrOrderLogList) {
+                                                    foreach (array_reverse($this->arrOrderLogList) as $arrOrderLogList) {
+                                                        echo date('d/m/Y', $arrOrderLogList['orde_log_created']) . " - " . $arrOrderLogList['orde_log_action'] . "<br>";
+                                                        echo $arrOrderLogList['orde_log_description'] . "<br>";
+                                                    }
+                                                } else {
+                                                    echo 'Đang chờ xử lý .';
+                                                }
+                                                ?>
+                                            </td>
+                                        <?php } ?>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="6" class="text-center">Hiện tại không có sản phẩm.</td></tr>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                        <?php if ($this->getdetailOrder['is_payment'] >= 0) { ?>
+                        <?php } ?>
+                        <div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>

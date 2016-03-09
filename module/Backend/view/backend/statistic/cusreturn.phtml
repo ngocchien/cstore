@@ -1,0 +1,100 @@
+<section class="panel">
+    <header class="panel-heading">Khách trả hàng</header>
+    <div class="panel-body">
+        <div class="row">
+            <!--            <div class="form-group">
+                            <label class="control-label col-md-3">Date Range</label>
+                            <div class="col-md-4">
+                                <div class="input-group input-large" data-date-format="dd/mm/yyyy">
+                                    <input type="text" class="form-control dpd1" id="from" value="<?php echo $this->date['from'] ?>">
+                                    <span class="input-group-addon">To</span>
+                                    <input type="text" class="form-control dpd2" id="to" value="<?php echo $this->date['to'] ?>">
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2 no-padding-right">
+                                <button type="button" class="btn btn-white per-100 btn-statusReturn" ><i class="icon-search"></i>Tìm</button>
+                            </div>
+                        </div>-->
+
+            <div class="form-group">
+                <div class="col-md-offset-6 col-md-6">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="input-group input-large" data-date-format="dd/mm/yyyy">
+                                <input type="text" class="form-control dpd1" id="from" value="<?php echo $this->date['from'] ?>">
+                                <span class="input-group-addon">To</span>
+                                <input type="text" class="form-control dpd2" id="to" value="<?php echo $this->date['to'] ?>">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-white per-100 btn-statusReturn" ><i class="icon-search"></i>OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="searchproduct">
+                    <table class="table table-striped table-bordered" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;width:7%">STT</th>
+                                <th style="text-align:center;width:10%">Mã khách hàng</th>
+                                <th style="text-align:center;width:10%">Mã đơn hàng</th>
+                                <th style="text-align:center;width:10%">Mã SP</th>
+                                <th style="text-align:center;width:10%">Tổng giá trị</th>
+                                <th style="text-align:center;width:10%">Ngày đặt hàng</th>
+                                <th style="text-align:center;width:10%">Nguyên nhân</th>
+                                <th style="text-align:center;width:10%">Sale bán</th>
+                                <th style="text-align:center;width:10%">Xem chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($this->orderList) {
+                                foreach ($this->orderList as $key => $list) {
+                                    $key++;
+                                    ?>
+                                    <tr>
+                                        <td style="text-align:center;"><?php echo $key ?></td>
+                                        <td style="text-align:center;"><?php echo $list['user_id'] ?></td>
+                                        <td style="text-align:center;"><?php echo $list['orde_id'] ?></td>
+                                        <td style="text-align:center;">
+                                            <?php
+                                            $arrProd = '';
+                                            foreach ($list['listProd'] as $key => $prod) {
+                                                $arrProd .= $prod['prod_id'] . ',';
+                                            }
+                                            echo rtrim($arrProd, ',');
+                                            ?>
+                                        </td>
+                                        <td style="text-align:center;"><?php echo number_format($list['orde_total_price']) ?></td>
+                                        <td style="text-align:center;"><?php echo date('d/m/Y', $list['orde_created']) ?></td>
+                                        <td style="text-align:center;"><?php echo $list['content_cancel'] ?></td>
+                                        <td style="text-align:center;"><?php echo $list['user_change_status'] ?></td>
+                                        <td class="text-center visible-xs visible-md visible-sm visible-lg" width="150">
+                                            <a target="_blank" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'order', 'action' => 'view', 'id' => $list['orde_id'])); ?>" class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Xem thông tin đơn hàng"><i class="icon-eye-open"></i> Xem</a>
+                                        </td>
+
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                echo "<tr><td style='text-align:center;' colspan='9'>Không tìm thấy đơn hàng</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" >
+                        <?php //echo $this->paging; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    Statistic.index();
+</script>

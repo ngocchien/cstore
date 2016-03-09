@@ -1,0 +1,114 @@
+<?php
+
+use My\General;
+
+$arrPaymentList = General::getPaymentMethod();
+?>
+<div id="content">
+    <div class="block-head">
+        <?php
+        echo $this->render('frontend/menu');
+        ?>
+        <div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+
+            <div class="br-hidden">
+                <div class="item item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none" itemprop="url"><span itemprop="title">Danh sách đơn hàng</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <?php
+        echo $this->render('frontend/leftmenu-order');
+        ?>    
+        <div class="main">
+            <?php
+            $errorMessage = $this->flashMessenger()->setNamespace('order-error')->getMessages();
+            if ($errorMessage) {
+                ?>
+                <p>- <?php echo current($errorMessage); ?></p>
+            <?php } ?>
+            <form method="GET">
+                <input type="text" name="s" placeholder="Nhập mã số đơn hàng">
+                <button type="submit">Tìm kiếm</button>
+            </form>
+
+            <table class="table table-bordered width_100">
+                <thead class="cf">
+                    <tr>
+                        <th class="text-center"><i class="icon-list-alt"></i> Mã đơn hàng</th>
+                        <th class="text-center"><i class=""></i> Số lượng sản phẩm</th>
+                        <th class="text-center"><i class="icon-dollar"></i> Tổng tiền</th>
+                        <th class="text-center"><i class="icon-ok"></i> Ngày đặt hàng</th>
+                        <th class="text-center"><i class="icon-ok"></i> Phương thức thanh toán</th>
+                        <th class="text-center"><i class=""></i> Trạng thái</th>
+                        <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($this->arrOrderList):
+                        foreach ($this->arrOrderList as $arrOrderList):
+                            ?>
+                            <tr>
+                                <td class="text-center"><?php echo $arrOrderList['orde_code'] . $arrOrderList['orde_id'] ?></td>
+                                <?php
+                                if ($this->arrProductOrder) {
+                                    $dem = 0;
+                                    foreach ($this->arrProductOrder as $arrProductOrder)
+                                        $arrProductOrder['orde_id'] === $arrOrderList['orde_id'] ? $dem++ : NULL;
+                                }
+                                ?>
+                                <td class="text-center"><?php echo $dem; ?></td>
+                                <td class="text-center"><?php echo number_format($arrOrderList['orde_total_price'], 0, ",", "."); ?> VNĐ</td>
+                                <td class="text-center"><?php echo date('d/m/Y', $arrOrderList['oder_created']); ?></td>
+                                <td class="text-center">
+                                    <?php
+                                    foreach ($arrPaymentList as $key => $val) {
+                                        if ($key == $arrOrderList['orde_payment']) {
+                                            $Payment = $val;
+                                            break;
+                                        }
+                                    }
+                                    echo $Payment ? $Payment : "Không xác định";
+                                    ?>
+                                </td>
+                                <td class = "text-center">
+                                    <?php
+                                    if ($arrOrderList['is_payment'] == 1)
+                                        echo "Đã xử lý";
+                                    else if ($arrOrderList['is_payment'] == 0)
+                                        echo "Đang chờ xử lý";
+                                    else if ($arrOrderList['is_payment'] == -1)
+                                        echo "Đã hủy";
+                                    else
+                                        echo "Không xác định";
+                                    ?>
+                                </td>
+                                <td class="text-center" width="200">
+                                    <a  href="<?php echo $this->serverUrl() . $this->Url('order-view', array('controller' => 'order', 'action' => 'view', 'id' => $arrOrderList['orde_id'])); ?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Xem thông tin đơn hàng"><i class="icon-eye-open"></i> Xem</a>
+                                </td>
+                            </tr>
+
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="7" class="text-center">Hiện tại chưa có đơn hàng nào.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+            <div class="paging">
+                <?php echo $this->paging; ?>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <script type="text/javascript">
+        Order.index();
+    </script>
+</div>

@@ -1,0 +1,37 @@
+<div id="content">
+    <?php
+    $errorMessage = $this->flashMessenger()->setNamespace('ordertracking-error')->getMessages();
+    if ($errorMessage) {
+        ?>
+        <p>- <?php echo current($errorMessage); ?></p>
+    <?php } ?>
+    <div class="get-alert"></div>
+    <section class="wrapper site-min-height">
+        <div class="row">
+            <div class="col-lg-12">
+                <section class="panel">
+                    <div id="total">  
+                        <h2>Kiểm tra đơn hàng</h2>
+                        <div class="panel-body" id="checkOrder">
+                            <form id="kt" method="POST" novalidate="novalidate">
+                                <label>
+                                    <span>Mã đơn hàng :</span>
+                                    <input type="text" name="id" class="form-control order_id" placeholder="Nhập mã đơn hàng"/>
+                                </label>
+                                <label>
+                                    <span>Email :</span>
+                                    <input type="email" name="email" class="email" placeholder="nhập email"/>
+                                </label>                             
+                                <button type="submit" class="btn-pre"  class="">Kiểm tra</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+    Ordertracking.index();
+</script>
+

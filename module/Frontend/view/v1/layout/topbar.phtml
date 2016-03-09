@@ -1,0 +1,99 @@
+<?php
+use My\General,
+    My\Controller\MyController;
+
+$arrMenuTopBottom = unserialize(ARR_MENU_TOP_BOTTOM);
+$arrTotalProductList = unserialize($_COOKIE['cookieCart']);
+$totalProduct = 0;
+foreach ($arrTotalProductList as $keyProduct => $valueProduct) {
+    $totalProduct = $totalProduct + $valueProduct['quantity'];
+}
+$GET_keywords = $_GET['s'];
+$GET_category = array_reverse(explode('-', $_GET['q']))[0];
+?>
+<div id="header">
+    <div class="top">
+        <?php
+        if ($arrMenuTopBottom) {
+            foreach ($arrMenuTopBottom as $val) {
+                if ($val['localtion'] == General::MENU_LOCALTION_TOP) {
+                    $url = $val['menu_url'] ? 'href="' . $val['menu_url'] . '"' : NULL;
+                    $icon = $val['class_icon'] ? $val['class_icon'] : NULL;
+                    ?>
+                    <div class="item">
+                        <a title="<?php echo $val['menu_name'] ?>" <?php echo $url ? $url : NULL ?> rel="nofollow">
+                            <span class="icon <?php echo $icon ? $icon : NULL ?>"></span>
+                            <span class="text"> <?php echo $val['menu_name'] ?></span>
+                        </a>
+                    </div>
+                    <?php
+                }
+            }
+        }
+        ?>
+        <div class="f-right u-info">
+            <div class="item ig">
+                <a rel="nofollow" href="<?php echo $this->serverUrl() . $this->Url('ordertracking', array('controller' => 'ordertracking', 'action' => 'index')) ?>" title="Kiểm tra đơn hàng">
+                    <span class="icon i-arrow"></span>
+                    <span class="text"> Kiểm tra đơn hàng</span>
+                </a>
+            </div>
+            <?php if (UID) { ?>
+                <div class="item  ie">
+                    <span class="icon i-arrow"></span>
+                    <span class="text">
+                        <a rel="nofollow" href="<?php echo $this->serverUrl() . $this->Url('profile', array('controller' => 'profile', 'action' => 'index')) ?>" title="Quản lý tài khoản" >Quản lý tài khoản</a> | 
+                        <a rel="nofollow"  href="<?php echo $this->serverUrl() . $this->Url('auth', array('controller' => 'auth', 'action' => 'logout')) ?>"   title="Đăng xuất">Đăng xuất</a>
+                    </span>
+                </div>
+            <?php } if (!UID) { ?>
+                <div class="item ie">
+                    <span class="icon i-arrow"></span>
+                    <span class="text">
+                        <a href="#register-frame"  rel="facebox " class="register" title="Đăng ký" onclick="Account.captcha()" >Đăng ký</a> |  <a  href="#login-frame"  rel="facebox" title="Đăng nhập">Đăng nhập</a>
+                    </span>
+                </div>
+            <?php } ?>
+        </div>
+
+    </div>
+    <div class="cont">
+        <div class="logo f-left">
+            <a href="/" title="logo">
+                <img src="<?php echo STATIC_URL; ?>/f/v1/images/logo.png" title="Megavita"/>
+                <img src="<?php echo STATIC_URL; ?>/f/v1/images/logo-scroll.png" class="logo-scroll" title="Megavita"/>
+            </a>
+
+        </div>
+
+        <div class="search f-left">
+            <div class="input">
+                <input type="search" class="s-topbar f-left" name="s" value="<?php echo $GET_keywords; ?>" placeholder="Nhập từ khóa cần tìm" autocomplete="off"/>
+                <ul class="auto-autocomplete auto-front auto-menu auto-widget auto-widget-content" id="autocomplete" tabindex="0" style="display: none;">
+                </ul>
+                <button class="btn-search-topbar" type="button">Tìm kiếm</button>
+            </div>
+            <div class="clear"></div>
+            <div class="more-text">
+                <span>Xu hướng tìm kiếm: </span>
+                <?php if(KEYWORD_SEARCH != null)
+                        echo KEYWORD_SEARCH; 
+                    ?>
+            </div>
+        </div>
+        <div class="hotline f-left">
+            <span class="i-hotline f-class"></span>
+            <div class="text">
+                <div>HOTLINE</div>
+                <div class="phone color-red"><img src="<?php echo STATIC_URL; ?>/f/v1/images/phone-hot-line.png"/></div>
+                <div class="note">8-21h kể cả T7&CN</div>
+            </div>
+        </div>
+        <div class="cart f-left">
+            <div class="bt-cart showcart"> <a href="javascript:;" class="button" rel=""><span class="i-cart"></span><span class="text"><strong class="totalProduct"><?php echo (empty($arrTotalProductList)) ? 0 : count($arrTotalProductList) ?></strong> Sản phẩm</span></a><span class="num-cart"><?php echo $totalProduct ?></span></div>
+        </div>
+    </div>
+</div>
+<form id="form-search-topbar" action="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index')); ?>" method="GET">
+    <div id="input-s-topbar"></div>
+</form>

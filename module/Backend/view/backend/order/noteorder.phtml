@@ -1,0 +1,82 @@
+<section class="wrapper site-min-height">
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách Ghi Chú
+        </header>
+        <div class="panel-body">    
+            <div class="adv-table editable-table ">  
+                <form id="frm" class="form-horizontal" role="form" method="GET">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-8 col-md-8 col-xs-10">
+                            <div data-date-format="dd/mm/yyyy" data-date="" class="input-group input-large">
+                                <input type="text" name="date_from" class="form-control dpd1" placeholder="Từ ngày" value="<?php echo empty($this->params['date_from']) ? date('d/m/Y', (time() - (60 * 60 * 24 * 30))) : $this->params['date_from']; ?>">
+                                <span class="input-group-addon">Đến ngày</span>
+                                <input type="text" name="date_to" class="form-control dpd2" placeholder="Đến ngày" value="<?php echo empty($this->params['date_to']) ? date('d/m/Y', time()) : $this->params['date_to']; ?>">
+                            </div>
+                        </div>
+                         <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div>
+                                <select class="form-control sumo-select-box" id="note_type" name="note_type">    
+                                    <!--<option value="-1" selected>Tất cả</option>-->
+                                    <option value="0" <?php if($this->params['note_type'] == 0) echo 'selected'; ?>>Đơn hàng</option>
+                                    <option value="1" <?php if($this->params['note_type'] == 1) echo 'selected'; ?>>Sản phẩm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-sm-8 col-md-8 col-xs-10 floatRight">
+                            <div class="col-lg-7 col-md-9 col-sm-9 col-xs-8 no-padding">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder=""></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-3 col-sm-3 col-xs-4 no-padding-right">
+                                <button type="submit" class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <section id="unseen">
+                    <table class="table table-bordered table-striped table-condensed cf">
+                        <thead class="cf">
+                            <tr>
+                                <th class="text-center">Mã ghi chú</th>
+                                <th class="text-center visible-xs visible-md visible-sm visible-lg">Vị trí</th>
+                                <th class="text-center visible-xs visible-md visible-sm visible-lg"> Tình trạng</th>
+                                <th class="text-center visible-xs visible-md visible-sm visible-lg">Lý do</th>
+                                <th class="text-center hidden-sm hidden-xs">Người tạo</th>
+                                <th class="text-center">Ngày đặt hàng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($this->arrNoteOrder):
+                                foreach ($this->arrNoteOrder as $arrOrderList):
+                                    ?>
+                                    <tr>
+                                        <td class="text-center" width="10%"><?php echo $arrOrderList['note_id']; ?></td>
+                                        <td class="text-left" width="20%"><span style="text-transform: capitalize;"><?php echo $arrOrderList['note_position']; ?></span></td>
+                                        <td class="text-left" width="18%"><?php echo $arrOrderList['note_status']; ?></td>
+                                        <td class="text-left" width="30%"><?php echo $arrOrderList['note_reason']; ?></td>
+                                        <td class="text-center" width="10%"><?php echo $arrOrderList['user_name']; ?></td>
+                                        <td class="text-center" width="10%"><?php echo date('d/m/Y',$arrOrderList['note_created']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="7" class="text-center">Hiện tại chưa có ghi chú nào.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div  class="col-lg-6">
+            </div>
+            <div class = "col-lg-6">
+                <?php echo $this->paging;
+                ?>
+            </div> 
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Order.index();
+</script>

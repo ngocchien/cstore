@@ -1,0 +1,195 @@
+<?php
+use My\General;
+$gender = General::getGender();
+?>
+<div id="register-frame" style="display: none;">
+    <div class="line-head">
+        <label>Đăng ký</label>           
+    </div>
+    <div class="error">
+        <span class="error-display error-rgServer"></span>
+    </div>
+    <div class="register-frame">
+        <div class="ui-formRow ">
+            <label class="label">Họ tên <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="rgFullname"><br>
+                <span class="error-display error-rgFullname"></span>
+            </div>
+        </div>
+
+        <div class="ui-formRow ">
+            <label class="label">Tài khoản <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="rgUsername" ><br>
+                <span class="error-display error-rgUsername"></span>
+            </div>
+        </div>
+
+        <div class="ui-formRow ">
+            <label class="label">E-Mail <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="rgEmail"><br>
+                <span class="error-display error-rgEmail"></span>
+            </div>
+        </div>  
+
+        <div class="ui-formRow">
+            <label class="label">Mật khẩu <span class="required">*</span></label>
+            <div  class="collection">
+
+                <input type="password" id="login-popup-pass" class="ui-inputPassword error rgPassword">   <br>                           
+                <span class="error-display error-rgPassword"></span>                            
+
+            </div>
+        </div>
+        <div class="ui-formRow">
+            <label class="label">Nhập lại mật khẩu<span class="required">*</span></label>
+            <div  class="collection">
+
+                <input type="password" id="login-popup-pass" class="ui-inputPassword error rgRe-Password">   <br>                           
+                <span class="error-display error-rgRePassword"></span>                          
+            </div>
+        </div>
+
+        <div class="ui-formRow ">
+            <label class="label">Số điện thoại <span class="required">*</span></label>                            
+            <div class="collection">
+                <input type="text" id="login-popup-email" class="rgPhone"><br>
+                <span class="error-display error-rgPhone"></span>
+
+            </div>
+        </div>
+
+        <div class="ui-formRow ">
+            <label class="label">Ngày sinh <span class="required">*</span></label>                            
+            <div class="collection">
+                <select class="year rgYear">
+                <?php
+                $now = getdate();
+                for ($i = ($now["year"] - 5); $i >= ($now["year"] - 105); $i--) :
+                    ?>
+                    <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                <?php endfor; ?>
+                </select>
+                <select class="month rgMoth">
+                    <?php
+                    $arrMoth = array('Tháng Một',
+                        'Tháng Hai',
+                        'Tháng Ba',
+                        'Tháng Tư',
+                        'Tháng Năm',
+                        'Tháng Sáu',
+                        'Tháng Bảy',
+                        'Tháng Tám',
+                        'Tháng Chín',
+                        'Tháng Mười',
+                        'Tháng Mười Một',
+                        'Tháng Mười Hai',
+                    );
+                    for ($i = 1; $i <= 12; $i++) :
+                        ?>
+                        <option value="<?php echo $i; ?>"><?php echo $arrMoth[$i - 1]; ?> </option>
+                <?php endfor; ?>
+                </select>
+                <select class="day rgDay" disabled>
+                </select>
+                <span class="error-display error-rgBirtday"></span>
+            </div>
+        </div>
+
+        <div class="ui-formRow ">
+            <label class="label">Giới tính <span class="required">*</span></label>                            
+            <div class="collection">
+                <select class="gender rgGender">
+                    <?php foreach ($gender as $keygender => $valgender) : ?>
+                        <option value="<?php echo $keygender ?>">  <?php echo $valgender; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <span class="error-display error-rgGender"></span>
+            </div>
+        </div>
+
+        <div class="ui-formRow ">
+            <label class="label">Mã xác nhận <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="rgCaptcha" style="width: 100px;" placeholder="Nhập mã xác nhận">
+                <img class="imgCaptcha" style="margin-bottom:-10px;"src=""/>
+                <img title="Lấy mã mới" onclick="Account.refreshCaptcha();" style="cursor: pointer;margin-bottom:-10px;" width="40px" height="30px" src="<?php echo STATIC_URL . '/f/v1/images/refresh2.png' ?>"><br>
+                <span class="error-display error-rgCaptcha"></span>
+            </div>
+        </div> 
+
+        <div class="ui-formRow ui-submmit-field">
+            <center><div class="img-register"></div></center>
+            <div class="button-login">
+                <button type="submit" class="ui-button btnsignup" onclick="Account.register();"><span>Đăng ký</span></button>
+            </div>
+        </div> 
+    </div>              
+</div>
+
+<div id="login-frame" style="display: none;">
+    <div class="line-head">
+        <label>Đăng nhập</label>           
+    </div>
+    <div class="error">
+        <span class="error-display error-lgServer"></span>
+    </div>
+    <div class="login-frame">
+        <div class="ui-formRow ">
+            <label class="label">E-Mail hoặc Tài khoản <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="userName" <?php if (isset($_COOKIE['cookieUser'])) { ?> value="<?php echo unserialize($_COOKIE['cookieUser'])['Username']; ?>"<?php } ?> /><br>
+                <span class="error-display error-Username"></span>
+            </div>
+        </div>
+        <div class="ui-formRow">
+            <label class="label">Mật khẩu <span class="required">*</span></label>
+            <div  class="collection">
+                <input type="password" id="login-popup-pass" class="ui-inputPassword password" <?php if (isset($_COOKIE['cookieUser'])) { ?> value="<?php echo unserialize($_COOKIE['cookieUser'])['Password']; ?>"<?php } ?>>   <br>                           
+                <span class="error-display error-Password"></span> 
+                <input class="remember" type="checkbox" <?php if (isset($_COOKIE['cookieUser'])) { ?>checked<?php } ?>> Ghi nhớ mật khẩu  <br>    
+                <div class="fg-pas"> <a  rel="facebox"  class="ui-inlineBlock" href="javascript:megaPopup($('#fogot-pass-frame').html())" onclick="Account.captcha();">Lấy lại mật khẩu?</a></div>
+            </div>
+        </div>
+        <div class="ui-formRow ui-submmit-field">
+            <div class="button-login">
+                <button type="button" class="ui-button btnlogin" onclick="Account.login();"><span>Đăng nhập</span></button>
+            </div>
+        </div> 
+    </div>              
+</div>
+
+<div id="fogot-pass-frame" style="display: none;">
+    <div class="line-head">
+        <label>Lấy lại mật khẩu</label>           
+    </div>
+    <div class="error">
+        <span class="error-display error-rsServer"></span>
+    </div>
+    <div class="login-frame">
+        <div class="ui-formRow ">
+            <label class="label">E-Mail <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="rsEmail"><br>
+                <span class="error-display error-rsEmail"></span>
+            </div>
+        </div>
+        <div class="ui-formRow ">
+            <label class="label">Mã xác nhận <span class="required">*</span></label>                            
+            <div class="collection">
+                <input id="login-popup-email" class="rsCaptcha" style="width: 100px;" placeholder="Nhập mã xác nhận">
+                <img class="imgCaptcha" style="margin-bottom:-10px;" src=""/>
+                <img title="Lấy mã mới" onclick="Account.refreshCaptcha();" style="cursor: pointer;margin-bottom:-10px;" width="25px" height="30px" src="<?php echo STATIC_URL . '/f/v1/images/refresh2.png' ?>"><br>
+                <span class="error-display error-rsCaptcha"></span>
+            </div>
+        </div> 
+        <div class="ui-formRow ui-submmit-field">
+            <center><div class="img-reset"></div></center>
+            <div class="button-login">
+                <button type="submit" class="ui-button"  onclick="Account.resetpass();"><span>Lấy mật khẩu</span></button>
+            </div>
+        </div> 
+    </div>              
+</div>

@@ -1,0 +1,177 @@
+
+<?php
+$listImage = json_decode($template['json_image'], TRUE);
+?>
+<section class="wrapper site-min-height">
+    <div class="row">
+        <div class="col-lg-7">
+            <header class="panel-heading tab-bg-dark-navy-blue">
+                <ul class="nav nav-tabs ">
+                    <li class="active">
+                        <a data-toggle="tab" href="#titeltemplte">
+                            <strong>Thông tin tiêu đề</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" class="" href="#listBaner">
+                            <strong>Danh sách banner</strong>
+                        </a>
+                    </li>
+                </ul>
+            </header>
+            <div class="panel-body panel">
+                <div class="tab-content tasi-tab">
+                    <div id="titeltemplte" class="tab-pane active">
+                       <div class="panel-body form-horizontal tasi-form">
+                           <form action="" method="POST">
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Tiêu đề</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control name" type="text" name="title" value="<?php  echo $template['title']?>">
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <label class="col-lg-3 control-label"> Sort</label>
+                                        <div class="col-lg-9">
+                                            <input class="form-control sort" type="text" name="sort" value="<?php echo $template['sort']?>">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"> trạng thái</label>
+                                        <div class="col-lg-9">
+                                            <select name="sta" class="form-control" >
+                                                <option value="1" <?php echo $template['status']==1? 'selected="selected"':'' ?>>Hiển thị</option>
+                                                <option value="0" <?php echo $template['status']==0? 'selected="selected"':'' ?>>Đã đóng</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label"></label>
+                                        <div class="col-lg-9">
+                                            <button data-bb-handler="main" type="button" class="btn btn-primary save-title"><i class="icon-save"></i> Hoàn tất</button>
+                                        </div>
+                                    </div>
+                           </form>
+                                </div>
+                    </div>
+                    <div id="listBaner" class="tab-pane"> 
+                            <header class="panel-heading">
+                               &nbsp;<button class="add_image btn btn-success" style="float: right; margin: -5px 0px 0px 0px !important; ">Add baner</button>
+                            </header>
+                            <div class="panel-body">
+                                <div class="adv-table">
+                                    <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="table-image-info">
+                                        <thead>
+                                            <tr>
+                                                <td>Id</td>
+                                                <th>IMG</th>
+                                                <th>Title</th>
+                                                <th>Url</th>
+                                                <th>Sort</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody> 
+                                            <?php
+                                            foreach ($listImage as $key => $arrImage):
+                                                $img= json_decode($arrImage['img'],TRUE);
+                                           
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $key ?></td>
+                                                    <td><a title="Xem" class="view" href="<?php echo $img['sourceImage']?>" target="_blank" ><?php echo $img['thumbImage']['50x40'] ? '<img src="' . $img['thumbImage']['50x40'] . '">' : ''; ?></a></td>
+                                                    <td><?php echo $arrImage['title'] ?></td>
+                                                    <td><?php echo $arrImage['url'] ?></td>
+                                                    <td><?php echo $arrImage['sort'] ?></td>
+                                                    <td>
+                                                        <a class="btn btn-danger remove_image" data-key="<?php echo $key ?>"><i class="icon-trash "></i></a>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                            endforeach;
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+         <div class="col-lg-5">
+            <img style="width: 100%" src="<?php echo STATIC_URL ?>/b/images/template/3.png" alt="Template 2">
+        </div>
+    </div> 
+</section>
+<div class="panel-body form-horizontal tasi-form" id="html_add_menu_hidden" style="display: none">
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Thuộc menu :</label>
+        <div class="col-lg-9">
+            <select name="loca" class="form-control loca">
+                <?php foreach ($listMenu as $key => $menu) { ?>
+                    <option value="<?php echo $key ?>">
+                        <?php echo $key ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Tên menu</label>
+        <div class="col-lg-9">
+            <input class="form-control name" type="text" name="name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Url</label>
+        <div class="col-lg-9">
+            <input class="form-control url" type="text" name="url">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Sort</label>
+        <div class="col-lg-9">
+            <input class="form-control sort" type="text" name="sort">
+        </div>
+    </div>
+</div>
+<div class="panel-body form-horizontal tasi-form" id="html_add_image_hidden" style="display: none">
+    <form action="" method="POST">
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Banner:</label>
+        <div class="col-lg-9">
+            <input type="file" name="img" class="img">
+            <div class="progress1"></div>
+            <ul></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Title</label>
+        <div class="col-lg-9">
+            <input class="form-control title" type="text" name="title">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Url</label>
+        <div class="col-lg-9">
+            <input class="form-control url" type="text" name="url">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Sort</label>
+        <div class="col-lg-9">
+            <input class="form-control sort" type="text" name="sort">
+        </div>
+    </div>
+    </form>
+</div>
+<script>
+    var baseURL = '<?php echo $this->serverurl() ?>';
+    var STATIS_URL = '<?php echo STATIC_URL ?>';
+    var tem_id = '<?php echo $template['tem_id'] ?>';
+    /* Formating function for row details */
+    Template.image();
+    Template.title();
+</script>

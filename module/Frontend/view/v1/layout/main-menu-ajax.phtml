@@ -1,0 +1,57 @@
+<?php
+$mainMenu = json_decode(unserialize(ARR_MENU)['json_menu'], true)['left'];
+?>
+<?php foreach ($mainMenu as $keyMain => $valueMain) : ?>
+    <div class="item">
+        <div class="hv">
+            <a href="<?php echo $valueMain['url'] ?>" title="<?php echo $valueMain['title'] ?>"><span class="icon <?php echo $valueMain['classicon']; ?>"></span> <span class="text"><?php echo $valueMain['title'] ?></span></a>
+        </div>
+        <div class="level2">
+            <?php if (count($valueMain['category']) > 0) : ?>
+                <div class="submenu"> 
+                    <?php foreach ($valueMain['category'] as $valueMainCate) : ?>
+                        <div class="il1"><a href="<?php echo $valueMainCate['url']; ?>" title="<?php echo $valueMainCate['title']; ?>"><?php echo $valueMainCate['title']; ?> <!-- <img src="images/Flame-rev.gif"/> --></a>
+                            <?php
+                            if (count($valueMainCate['sub']) > 0):
+                                foreach ($valueMainCate['sub'] as $mainSub):
+                                    ?>
+                                    <div class="il2">
+                                        <a href="<?php echo $mainSub['url'] ?>" title="<?php echo $mainSub['title'] ?>"><?php echo $mainSub['title'] ?> <!-- <img src="images/Flame-rev.gif"/> --></a>
+                                    </div>
+                            <?php endforeach;
+                        endif; ?>
+                        </div>
+                <?php endforeach; ?>
+                </div>
+            <?php
+            endif;
+            if (count($valueMain['banner']) > 0) :
+                $arrMainBanner = array();
+                foreach ($valueMain['banner'] as $keyMainBan => $valueMainBan) {
+                    $arrMainBanner[$valueMainBan['sort']] = $valueMainBan;
+                }
+                ?>
+                <div class="prod">
+                    <div class="m-item i-main">
+                        <a href="<?php echo (!empty($arrMainBanner[1])) ? $arrMainBanner[1]['url'] : NULL ?>" title="<?php echo (!empty($arrMainBanner[1])) ? $arrMainBanner[1]['title'] : NULL ?>"><img src="<?php echo (!empty($arrMainBanner[1])) ? json_decode($arrMainBanner[1]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-a.jpg' ?>"/></a>
+                    </div>
+                    <div class="m-item">
+                        <a href="<?php echo (!empty($arrMainBanner[2])) ? $arrMainBanner[2]['url'] : NULL ?>" title="<?php echo (!empty($arrMainBanner[2])) ? $arrMainBanner[2]['title'] : NULL ?>"><img src="<?php echo (!empty($arrMainBanner[2])) ? json_decode($arrMainBanner[2]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-b.jpg' ?>"/></a>
+                    </div>
+                    <div class="m-item">
+                        <a href="<?php echo (!empty($arrMainBanner[3])) ? $arrMainBanner[3]['url'] : NULL ?>" title="<?php echo (!empty($arrMainBanner[3])) ? $arrMainBanner[3]['title'] : NULL ?>"><img src="<?php echo (!empty($arrMainBanner[3])) ? json_decode($arrMainBanner[3]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-c.jpg' ?>"/></a>
+                    </div>
+                    <div class="m-item">
+                        <a href="<?php echo (!empty($arrMainBanner[4])) ? $arrMainBanner[4]['url'] : NULL ?>" title="<?php echo (!empty($arrMainBanner[4])) ? $arrMainBanner[4]['title'] : NULL ?>"><img src="<?php echo (!empty($arrMainBanner[4])) ? json_decode($arrMainBanner[4]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-b.jpg' ?>"/></a>
+                    </div>
+                    <div class="m-item">
+                        <a href="<?php echo (!empty($arrMainBanner[5])) ? $arrMainBanner[5]['url'] : NULL ?>" title="<?php echo (!empty($arrMainBanner[5])) ? $arrMainBanner[5]['title'] : NULL ?>"><img src="<?php echo (!empty($arrMainBanner[5])) ? json_decode($arrMainBanner[5]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-c.jpg' ?>"/></a>
+                    </div>
+                    <div class="m-item">
+                        <a href="<?php echo (!empty($arrMainBanner[6])) ? $arrMainBanner[6]['url'] : NULL ?>" title="<?php echo (!empty($arrMainBanner[6])) ? $arrMainBanner[6]['title'] : NULL ?>"><img src="<?php echo (!empty($arrMainBanner[6])) ? json_decode($arrMainBanner[6]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-c.jpg' ?>"/></a>
+                    </div>
+                </div>
+    <?php endif; ?>
+        </div>
+    </div>
+<?php endforeach; ?>

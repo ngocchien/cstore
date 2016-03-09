@@ -1,0 +1,447 @@
+<?php
+//p($this->detailOrder);die;
+//p (My\General::getMethodShip());die;  
+?>
+<?php
+$txtShipInfo = $this->detailOrder['ship_info'];
+$arrShip = json_decode($txtShipInfo, true);
+?>
+<section class="wrapper site-min-height">
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <?php if ($this->errors): ?>
+                    <div class="alert alert-block alert-danger fade in">
+                        <button class="close close-sm" type="button" data-dismiss="alert">
+                            <i class="icon-remove"></i>
+                        </button>
+                        <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+                        <?php foreach ($this->errors as $error): ?>
+                            <p> - <?php echo $error; ?></p>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php
+                $error = array_merge($this->flashMessenger()->setNamespace('error-shiping-order')->getMessages());
+                if ($error):
+                    ?>
+                    <div class="alert alert-block alert-danger fade in">
+                        <button class="close close-sm" type="button" data-dismiss="alert">
+                            <i class="icon-remove"></i>
+                        </button>
+                        <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+                        <p> - <?php echo current($error); ?></p>
+                    </div>
+                <?php endif; ?>
+
+                <?php
+                $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-order')->getMessages(), $this->flashMessenger()->setNamespace('success-shiping-order')->getMessages());
+                if ($successMessage):
+                    ?>
+                    <div class="alert alert-success alert-block fade in">
+                        <button class="close close-sm" type="button" data-dismiss="alert">
+                            <i class="icon-remove"></i>
+                        </button>
+                        <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+                        <p>- <?php echo current($successMessage); ?></p>
+                    </div>
+                <?php endif; ?>
+                <header class="panel-heading">Chi tiết đơn hàng</header>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-lg-push-8">
+                            <section class="panel">
+                                <div class="twt-feed blue-bg">
+                                    <h1 style="  margin: 5px;">
+                                        Chi tiết đơn hàng
+                                    </h1>
+                                </div>
+                                <div style="border: 1px solid #E4E4E4">
+                                    <div class="panel-body">
+                                        <div class="row text-right">
+                                            <div class="col-xs-6">
+                                                <strong>Tổng chi phí</strong>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                <strong class="text-primary"> <?php echo number_format($this->detailOrder['orde_total_price'] + (int) $this->detailOrder['vouc_value'] - (int) $this->detailOrder['ship_fee']) . ' VNĐ' ?></strong>
+                                            </div>
+                                        </div>
+
+                                        <?php if ($this->detailOrder['vouc_value']): ?>
+                                            <div class="row text-right">
+                                                <div class="col-xs-6">
+                                                    <strong>Chiết khấu</strong>
+                                                </div>
+                                                <div class="col-xs-5">
+                                                    <strong class="text-success"><?php echo "-" . number_format($this->detailOrder['vouc_value']) . ' VNĐ' ?></strong>
+                                                </div>
+                                            </div>
+                                        <?php endif ?>
+                                        <div class="row text-right">
+                                            <div class="col-xs-6">
+                                                <strong>Phí vận chuyển</strong>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                <input type="hidden" value="<?php echo $this->detailOrder['ship_fee'] ?>" class="int-shiping-fee"/>
+                                                <strong><?php echo empty($this->detailOrder['ship_fee']) ? "Miễn Phí" : "+" . number_format($this->detailOrder['ship_fee']) . ' VNĐ' ?></strong> <button type="button" class="btn btn-info btn-xs changeShingFee"><i class="icon-edit"></i>Sửa</button>
+                                            </div>
+                                        </div>
+                                        <div class="row text-right">
+                                            <div class="col-xs-6">
+                                                <strong>Số tiền phải thu</strong>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                <strong class="text-danger"><?php echo number_format($this->detailOrder['orde_total_price']) . ' VNĐ' ?></strong>
+                                            </div>
+                                        </div><br/>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'print', 'action' => 'order', 'id' => $this->detailOrder['orde_id'])); ?>" target="_bank">        
+                                                    <button type="button" class="btn btn-primary btn-block"><i class="icon-print"></i> In đơn hàng</button>
+                                                </a><br/>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'print', 'action' => 'orderbarcode', 'id' => $this->detailOrder['orde_id'])); ?>" target="_bank">        
+                                                    <button type="button" class="btn btn-primary btn-block"><i class="icon-print"></i> In mã vạch</button>
+                                                </a><br/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row text-right">
+                                            <div class="col-lg-12">
+                                                <?php
+                                                if (UID == $this->detailOrder['user_updated'] || empty($this->detailOrder['user_updated'])) {
+                                                    ?>
+                                                    <h4 class="text-Quản lý đơn hàngcenter"></h4>     
+                                                    <select class="form-control m-bot15 changeStatusOrder">
+
+                                                        <option value="" selected="">==<?php echo My\General::getStatusOrder()[$this->detailOrder['is_payment']] ?>==</option>
+                                                        <?php
+                                                        $arrStatus = My\General::arrSortStatus();
+                                                        foreach ($arrStatus as $key => $val) {
+                                                            if ($val == $this->detailOrder['is_payment']) {
+                                                                $intKey = $key;
+                                                                break;
+                                                            }
+                                                        }
+                                                        foreach ($arrStatus as $key => $value) {
+                                                            if ($key > $intKey) {
+                                                                echo '<option value="' . $value . '">' . My\General::getStatusOrder()[$value] . '</option>';
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+
+                                            <?php if ($this->detailOrder['is_payment'] == -1 || $this->detailOrder['is_payment'] == 5): ?>
+                                                <div class="col-lg-12">
+                                                    <div class="alert alert-block alert-danger fade in">
+                                                        <strong><?php if ($this->detailOrder['is_payment'] == -1): ?>Lý do hủy đơn hàng :<?php endif; ?><?php if ($this->detailOrder['is_payment'] == 5): ?>Lý do khách trả hàng :<?php endif; ?></strong> <?php echo $this->detailOrder['content_cancel']; ?>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <footer class="twt-footer">
+
+                                </footer>
+                            </section>
+
+                        </div>
+                        <div class="col-lg-8 col-lg-pull-4">
+                            <div class="row invoice-list">
+                                <div class="col-lg-6 col-sm-6">
+                                    <h4>THÔNG TIN KHÁCH HÀNG</h4>
+                                    <input type="hidden" class="user-infomation" value='<?php echo 'Họ tên: ' . $this->userInfo['fullname'] . '<br>Địa chỉ: ' . $this->userInfo['address'] . '<br>Phone: ' . $this->userInfo['phone']; ?>'>
+                                    <p>
+                                        <b>Họ tên :</b> <?php echo $this->userInfo['fullname']; ?> <br>
+                                        <b>Địa chỉ :</b> <?php echo $this->userInfo['address']; ?> <br>
+                                        <b>Số điện thoại :</b> <?php echo $this->userInfo['phone']; ?><br>
+                                        <b>Email :</b> <?php echo $this->userInfo['email']; ?><br>
+                                        <b>Ghi chú của khách : <?php echo isset($this->userInfo['note']) ? $this->userInfo['note'] : NULL ?><br>
+                                            </p>
+                                            <?php if (UID == $this->detailOrder['user_updated'] || empty($this->detailOrder['user_updated'])) { ?>
+                                                <p>
+                                                    <button type="button" class="btn btn-info btn-xs changeInfoCus"><i class="icon-edit"></i>  Thay đổi thông tin khách hàng</button>
+                                                </p>
+                                                <?php
+                                            }
+                                            ?>
+                                </div>
+                                <div class="col-lg-6 col-sm-6">
+                                    <h4>TRẠNG THÁI ĐƠN HÀNG</h4>
+                                    <p>
+                                        <b>Trạng thái :</b> <?php echo My\General::getStatusOrder()[$this->detailOrder['is_payment']] ?><br>
+                                        <!--<b>Lý do hủy-->
+                                        <b>Mã đơn hàng :</b><?php echo $this->detailOrder['orde_code']; ?><span class="order-id"><?php echo sprintf("%03d", $this->detailOrder['orde_id']); ?></span><br/>
+                                        <b>Ngày đặt hàng :</b> <span class="orderCreatedDate"><?php echo date('d/m/Y H:i:s', $this->detailOrder['orde_created']); ?></span><br>    
+                                        <b>Hình thức thanh toán :</b> <?php echo My\General::getPaymentMethod()[$this->detailOrder['orde_payment']] ?> <br/>
+                                        <b>Hình thức vận chuyển :</b> <?php echo My\General::getMethodShip()[$this->detailOrder['orde_ship']] ?><br/>
+                                        <b>Sale : </b> <?php echo $this->detailOrder['user_change_status']; ?><br/>
+                                        <b>Ngày cập nhật : </b> <?php echo empty($this->detailOrder['orde_updated']) ? "Chưa cập nhật lần nào" : date('d-m-Y H:i:s', $this->detailOrder['orde_updated']); ?><br/>
+                                    </p>  
+                                </div>
+                            </div>
+
+                            <?php if (UID == $this->detailOrder['user_updated'] || empty($this->detailOrder['user_updated'])) { ?>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <?php if ($this->detailOrder['is_payment'] != 2) { ?>
+                                            <p><a class="btn btn-primary btn-addproduct" href="javascript:;" data-original-title="Thêm sản phẩm quà tặng" class="tooltips"><i class="icon-plus-sign-alt"></i> Thêm</a></p>
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="col-lg-6">   
+                                        <p class="text-right"><a class="btn btn-primary btn-createOrder" href="javascript:;" data-original-title="Tạo nhanh đơn hàng" class="tooltips"><i class="icon-plus-sign-alt"></i> Tạo nhanh đơn hàng</a></p>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <div class="row">
+                                <div class="col-lg-12"> 
+                                    <table class="table table-bordered table-striped table-condensed cf">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="text-center">Tên sản phẩm</th>
+                                                <th class="text-center">Số lượng</th>
+                                                <th class="text-center">Giá bán (VNĐ)</th>
+                                                <th class="text-center">Chiết khấu</th>
+                                                <th class="text-center">Tổng tiền (VNĐ)</th>
+                                                <th class="text-center">Tình trạng</th>
+                                                <?php if (UID == $this->detailOrder['user_updated'] || empty($this->detailOrder['user_updated'])) { ?>
+                                                    <th class="text-center">Chức năng</th>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <input type="hidden" id="OrderID" value="<?php echo $this->detailOrder['orde_id']; ?>" />
+                                        <?php
+                                        if ($this->arrProductList):
+                                            foreach ($this->arrProductList as $key => $value):
+                                                ?>
+                                                <tr class="item" id="<?php echo $value['prod_id'] ?>">
+                                                    <td class="text-center ProductOrderID"><?php echo $key + 1 ?></td>
+                                                    <td class="text-left ProductName" width="250">
+                                                        <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => 'productslug', 'productId' => $value['prod_id'])) ?>" target="_bank">                                    
+                                                            <?php echo $value['prod_name']; ?>
+                                                        </a>
+                                                        <?php
+                                                        if ($this->arrTakeCus[$value['prod_id']]) {
+                                                            echo '<span style="color:red;">(' . date('d/m/Y', $this->arrTakeCus[$value['prod_id']]) . ')</span>';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td class="text-center prodQuantity" width="80"><?php echo $value['prod_quantity']; ?></td>
+                                                    <td class="text-center prodPrice"><?php
+                                                        if ($value['prod_call_price'] != 1) {
+                                                            echo number_format($value['prod_price']);
+                                                        } else {
+                                                            ?>Giá liên hệ ...<br/>(Giá thực : <small class="text-muted " style="color:#F00"><?php echo number_format($arrProductList['prod_price']) . ' VNĐ'; ?></small>)<?php } ?></td>
+                                                    <td class="text-center disCount"><?php echo $value['discount']; ?>%</td>
+                                                    <td class="text-center TotalPrice"><?php
+                                                        if ($value['prod_call_price'] != 1) {
+                                                            echo number_format($value['total_price']);
+                                                        } else {
+                                                            ?>Đang cập nhật ... <br/><small class="text-muted ">(Tổng tiền : <small class="text-muted " style="color:#F00"><?php echo number_format($arrProductList['total_price']) . ' VNĐ'; ?></small>)</small><?php } ?></td> 
+
+                                                    <td class="text-center">
+                                                        <strong>
+                                                            <?php
+                                                            if ($this->detailOrder['is_payment'] == 2 || $this->detailOrder['is_payment'] == 3 || $this->detailOrder['is_payment'] == 4) {
+                                                                switch ($this->detailOrder['is_payment']) {
+                                                                    case 2:
+                                                                        echo '<span class="label label-primary tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$this->detailOrder['is_payment']] . '">' . My\General::getStatusOrder()[$this->detailOrder['is_payment']] . '</span>';
+                                                                        break;
+                                                                    case 3:
+                                                                        echo '<span class="label label-warning tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$this->detailOrder['is_payment']] . '">' . My\General::getStatusOrder()[$this->detailOrder['is_payment']] . '</span>';
+                                                                        break;
+                                                                    case 4:
+                                                                        echo '<span class="label label-success tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$this->detailOrder['is_payment']] . '">' . My\General::getStatusOrder()[$this->detailOrder['is_payment']] . '</span>';
+                                                                        break;
+                                                                }
+                                                            } else {
+                                                                switch ($value['prod_status']) {
+                                                                    case -1:
+                                                                        echo '<span class="label label-default tooltips" data-placement="top" data-original-title="' . My\General::getStatusProdOrder()[$value['prod_status']] . '">' . My\General::getStatusProdOrder()[$value['prod_status']] . '</span>';
+                                                                        break;
+                                                                    case 0:
+                                                                        echo '<span class="label label-danger tooltips" data-placement="top" data-original-title="' . My\General::getStatusProdOrder()[$value['prod_status']] . '">' . My\General::getStatusProdOrder()[$value['prod_status']] . '</span>';
+                                                                        break;
+                                                                    case 1:
+                                                                        echo '<span class="label label-success tooltips" data-placement="top" data-original-title="' . My\General::getStatusProdOrder()[$value['prod_status']] . '">' . My\General::getStatusProdOrder()[$value['prod_status']] . '</span>';
+                                                                        break;
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </strong>
+                                                    </td>    
+                                                    <?php if (UID == $this->detailOrder['user_updated'] || empty($this->detailOrder['user_updated'])) { ?>
+                                                        <td class="text-center" width="150">
+                                                            <?php
+                                                            $is_payment = $this->detailOrder['is_payment'];
+                                                            if ($is_payment == 0 || $is_payment == 1 || $is_payment == 6) {
+                                                                ?>
+                                                                <a class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Sửa giá liên hệ" id="<?php echo $value['prod_id'] ?>" rel="<?php echo $value['product_order_id'] ?>"><i class="icon-pencil"></i> Sửa</a>
+                                                                <?php
+                                                            }
+                                                            ?>
+
+                                                            <?php
+                                                            $arrPayment = array('2', '3', '4');
+                                                            if (!in_array($this->detailOrder['is_payment'], $arrPayment)) {
+                                                                ?>
+                                                                <a class="btn btn-danger btn-xs  denied" data-placement="top" rel="<?php echo $value['product_order_id'] ?>" ><i class="icon-remove"></i>Xóa</a>
+                                                            <?php } ?>    
+                                                            <p style="margin: 3px;">
+                                                                <a class="btn btn-primary btn-xs edit-date-care" rel="<?php echo $value['prod_id']; ?>" data-placement="top" data-original-title="Hỗ trợ chăm sóc khách hàng"><i class="icon-pencil"></i> Sửa hỗ trợ</a>
+                                                            </p>
+                                                        </td>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr><td colspan="8" class="text-center">Hiện tại không có sản phẩm.</td></tr>
+                                        <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <section class="panel panel-shipping">
+                                        <select class="form-control shipping" name="proship_package"> 
+                                            <?php
+                                            foreach (My\General::getMethodShip() as $key => $value):
+
+                                                if ($key != (int) $this->detailOrder['orde_ship'] && $key != 3):
+                                                    ?>
+                                                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                                    <?php
+                                                endif;
+                                            endforeach;
+                                            ?>
+                                        </select>
+                                    </section>
+                                </div>
+                            </div>
+
+
+                            <div class="row u-shiping">
+                                <div class="col-lg-12">   
+                                    <section class="panel panel-proship">
+                                        <div class="twt-feed blue-bg">
+                                            <h1 style="  margin: 0px;"><?php echo ($this->detailOrder['orde_ship'] == 1) ? 'Thông tin GiaoNhan247' : 'Thông tin Proship'; ?></h1>
+                                        </div>
+                                        <div style="border: 1px solid #E4E4E4">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <form method="POST" role="form" class="form-horizontal tasi-form" id="frm" action="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'order', 'action' => 'shiping', 'id' => $this->detailOrder['orde_id'])); ?>" novalidate="novalidate">
+                                                        <input type="hidden" value="<?php echo ($this->detailOrder['orde_ship'] == 1) ? 2 : 1; ?>" class="shipID" name="shipping"/>
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">Địa Chỉ:</label>
+                                                                <div class="col-xs-10">
+                                                                    <input type="text" value="<?php echo $this->userInfo['address']; ?>" placeholder="Nhập địa chỉ giao hàng" class="form-control" name="proship_address" id="proship_address">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">Tỉnh Thành:</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="form-control" name="proship_province" id="proship_province">    
+                                                                        <option>----   Chọn Tỉnh / Thành Phố  ----</option>
+                                                                        <?php foreach ($this->arrCityList as $arrCity): ?>
+                                                                            <option value="<?php echo $arrCity['cityId']; ?>" <?php echo ($this->params['city'] == $arrCity['cityId'] || $arrShip['city_id'] == $arrCity['cityId']) ? "selected" : ''; ?>><?php echo $arrCity['cityName']; ?></option>
+                                                                        <?php endforeach; ?>
+                                                                        <input name="cityName" class="cityName" hidden value="" />
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">Quận Huyện:</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="form-control" name="proship_district" id="proship_district">                                                   
+                                                                        <option value="0">------</option>
+                                                                    </select>
+                                                                    <input name="distName" class="distName" hidden value="" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">Phường Xã:</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="form-control" name="proship_ward" id="proship_ward">                                                   
+                                                                        <option value="0">-----</option>
+                                                                    </select>
+                                                                    <input name="wardName" class="wardName" hidden value="" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">Khối lượng:</label>
+                                                                <div class="col-xs-10">
+                                                                    <input type="text" value="0" placeholder="Khối lượng" class="form-control" name="proship_weigh" id="proship_number">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">Gói dịch vụ:</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="form-control" name="proship_package">                                                   
+                                                                        <option value="1">Tiết kiệm</option>
+                                                                        <option value="4">Qua ngày</option>
+                                                                        <option value="3" selected="">Giao nhanh</option>
+                                                                        <option value="2">Siêu tốc</option>
+                                                                        <option value="5">Ban đêm</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-xs-2 control-label" value="">hình thức thanh toán:</label>
+                                                                <div class="col-xs-10">
+                                                                    <select class="form-control" name="proship_payment">                                                   
+                                                                        <option value="1" selected="">Người gửi trả phí</option>
+                                                                        <option value="2" selected="">Người nhận trả phí</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <?php if (empty($this->detailOrder['user_updated']) || $this->detailOrder['user_updated'] == UID): ?>
+                                                                <div class="form-group">
+                                                                    <label class="col-xs-2 control-label" value=""></label>
+                                                                    <div class="col-xs-10">
+                                                                        <button type="submit" class="btn btn-danger">Lưu thông tin</button>
+                                                                    </div>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <footer class="twt-footer">
+                                        </footer>
+                                    </section>
+                                </div>
+                            </div>                    
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script>
+    var _cityID = '<?php echo empty($arrShip['city_id']) ? 0 : $arrShip['city_id']; ?>';
+    var _distID = '<?php echo empty($arrShip['dist_id']) ? 0 : $arrShip['dist_id']; ?>';
+    var _wardID = '<?php echo empty($arrShip['ward_id']) ? 0 : $arrShip['ward_id']; ?>';
+    var orderID = '<?php echo $this->detailOrder['orde_id'] ?>';
+    Order.index();
+    Order.loadAddressShip();
+</script>

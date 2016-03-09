@@ -1,0 +1,103 @@
+<?php
+
+use My\General;
+?>
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">            
+            <div class="br-hidden">
+                <div class="item item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none" itemprop="url"><span itemprop="title">Thông tin cá nhân</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <?php
+        echo $this->render('frontend/leftmenu-order');
+        ?>
+        <div class="main">
+            <div id="totalProfile">               
+                <h2>Thông tin cá nhân</h2>
+                <?php
+                $successMessage = $this->flashMessenger()->setNamespace('success-edit-profile')->getMessages();
+                if ($successMessage):
+                    ?>
+                    <h4> Hoàn tất!</h4>
+                    <p><?php echo current($successMessage); ?></p>
+                <?php endif; ?>
+                <div id="t_left">
+                    <?php
+                    if ($this->arrDetailUser['user_avatar']):
+                        $user_avatar = json_decode($this->arrDetailUser['user_avatar'], true);
+                    endif;
+                    ?>
+                    <!--<div class="get-alert-upload" style="color:#8BB400;"></div>-->
+                    <div id="userphoto" style="position: relative">
+                        <a id="uploadPreview" style="position: absolute; "> 
+                            <img src="<?php echo $user_avatar[0]['sourceImage']; ?>"> 
+                        </a>
+                        <form style="position: absolute; width: 100%;height:100%;" enctype="multipart/form-data">
+                            <div class="btn btn-primary btn-file btn-lg"  style="opacity: 0;width: 100%;height:100%;" >
+                                <input type="file" id="categoryImages" style="opacity: 0;width: 100%;height:100%;" class="fileupload-new" title="Ảnh cá nhân"/>
+                            </div>
+                        </form>   
+                    </div>
+                    <section id="settings" class="hidden">
+                        <p class="setting_l"><span>Ngày đăng kí : </span><?php echo date('d-m-Y', ($this->arrDetailUser['user_created'])); ?></p>
+                        <p class="setting_l"><span>Quyền : </span>
+                            <?php
+                            if ($this->arrGroup) {
+                                foreach ($this->arrGroup as $val) {
+                                    if ($val['grou_id'] == $this->arrDetailUser["grou_id"]) {
+                                        echo $val['grou_name'];
+                                        break;
+                                    }
+                                }
+                            }
+                            ?>
+                        </p>
+                    </section>
+                </div>
+                <div id="t_right">
+                    <section id="settings" class="hidden">
+                        <p class="setting"><span>Họ tên: </span><?php echo $this->arrDetailUser['user_fullname']; ?></p>
+                        <p class="setting"><span>Địa chỉ:</span><?php echo $this->arrDetailUser['user_address']; ?></p>
+                        <p class="setting"><span>Giới tính:</span><?php
+                            foreach (General::getGender() as $key => $val) {
+                                if ($key == $this->arrDetailUser['user_gender']) {
+                                    echo $val;
+                                }
+                            }
+                            ?></p>
+                        <p class="setting"><span>Ngày sinh:</span><?php echo date("d-m-Y", $this->arrDetailUser['user_birthdate']); ?></p>
+                        <p class="setting"><span>Email:</span><?php echo $this->arrDetailUser['user_email']; ?></p>
+                        <p class="setting"><span>Số điện thoại:</span><?php echo $this->arrDetailUser['user_phone']; ?></p>        
+                        <p class="setting"><a class="button" href="<?php echo $this->serverUrl() . $this->Url('profile', array('controller' => 'profile', 'action' => 'edit')) ?>">Chỉnh sửa</a></p>
+                    </section>
+                </div>
+                <div style="clear: both;"></div>
+            </div>   
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+<script type="text/javascript">
+//    Profile.index();
+    Profile.showImage();
+</script>

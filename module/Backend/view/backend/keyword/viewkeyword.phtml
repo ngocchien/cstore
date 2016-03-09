@@ -1,0 +1,49 @@
+<?php
+//    p($this->params);die;
+?>
+<section class="wrapper site-min-height">
+    <section class="panel">
+        <header class="panel-heading">
+            View Keyword
+        </header>
+        <div class="panel-body">    
+            <div class="adv-table editable-table ">  
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3">                  
+                        <div id="editable-sample_length" class="dataTables_length no-padding">
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        <form id="frm" class="form-horizontal" role="form" method="GET">
+                            <div class="col-xs-9 no-padding">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder="Nhập keyword vào đây"></label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 no-padding-right">
+                                <button type="submit" class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    </div>
+                <?php if (!empty($this->arrKeyList)): ?>
+                    <div class="col-sm-6">
+                        <section id="unseen">
+                                <tbody>
+                                    <?php 
+                                    $StringWord = '';
+                                    foreach ($this->arrKeyList as $key => $value):
+$StringWord .= trim($value) . '
+';
+                                    endforeach ?>
+                                    <textarea rows="20" name="word_data" id="Sumary" class="form-control editor"><?php echo trim($StringWord); ?></textarea>
+                                </tbody>
+                        </section>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+</section>

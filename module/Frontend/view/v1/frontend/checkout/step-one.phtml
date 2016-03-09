@@ -1,0 +1,389 @@
+<!--<??>-->
+<script type="text/javascript">
+    var checkoutURL = '<?php echo $this->serverUrl() . $this->Url('frontend-order', array('controller' => 'order', 'action' => 'update_cart_in_checkout')); ?>';
+</script>
+<?php
+//p($params);die;
+$arrProductListCookie = $this->arrProductListCookie;
+$listProductCart = $this->listProductCart;
+$totalPriceOrder = 0;
+$arrDistrict = $this->arrDistrict;
+$arrCity = $this->arrCity;
+?>
+
+<div class="bar">
+    <div class="bar-ps step-3">
+        <div class="itm ps_1">
+            <div class="pl">
+                <div class="pr">
+                    <div class="pc">THÔNG TIN<br>ĐƠN HÀNG</div>
+                </div>
+            </div>
+        </div>
+        <div class="itm ps_2 ">  <div class="pl">
+                <div class="pr">
+                    <div class="pc">THÌNH THỨC <br>THANH TOÁN</div>
+                </div>
+            </div>
+        </div>
+        <div class="itm ps_3">  <div class="pl">
+                <div class="pr">
+                    <div class="pc">ĐỊA CHỈ<br> GIAO HÀNG</div>
+                </div>
+            </div>
+        </div>
+        <div class="itm ps_4 ps_en">  <div class="pl">
+                <div class="pr">
+                    <div class="pc">HOÀN TẤT<br> ĐƠN HÀNG</div>
+                </div>
+            </div>
+        </div>
+        <div class="itm ps_5">&nbsp;</div>
+
+        <div style="clear: both"></div>
+    </div>
+</div>
+<div id="cont-checkout">
+    <div class="main">
+        <form method="POST">
+            <div class="info-take">
+                <div class="info-cus">
+                    <p class="title">Thông tin liên hệ</p>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="label">  Họ tên<span class="color-red">*</span></td>
+                                <td>  
+                                    <input type="text" class="form-control  valid fullname" name="strFullname" value="<?php echo ($params['strFullname']) ? $params['strFullname'] : ((UID) ? FULLNAME : NULL) ?>">
+                                    <?php
+                                    if ($this->errors['fullname']):
+                                        ?>
+                                        <div class="error errorCheckoutFullName"><?php echo $this->errors['fullname'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">  Điện thoại<span class="color-red">*</span></td>
+                                <td>  
+                                    <input type="text" class="phone phoneNumber" name="strPhone" value="<?php echo ($params['strPhone']) ? $params['strPhone'] : ((UID) ? PHONE : NULL) ?>"><div style="color: activecaption;">Dùng để liên hệ khi giao hàng</div>
+                                    <?php
+                                    if ($this->errors['phoneNumber']):
+                                        ?>
+                                        <div class="error errorCheckoutPhone"><?php echo $this->errors['phoneNumber'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">  Email<span class="color-red">*</span></td>
+                                <td>  <input name="strEmail" type="text" class="form-control email valid" value="<?php echo ($params['strEmail']) ? $params['strEmail'] : ((UID) ? EMAIL : NULL) ?>">
+                                    <?php
+                                    if ($this->errors['Email']):
+                                        ?>
+                                        <div class="error errorCheckoutEmail"><?php echo $this->errors['Email'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="title">Địa chỉ nhận hàng</p>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="label">
+                                </td>
+                                <td> 
+                                    <input name="strAddress" type="text" placeholder="Địa chỉ" id="inputEmail3" class="form-control address" value="<?php echo ($params['strAddress']) ? $params['strAddress'] : (ADDRESS ? ADDRESS : '') ?>"> <br/>
+                                    <div style="color: activecaption; margin-left:0px">(Lưu ý: Nhập Số nhà, tên đường , Phường-xã)</div>
+                                    <?php
+                                    if ($this->errors['address']):
+                                        ?>
+                                        <div class="error errorCheckoutAddress"><?php echo $this->errors['address'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">
+                                    Tỉnh / Thành
+                                </td>
+                                <td> 
+                                    <select name="intCity" class="form-control intCity" id="inputEmail3">
+                                        <option value="0"> --- Chọn Tỉnh / Thành phố ---</option>
+                                        <?php foreach ($arrCity as $value): ?>
+                                            <option value="<?php echo $value['city_id']; ?>" <?php if ($value['city_id'] == CITY_ID || $params['intCity'] == $value['city_id']): ?>selected<?php endif; ?>><?php echo $value['city_name']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php
+                                    if ($this->errors['intCity']):
+                                        ?>
+                                        <div class="error errorCheckoutintCity"><?php echo $this->errors['intCity'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">
+                                    Quận / Huyện
+                                </td>
+                                <td> 
+                                    <select name="intDist" class="form-control intDist" id="inputEmail3">
+                                        <option value="0">  --- Chọn Quận / Huyện ---</option>
+                                        <?php
+                                        if (!empty($this->arrDistrict)):
+                                            foreach ($this->arrDistrict as $value):
+                                                ?>
+                                                <option value="<?php echo $value['dist_id']; ?>" <?php if (DISTRICT_ID == $value['dist_id'] || $params['intDist'] == $value['dist_id']): ?> selected <?php endif; ?>><?php echo $value['dist_name']; ?></option>
+                                                <?php
+                                            endforeach;
+                                        endif;
+                                        ?>
+                                    </select>
+                                    <?php
+                                    if ($this->errors['intDist']):
+                                        ?>
+                                        <div class="error errorCheckoutintDist"><?php echo $this->errors['intDist'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">
+                                    Xã / Phường
+                                </td>
+                                <td> 
+                                    <select name="intWard" class="form-control intWard" id="inputEmail3">
+                                        <option value="">  --- Chọn Xã / Phường ---</option>
+                                        <?php
+                                        if (!empty($this->arrWardList)):
+                                            foreach ($this->arrWardList as $value):
+                                                ?>
+                                                <option value="<?php echo $value['ward_id']; ?>" <?php if (WARD_ID == $value['ward_id'] || $params['intWard'] == $value['ward_id']): ?> selected <?php endif; ?>><?php echo $value['ward_name']; ?></option>
+                                                <?php
+                                            endforeach;
+                                        endif;
+                                        ?>
+                                    </select>
+                                    <?php
+                                    if ($this->errors['intWard']):
+                                        ?>
+                                        <div class="error errorCheckoutintDist"><?php echo $this->errors['intWard'] ?></div>
+                                        <?php
+                                    endif;
+                                    ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="title">Ghi chú</p>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td  class="label">
+                                </td>
+                                <td> 
+                                    <textarea name="strNote" class="form-control note" rows="3"> <?php echo ($params['strNote']) ? $params['strNote'] : NULL; ?></textarea><br><span style="color: activecaption; margin-left:0px">(Nếu quý khách muốn giao hàng hẹn giờ, hoặc có các vấn đề khác vui lòng ghi chú)</span> 
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="payment-cus">
+                    <div class="page">
+                        <p class="title">Chọn hình thức thanh toán</p>                       
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="ic">
+                                        <label for="optionsRadios1"><img  alt="" src="<?php echo STATIC_URL . '/f/' . FRONTEND_TEMPLATE ?>/images/cart.png"></label>
+                                    </td>
+                                    <td class="rd">
+                                        <input type="radio" value="1" id="optionsRadios1" name="payment" class="payment" <?php if ($params["payment"] == 1) echo 'checked'; ?>>
+                                    </td>
+                                    <td class="tx">
+                                        <label for="optionsRadios1"><strong>Chuyển khoản ngân hàng</strong>
+                                            <p>Chuyển khoản qua các ngân hàng Vietcombank, Viettinbank, Agribank, Ocenbank...</p></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="ic">
+                                        <label for="optionsRadios2"><img alt="" src="<?php echo STATIC_URL . '/f/' . FRONTEND_TEMPLATE ?>/images/pay_bkim.png"></label>
+                                    </td>
+                                    <td class="rd">
+                                        <input type="radio" value="2" id="optionsRadios2" name="payment" class="payment" <?php if ($params["payment"] == 2) echo 'checked'; ?>>
+                                    </td>
+                                    <td class="tx">
+                                        <label for="optionsRadios2"><strong>Thanh toán Bảo Kim</strong>
+                                            <p>Đảm bảo an toàn 100% thanh toán trực tuyến qua website</p></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="page" >
+                        <div class="card">
+                            <table>
+                                <tr>
+                                    <td class="ic">
+                                        <label for="optionsRadios3"><img for="optionsRadios3" alt="" src="<?php echo STATIC_URL . '/f/' . FRONTEND_TEMPLATE ?>/images/pay_take.png"></label>
+                                    </td>
+                                    <td class="rd">
+                                        <input type="radio" value="3" id="optionsRadios3" name="payment" class="payment" <?php if ($params["payment"] == 3) echo 'checked'; ?>>
+                                    </td>
+                                    <td class="tx">
+                                        <label for="optionsRadios3"><strong>Thanh toán khi nhận hàng</strong>
+                                            <p>Nhân viên giao hàng của chúng tôi sẽ thu tiền tại nhà của bạn khi giao hàng</p></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <?php
+                    if ($this->errors['payment']):
+                        ?>
+                        <div class="error errorCheckoutintDist"><?php echo $this->errors['payment'] ?></div>
+                        <?php
+                    endif;
+                    ?>
+
+                    <div class="page" style="border:none">
+                        <p class="title">Mã Giảm Giá</p>
+                        <div class="">
+                            <table>
+                                <tr>
+                                    <?php if (!isset($_COOKIE['voucher'])) { ?>
+                                        <td style="width: 75%"><input type="text" id="voucher" class="form-control"></td>
+                                        <td><button type="button" class="btn-voucher  btn-ok" >OK</button></td>
+                                    <?php } else { ?>
+                                        <td style="color:red"><?php echo $_COOKIE['voucher'] ?> <button type="button" class="del-voucher   btn-ok">Xóa</button></td>
+
+                                    <?php } ?>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-1">
+                <div class="button">
+                    <a href="<?php echo $this->serverUrl() . $this->Url('frontend', array('controller' => 'checkout', 'action' => 'index')); ?>"><button class=" btn-next" type="button">&lt;&lt; QUAY LẠI</button></a>
+                    <button class=" btn-pre finishOrder" type="submit">HOÀN TẤT ĐƠN HÀNG &gt;&gt;</button>
+                </div>
+                <div class="card">
+                    <div class="pay-logo">
+                        <div class="proship">
+                            <p><strong>Dịch vụ vận chuyển nội thành nhanh nhất</strong></p>
+                            <p class="img"><a target="_bank" title="Proship" href="http://proship.vn"><img alt="proship" src="<?php echo STATIC_URL . '/f/' . FRONTEND_TEMPLATE ?>/images/prohip.jpg"></a></p>
+                        </div>
+                        <div class="baokim">
+                            <p><strong>Thanh toán đảm bảo</strong></p>
+                            <p><a target="_bank" title="baokim" href="http://baokim.vn"><img alt="baokim" src="<?php echo STATIC_URL . '/f/' . FRONTEND_TEMPLATE ?>/images/baokim.jpg"></a></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="right">
+        <div class="info">
+            <div class="head"><h2>Bạn có <?php echo count($arrProductListCookie); ?> sản phẩm trong giỏ hàng</h2></div>
+            <div>
+                <table>
+                    <tbody><tr class="hd">
+                            <td class="sp">Sản phẩm</th>
+                            <!--<td class="name">&nbsp;</th>-->
+                            <td class="number">Số lượng</th>
+                            <td class="price">Giá</th>
+                            <td class="price">Thành tiền</th>
+                        </tr>
+                        <?php
+                        foreach ($listProductCart as $keyListProduct => $valueListProduct) {
+                            if ($valueListProduct['prod_is_promotion'] == 1) {
+                                $totalPriceOrder = $totalPriceOrder + ($valueListProduct['prod_promotion_price'] * $arrProductListCookie[$valueListProduct['prod_id']]['quantity']);
+                            } else {
+                                $totalPriceOrder = $totalPriceOrder + ($valueListProduct['prod_price'] * $arrProductListCookie[$valueListProduct['prod_id']]['quantity']);
+                            }
+                            $totalPriceRedu = $totalPriceOrder;
+                            if (!empty($this->totalPriceRedu))
+                                $totalPriceRedu = $this->totalPriceRedu;
+                            ?>
+                            <tr class="detaiProduct">
+                                <!--<td><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $valueListProduct["prod_slug"], 'productId' => $valueListProduct['prod_id'])); ?>"><img alt="" width="60" src="<?php echo json_decode($valueListProduct['prod_image'], true)['thumbImage']['224x224']; ?>"></a></td>-->
+                                <td><strong><?php echo $valueListProduct['prod_name'] ?></strong></td>
+                                <td>
+                                    <select class="form-control quantity" id="29" rel="<?php echo $valueListProduct['prod_id'] ?>">
+                                        <?php for ($i = 1; $i <= 100; $i++) { ?>
+                                            <option value="<?php echo $i ?>" <?php
+                                            if ($arrProductListCookie[$valueListProduct['prod_id']]['quantity'] == $i) {
+                                                echo 'selected';
+                                            }
+                                            ?>><?php echo $i; ?></option>
+                                                <?php } ?>
+                                    </select>
+                                </td>
+                                <td class="price">
+                                    <?php echo ($valueListProduct['prod_is_promotion'] == 1) ? number_format($valueListProduct['prod_promotion_price'], 0, ",", ".") : number_format($valueListProduct['prod_price'], 0, ",", "."); ?>VNĐ<br>
+                                    <?php if ($valueListProduct['prod_is_promotion'] == 1) { ?><p style="text-decoration:line-through;"><?php echo number_format($valueListProduct['prod_price'], 0, ",", ".") ?> VNĐ</p><?php } ?>
+                                </td>
+                                <td class ='total'>
+                                    <?php echo ($valueListProduct['prod_is_promotion'] == 1) ? number_format($valueListProduct['prod_promotion_price'] * $arrProductListCookie[$valueListProduct['prod_id']]['quantity']) : number_format($valueListProduct['prod_price'] * $arrProductListCookie[$valueListProduct['prod_id']]['quantity']); ?> VNĐ<br>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        <tr class="sum">
+                            <td colspan="3">Tổng cộng</td>
+                            <td class = "totalPriceOrder"> <span><?php echo number_format($totalPriceOrder, 0, ",", ".") ?></span> VNĐ <input type="hidden" value="<?php echo $totalPriceOrder ?>"/></td>
+                        </tr>
+                        <tr class="sum">
+                            <td colspan="3">Phí vận chuyển</td>
+                            <td  class = "shippingFee"> 
+                                <span><?php
+                                    //$shipingFee = My\Shipping\Domestic::_calculateFeeFromRange($totalPriceOrder, $shipFee);
+                                    echo ((int) $intShipingFee == 0) ? "Miễn phí" : number_format($intShipingFee, 0, ",", ".") . " VNĐ";
+                                    ?></span> <input type="hidden" value="<?php echo $intShipingFee ?>"/>
+                            </td>
+                        </tr>
+                        <?php if (!empty($_COOKIE['voucher'])) { ?>
+                            <tr class="sum">
+                                <td colspan="3">Voucher giảm giá</td>
+                                <td class="moneyRedu"> <span><?php echo number_format($this->moneyRedu, 0, ",", ".") ?> </span> VNĐ  <input type="hidden" value="<?php echo $this->moneyRedu ?>"/></td>
+                            </tr>
+                        <?php } ?>
+                        <tr class="sum">
+                            <td colspan="3">Thành tiền (Đã bao gồm VAT)</td>
+                            <td class = "totalPriceOrderRedu"><span><?php echo number_format($totalPriceRedu + $intShipingFee, 0, ",", ".") ?>
+                                </span> VNĐ  <input type="hidden" value="<?php echo $totalPriceRedu ?>"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+</div>
+<script>
+    getDistURL = '<?php echo $this->serverUrl() . $this->url('checkout', array('controller' => 'checkout', 'action' => 'get-list-district')); ?>';
+    getWardURL = '<?php echo $this->serverUrl() . $this->url('checkout', array('controller' => 'checkout', 'action' => 'get-list-ward')); ?>';
+    voucherURL = '<?php echo $this->serverUrl() . $this->url('frontend-order', array('controller' => 'order', 'action' => 'voucher')); ?>';
+    delVoucherURL = '<?php echo $this->serverUrl() . $this->url('frontend-order', array('controller' => 'order', 'action' => 'del-voucher')); ?>';
+    Checkout.index();
+</script>

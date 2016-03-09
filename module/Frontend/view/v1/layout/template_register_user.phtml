@@ -1,0 +1,30 @@
+<div style="background: #e3f5ff; margin: 0 auto;">
+    <table  cellspacing="0" cellpadding="0" width="700px" align="center" valign="middle" style="background: #ffffff; border: 1px solid #37c3ff; padding: 10px 10px;" >
+        <tbody>
+            <tr>
+                <td align="center" colspan="2"><img src="<?php echo STATIC_URL . '/f/v1/images/logo-email.png' ?>"></td>
+            </tr>       
+            <tr>
+                <td>
+                    <table cellspacing="0" cellpadding="0"  align="center" valign="middle" style="line-height: 20px; font-size: 13px; padding-right: 30px; text-align: justify;">
+                        <tr><td  style="padding-top: 5px;">Kính chào <b><?php echo $this->user_fullname ?></b></td></tr>
+                        <tr><td  style="padding-top: 5px;">Chúc mừng bạn đã đăng ký tài khoản <strong><?php echo $this->user_name ?></strong> thành công</td></tr>
+                        <tr><td  style="padding-top: 5px;">Mã tài khoản của bạn là: <strong><?php echo $this->user_id ?></strong> thành công</td></tr>
+                    </table>
+                </td>               
+            </tr>
+            <tr>
+                <td colspan="2" style="font-size: 13px;padding: 0px 10px; border-radius: 5px; line-height: 20px; ">Nếu quý khách cần hỗ trợ, vui lòng gọi  <span style="color:#f00; font-weight: bold; font-size: 15px;"><?php echo HOTLINE_NUMBER; ?></span> hoặc gửi email đến: <span style="color:#0f72e2"><?php echo \My\General::EMAIL_SUPPORT ?></span>.<br/>Cảm ơn Quý khách đã mua sắm trên megavita.vn !.</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="font-size: 13px;padding: 10px 10px; border-radius: 5px; line-height: 20px; color: #888888; ">(*) Đây là email hệ thống gửi tự động, vui lòng không trả lời (reply) lại email này.</td>
+            </tr>
+            <tr>
+                <td colspan="2"  style="padding: 30px 10px;"><img src="<?php echo STATIC_URL . '/f/v1/images/line.png' ?>" alt=""/></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="font-size: 20px;padding: 20px 10px; border-radius: 5px; line-height: 20px; color: #3bace1; font-weight: bold; text-align: center; ">Megavita.Vn - SIÊU THỊ KHỎE VÀ ĐẸP ONLINE !</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,219 @@
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-category')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <div class="row" id="frmAddCity">
+        <div class="col-lg-12">
+            <section class="panel panel-primary">
+                <header id="frmTitle" class="panel-heading">Chỉnh sửa Danh mục bài viết</header>
+                <div class="panel-body">
+                    <form id="frm" role="form" class="form-horizontal tasi-form" method="POST">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"> Tên Danh mục</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" readonly type="text" name="CategoryName" value = "<?php echo $this->detailCategory['cate_name'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_slug" class="col-lg-2 control-label">Url</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" readonly type="text" name="CateSlug" placeholder="Nhập Tên không dấu" value="<?php echo $this->detailCategory['cate_slug'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label"> Thuộc Nhóm :</label>
+                            <div class="col-lg-10">
+                                <select name="parentID" class="form-control" disabled>
+                                    <option value="0" >Chọn Nhóm</option>
+                                    <?php foreach ($this->arrCategoryList as $arrCategoryList) { ?>
+                                        <option value="<?php echo $arrCategoryList['cate_id'] ?>"<?php if ($arrCategoryList['cate_id'] == $this->detailCategory['cate_parent']) { ?> selected<?php } ?> >
+                                            <?php
+                                            $temp = substr_count($arrCategoryList['cate_grade'], ':');
+                                            if ($temp > 0) {
+                                                if ($arrCategoryList['cate_parent'] != 0) {
+                                                    echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $temp);
+                                                    echo '&#x21b3;&nbsp;&nbsp;';
+                                                }
+                                            }
+                                            echo $arrCategoryList['cate_name'];
+                                            ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_order" class="col-lg-2 control-label">Độ ưu tiên</label>
+                            <div class="col-lg-5">
+                                <input readonly class="form-control" type="text" name="CateOrder" value="<?php echo $this->detailCategory['cate_order']; ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_description" class="col-lg-2 control-label">Mô tả ngắn về Danh mục</label>
+                            <div class="col-lg-10">
+                                <textarea rows="6" name="cate_description" id="Sumary" class="form-control editor" style="">
+                                    <?php echo isset($this->params["cate_description"]) ? $this->params["cate_description"] : $this->detailContentCategory["cate_description"]; ?>
+                                </textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_meta_title" class="col-lg-2 control-label">SEO Meta Title</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="CateMetaTitle" placeholder="Nhập SEO Meta Title" value ="<?php echo $this->detailContentCategory['cate_meta_title'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_meta_keyword" class="col-lg-2 control-label">SEO Meta Keyword</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="CateMetaKeyword" placeholder="Nhập SEO Meta Keyword" value ="<?php echo $this->detailContentCategory['cate_meta_keyword'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_meta_description" class="col-lg-2 control-label">SEO Meta Description</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="CateMetaDescription" placeholder="Nhập SEO Meta Description" value ="<?php echo $this->detailContentCategory['cate_meta_description'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cate_meta_social" class="col-lg-2 control-label">SEO Meta Social</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="CateMetaSocial" placeholder="Nhập SEO Meta Social" value ="<?php echo $this->detailContentCategory['cate_meta_social'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-offset-3 col-lg-10">
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
+                                <input value="0" name="is_close" class="is_close" type="hidden" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <?php
+            $successMessage = $this->flashMessenger()->setNamespace('success-delete-news-cate')->getMessages();
+            $errorMessage = $this->flashMessenger()->setNamespace('error-delete-news-cate')->getMessages();
+            if ($successMessage) {
+                ?>
+                <div class="alert alert-success alert-block fade in">
+                    <button class="close close-sm" type="button" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+                    <p>- <?php echo current($successMessage); ?></p>
+                </div>
+            <?php } ?>
+            <?php
+            if ($errorMessage) {
+                ?>
+                <div class="alert alert-danger alert-block fade in">
+                    <button class="close close-sm" type="button" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <h4><i class="icon-ok-sign"></i> Thất bại!</h4>
+                    <p>- <?php echo current($errorMessage); ?></p>
+                </div>
+            <?php } ?>
+            <section class="panel panel-primary">
+                <header id="" class="panel-heading">Danh sách bài viết trong danh mục</header>
+                <div class="panel-body">
+                    <div class="row">
+                        <form id="frm_addprod">
+                            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" id="result">
+                                <input class="form-control" id="contentId" name="contentTag" type="text">
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <a class="btn btn-primary" onclick="addContent()"><i class="icon-plus-sign-alt"></i> Thêm</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <strong class="text-danger get-error"></strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <p>Vui lòng nhập ID Bài viết để thêm Bài viết vào Danh mục</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <a onclick="refresh()" class="btn btn-primary" data-placement="top" data-original-title="Cập nhật">
+                                <i class="icon-refresh"></i> Làm mới
+                            </a>
+                            <a onclick="deleteContent(<?php echo $this->params['id']; ?>, '', 1)" class="btn btn-danger remove tooltips" data-placement="top" data-original-title="Xóa sản phẩm">
+                                <i class="icon-trash "></i> Xóa
+                            </a>
+                        </div>
+
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                            <div class="col-xs-9 no-padding">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label>
+                                        <input onkeypress="if (event.keyCode == 13) {
+                                                    search();
+                                                }" autocomplete="off" name="s" value="" aria-controls="editable-sample" class="per-100 input-seaching form-control medium s" type="text">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 no-padding-right">
+                                <button onclick="search()" type="button" class="btn btn-white per-100"><i class="icon-search"></i> Tìm kiếm</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row listContent">
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    var s = '';
+    var id_news_cate = <?php echo $this->params['id']; ?>;
+    $('.listContent').load(baseurl + '/backend/news-category/content', {id_news_cate: id_news_cate});
+    $('#contentId').tagsInput({
+        autocomplete_url: baseurl + '/backend/news-category/autocomplete-content?id_news_cate=' + id_news_cate,
+        autocomplete: {selectFirst: true, width: '100px', autoFill: false}
+    });
+    Categorynews.index();
+</script>

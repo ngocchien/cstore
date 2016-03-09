@@ -1,0 +1,96 @@
+<?php
+$value = $this->template;
+$key = $this->key;
+$keyColor = $this->keyColor;
+$arrColor = $this->arrColor;
+$menu = json_decode($value['json_menu'], true);
+$menuTopMain = $menu['top'];
+$menuLeftMain = $menu['left'];
+$arrProductDefault = array();
+foreach ($menu['default'] as $keyMenu => $valueMenu) {
+    $arrProductDefault[$valueMenu['sort']] = $valueMenu;
+}
+?>      
+<div class="block-head">
+    <?php
+    echo $this->render('frontend/menu');
+    ?>
+    <div id="slider">
+        <div class="menu-top">
+            <?php foreach ($menuTopMain as $keyTop => $valueTop) : ?>
+                <div class="item">
+                    <a href="<?php echo $valueTop['url'] ?>" title="<?php echo $valueTop['title']; ?>"><?php echo $valueTop['title']; ?></a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="cont">
+            <div class="sleft">
+                <div class="item sl-blue active">
+                    <div class="img">
+                        <a href="<?php echo (!empty($arrProductDefault[1])) ? $arrProductDefault[1]['url'] : NULL ?>" ref="<?php echo (!empty($arrProductDefault[1])) ? $arrProductDefault[1]['url'] : NULL ?>"> <img  class="lazy" data-original="<?php echo (!empty($arrProductDefault[1])) ? json_decode($arrProductDefault[1]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/images-1.png' ?>"/></a>
+                    </div>
+                    <div class="desc">
+                        <div class="num">01</div>
+                        <div class="title"><?php echo (!empty($arrProductDefault[1])) ? $arrProductDefault[1]['title'] : 'Chăm Sóc Da' ?></div>
+                        <div class="text"><?php echo (!empty($arrProductDefault[1])) ? $arrProductDefault[1]['summary'] : 'Các sản phẩm chăm sóc da móng tóc nổi tiếng, Các sản phẩm chăm sóc da móng tóc nổi tiếng,' ?></div>
+                    </div>
+                </div>
+                <div class="item sl-orange">
+                    <div class="img">
+                        <a href="#" ref="<?php echo (!empty($arrProductDefault[2])) ? $arrProductDefault[2]['url'] : NULL ?>"> <img   class="lazy" data-original="<?php echo (!empty($arrProductDefault[2])) ? json_decode($arrProductDefault[2]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/images-2.png' ?>"/></a>
+                    </div>
+                    <div class="desc">
+                        <div class="num">02</div>
+                        <div class="title"><?php echo (!empty($arrProductDefault[2])) ? $arrProductDefault[2]['title'] : 'Chăm Sóc Da' ?></div>
+                        <div class="text"><?php echo (!empty($arrProductDefault[2])) ? $arrProductDefault[2]['summary'] : 'Các sản phẩm chăm sóc da móng tóc nổi tiếng, Các sản phẩm chăm sóc da móng tóc nổi tiếng,' ?></div>
+                    </div>
+                </div>
+                <div class="item sl-green">
+                    <div class="img">
+                        <a href="#" ref="<?php echo (!empty($arrProductDefault[3])) ? $arrProductDefault[3]['url'] : NULL ?>"> <img   class="lazy" data-original="<?php echo (!empty($arrProductDefault[3])) ? json_decode($arrProductDefault[3]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/images-3.jpg' ?>"/></a>
+                    </div>
+                    <div class="desc">
+                        <div class="num">03</div>
+                        <div class="title"><?php echo (!empty($arrProductDefault[3])) ? $arrProductDefault[3]['title'] : 'Chăm Sóc Da' ?></div>
+                        <div class="text"><?php echo (!empty($arrProductDefault[3])) ? $arrProductDefault[3]['summary'] : 'Các sản phẩm chăm sóc da móng tóc nổi tiếng, Các sản phẩm chăm sóc da móng tóc nổi tiếng,' ?></div>
+                    </div>
+                </div>
+                <div class="item sl-purple">
+                    <div class="img">
+                        <a href="#" ref="<?php echo (!empty($arrProductDefault[4])) ? $arrProductDefault[4]['url'] : NULL ?>"> <img   class="lazy" data-original="<?php echo (!empty($arrProductDefault[4])) ? json_decode($arrProductDefault[4]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/images-4.jpg' ?>"/></a>
+                    </div>
+                    <div class="desc">
+                        <div class="num">04</div>
+                        <div class="title"><?php echo (!empty($arrProductDefault[4])) ? $arrProductDefault[4]['title'] : 'Chăm Sóc Da' ?></div>
+                        <div class="text"><?php echo (!empty($arrProductDefault[4])) ? $arrProductDefault[4]['summary'] : 'Các sản phẩm chăm sóc da móng tóc nổi tiếng, Các sản phẩm chăm sóc da móng tóc nổi tiếng,' ?></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="sright">
+                <div class="item">
+                    <a href="<?php echo (!empty($arrProductDefault[5])) ? $arrProductDefault[5]['url'] : NULL ?>" title="<?php echo (!empty($arrProductDefault[5])) ? $arrProductDefault[5]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($arrProductDefault[5])) ? json_decode($arrProductDefault[5]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-d.jpg' ?>"/></a>
+                </div>
+                <div class="item">
+                    <a href="<?php echo (!empty($arrProductDefault[6])) ? $arrProductDefault[6]['url'] : NULL ?>" title="<?php echo (!empty($arrProductDefault[6])) ? $arrProductDefault[6]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($arrProductDefault[6])) ? json_decode($arrProductDefault[6]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-e.jpg' ?>"/></a>
+                </div>
+                <div class="item">
+                    <a href="<?php echo (!empty($arrProductDefault[7])) ? $arrProductDefault[7]['url'] : NULL ?>" title="<?php echo (!empty($arrProductDefault[6])) ? $arrProductDefault[6]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($arrProductDefault[7])) ? json_decode($arrProductDefault[7]['img'], true)['sourceImage'] : STATIC_URL . '/f/v1/images/image-f.jpg' ?>"/></a>
+                </div>                            
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+<div class="block-note">
+    <ul class="list-inline">
+        <li><img   class="lazy" data-original="<?php echo STATIC_URL; ?>/f/v1/images/loiich.png" alt=""></li>
+<!--        <li><a title="loiich-1"><img  class="lazy" data-original="<?php echo STATIC_URL; ?>/f/v1/images/loiich-1.png"></a></li>-->
+        <li><a title="loiich-2"><img  class="lazy" data-original="<?php echo STATIC_URL; ?>/f/v1/images/loiich-2.png"></a></li>
+        <li><a title="loiich-3"><img  class="lazy" data-original="<?php echo STATIC_URL; ?>/f/v1/images/loiich-3.png"></a></li>
+        <li><a title="loiich-4"><img  class="lazy" data-original="<?php echo STATIC_URL; ?>/f/v1/images/loiich-4.png"></a></li>
+        <li><a title="loiich-5"><img  class="lazy" data-original="<?php echo STATIC_URL; ?>/f/v1/images/loiich-5.png"></a></li>
+    </ul>
+    <div style="clear: both;"></div>
+</div>

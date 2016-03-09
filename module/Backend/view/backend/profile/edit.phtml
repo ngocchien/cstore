@@ -1,0 +1,117 @@
+<div id="get-alert"></div>
+<section class="panel" id="alert">
+    <div class="panel-heading"> Chỉnh sửa thông tin tài khoản</div>
+    <div class="panel-body">
+        <form id="frm" class="form-horizontal tasi-form" action="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'profile', 'action' => 'edit')); ?>" role="form" method="POST">
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Họ và Tên <span style="color:red">*</span></label>
+                <div class="col-lg-10">
+                    <input type="text" name="name" class="form-control name" value="<?php echo $this->arrUser['user_fullname'] ?>" placeholder="Vui lòng nhập Họ và Tên">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Email <span style="color:red">*</span></label>
+                <div class="col-lg-10">
+                    <input type="text" name="email" class="form-control email" value="<?php echo $this->arrUser['user_email'] ?>" placeholder="Vui lòng nhập Email">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Giới tính </label>
+                <div class="col-lg-10">
+                    <select name="gender" class="form-control gender">
+                                        <option value="">--Mời chọn--</option>
+                                        <?php
+                                        foreach( My\General::getGender() as $key=>$value):
+                                            ?>
+                                        <option value="<?php echo $key ?>" <?php echo $this->arrUser['user_gender'] == $key ? 'selected="selected"' : ''; ?>><?php echo $value ?></option>
+                                        <?php
+                                        endforeach;
+                                        ?>
+                                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Số điện thoại <span style="color:red">*</span></label>
+                <div class="col-lg-10">
+                    <input type="text" name="telephone" class="form-control telephone" value="<?php echo $this->arrUser['user_phone'] ?>" placeholder="Vui lòng nhập số điện thoại">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 col-sm-2 control-label" for="birthdate">Ngày sinh</label>
+                <div class="col-lg-10">
+                    <input id="birthdate" name="birthdate" class="form-control birthdate default-date-picker" type="text" placeholder="Vui lòng nhập ngày sinh" value="<?php echo date('d-m-Y', $this->arrUser['user_birthdate']) ?>" style="cursor: default;background-color: #FFF" readonly="readonly">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Số nhà, tên đường <span style="color:red">*</span></label>
+                <div class="col-lg-10">
+                    <input id="address" name="address" class="form-control address" type="text" placeholder="Lưu ý: Chỉ nhập số nhà - tên đường - Xã/ Phường" value="<?php echo $this->arrUser['user_address'] ?>">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Tỉnh / Thành </label>
+                <div class="col-lg-10">
+                    <select name="city" id="city" class="form-control city">
+                        <option value="">-- Chọn Tỉnh / Thành --</option>
+                        <?php foreach ($this->arrCity as $arrCity): ?>
+                            <option value="<?php echo $arrCity['city_id']; ?>" <?php echo $arrCity['city_id'] == $this->arrUser['city_id'] ? 'selected="selected"' : ''; ?>><?php echo $arrCity['city_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group get-district">
+                <label  class="col-lg-2 control-label">Quận / Huyện </label>
+                <div class="col-lg-10">
+                    <select name="district" id="district" class="form-control district">
+                        <?php foreach ($this->arrDistrict as $arrDistrict): ?>
+                            <option value="<?php echo $arrDistrict['dist_id']; ?>" <?php echo $arrDistrict['dist_id'] == $this->arrUser['dist_id'] ? 'selected="selected"' : ''; ?>><?php echo $arrDistrict['dist_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Mật khẩu hiện tại</label>
+                <div class="col-lg-10">
+                    <input type="password" name="old-password" class="form-control old-password" placeholder="Nhập vào mật khẩu hiện tại nếu muốn đổi mật khẩu mới">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Mật khẩu mới</label>
+                <div class="col-lg-10">
+                    <input type="password" name="new-password" class="form-control new-password" placeholder="Vui lòng nhập mật khẩu mới">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-lg-2 control-label">Nhập lại mật khẩu mới</label>
+                <div class="col-lg-10">
+                    <input type="password" name="re-new-password" class="form-control re-new-password" placeholder="Vui lòng nhập lại mật khẩu mới">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                    <button type="button" class="btn btn-success btn-edit"><i class="icon-save"></i> Hoàn tất</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+<script src="<?php echo STATIC_URL ?>/b/js/library/bootstrap-datepicker.js"></script>   <!-- Không include thư viện ở controller đc nên mới include ở đây -->
+<script src="<?php echo STATIC_URL ?>/b/js/library/advanced-form-components.js"></script>
+<script>
+    $('.eff-new-password').hide();
+    $('.eff-re-new-password').hide();
+<?php if (!$this->arrDistrict) { ?>
+        $('.get-district').hide();
+<?php } ?>
+</script>

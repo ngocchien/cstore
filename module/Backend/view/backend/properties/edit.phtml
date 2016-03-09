@@ -1,0 +1,76 @@
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-properties')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <div class="row" id="frmAddCity">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header id="frmTitle" class="panel-heading">Chỉnh sửa thuộc tính</header>
+                <div class="panel-body">
+                    <form id="frm" role="form" class="form-horizontal tasi-form" method="POST">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Tên thuộc tính</label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <input class="form-control" type="text" name="PropertiesName" value = "<?php echo $this->detailProperties['prop_name'] ?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Thuộc Nhóm :</label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <select name="parentID" class="form-control">
+                                    <option value="0" >Chọn Nhóm</option>
+                                    <?php foreach ($this->arrPropertiesList as $arrPropertiesList) { ?>
+                                        <option value="<?php echo $arrPropertiesList['prop_id'] ?>"<?php if ($arrPropertiesList['prop_id'] == $this->detailProperties['prop_parent']) { ?> selected<?php } ?>>
+                                            <?php $temp = substr_count($arrPropertiesList['prop_grade'], ':'); ?>
+                                            <?php
+                                            if ($temp > 0) {
+                                                if ($arrPropertiesList['prop_parent'] != 0) {
+                                                    echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $temp);
+                                                    echo '&#x21b3;&nbsp;&nbsp;';
+                                                }
+                                            }
+                                            echo $arrPropertiesList['prop_name'];
+                                            ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-10 col-md-10 col-sm-10">
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
+                                <input value="0" name="is_close" class="is_close" type="hidden" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Properties.index();
+</script>

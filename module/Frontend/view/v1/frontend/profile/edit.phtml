@@ -1,0 +1,176 @@
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <div class="br-hidden">
+                <div class="item item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none">Thông tin tài khoản</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <?php
+        echo $this->render('frontend/leftmenu-order');
+        ?>
+        <div class="main">
+            <div id="totalProfile">               
+                <h2>Thông tin cá nhân</h2>
+                <div id="t_left">
+                    <?php
+                    if ($this->arrUser['user_avatar']):
+                        $user_avatar = json_decode($this->arrUser['user_avatar'], true);
+                    endif;
+                    ?>
+                    <!--<div class="get-alert-upload"></div>-->    
+                    <div id="userphoto" style="position: relative">
+                        <a id="uploadPreview" style="position: absolute; "> <img src="<?php echo $user_avatar[0]['sourceImage']; ?>"> </a>
+                        <form style="position: absolute; width: 100%;height:100%;" enctype="multipart/form-data">
+                            <div class="btn btn-primary btn-file btn-lg"  style="opacity: 0;width: 100%;height:100%;" >
+                                <input type="file" id="categoryImages" style="opacity: 0;width: 100%;height:100%;" class=" fileupload-new" title="Ảnh cá nhân"/>
+                            </div>
+                        </form>         
+                    </div>
+                    <section id="settings" class="hidden">
+                        <p class="setting_l"><span>Ngày đăng kí : </span><?php echo date('d-m-Y', ($this->arrDetailUser['user_created'])); ?></p>
+                    </section>
+                </div>
+                <div id="t_right"> 
+                    <?php
+                    if ($this->errors) {
+                        foreach ($this->errors as $errors) {
+                            ?>
+                            <p style="color: red"><?php echo ' - ' . $errors; ?></p>
+                            <?php
+                        }
+                    }
+                    ?>
+                    <form id="frm" class="form-horizontal tasi-form" role="form" method="POST">
+                        <label>
+                            <span>Họ tên :</span>
+                            <input id="name" type="text" name="name"value="<?php echo $this->arrUser['user_fullname'] ?>"/>
+                        </label>
+                        <label>
+                            <span>Email:</span>
+                            <input id="name" type="email" name="email" value="<?php echo $this->arrUser['user_email'] ?>" readonly/>
+                        </label>
+                        <label>
+                            <span>Giới tính:</span>
+                            <select name="gender" id="gender" class="form-control gender">
+                                <option value="">--Mời chọn--</option>
+                                <?php
+                                foreach (My\General::getGender() as $key => $value):
+                                    ?>
+                                    <option value="<?php echo $key ?>" <?php echo $this->arrUser['user_gender'] == $key ? 'selected="selected"' : ''; ?>><?php echo $value ?></option>
+                                    <?php
+                                endforeach;
+                                ?>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Số điện thoại:</span>
+                            <input id="telephone" type="text" name="telephone" value="<?php echo $this->arrUser['user_phone'] ?>" readonly/>
+                        </label>
+                        <label>
+                            <span>Ngày sinh:</span>
+                            <div class="ui-formRow ">
+                                <div class="collection">
+                                    <select name="year" class="year rgYear">
+                                        <option value="">-</option>
+                                        <?php
+                                        $now = getdate();
+                                        for ($i = ($now["year"] - 5); $i >= ($now["year"] - 105); $i--) {
+                                            ?>
+                                            <option value="<?php echo $i; ?>" <?php echo date('Y', $this->arrUser['user_birthdate']) == $i ? 'selected' : NULL ?>><?php echo $i; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <select name="month" class="month rgMoth">
+                                        <option value="">-</option>
+                                        <?php
+                                        $arrMoth = array('Tháng Một',
+                                            'Tháng Hai',
+                                            'Tháng Ba',
+                                            'Tháng Tư',
+                                            'Tháng Năm',
+                                            'Tháng Sáu',
+                                            'Tháng Bảy',
+                                            'Tháng Tám',
+                                            'Tháng Chín',
+                                            'Tháng Mười',
+                                            'Tháng Mười Một',
+                                            'Tháng Mười Hai',
+                                        );
+                                        for ($i = 1; $i <= 12; $i++) {
+                                            ?>
+                                            <option value="<?php echo $i; ?>" <?php echo date('m', $this->arrUser['user_birthdate']) == $i ? 'selected' : NULL ?>><?php echo $arrMoth[$i - 1]; ?> </option>
+                                        <?php } ?>
+                                    </select>
+                                    <select name="day" class="day rgDay" disabled style="background-color: #d5d5d5;" >
+                                        <option value="">-</option>
+                                    </select>
+                                    <span class="error-display error-rgBirtday"></span>
+                                </div>
+                            </div>
+                        </label>
+                        <label>
+                            <span>Số nhà, tên đường:</span>
+                            <input id="address" type="text" name="address" value="<?php echo $this->arrUser['user_address'] ?>"/>
+                        </label>
+                        <label>
+                            <span>Tỉnh thành:</span>
+                            <select name="city" id="city" class="form-control gender">
+                                <option value="">-- Chọn Tỉnh / Thành --</option>
+                                <?php foreach ($this->arrCity as $arrCity): ?>
+                                    <option value="<?php echo $arrCity['city_id']; ?>" <?php echo $arrCity['city_id'] == $this->arrUser['city_id'] ? 'selected="selected"' : ''; ?>><?php echo $arrCity['city_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Quận/Huyện:</span>
+                            <select name="district" id="district" class="form-control gender">
+                                <?php foreach ($this->arrDistrict as $arrDistrict): ?>
+                                    <option value="<?php echo $arrDistrict['dist_id']; ?>" <?php echo $arrDistrict['dist_id'] == $this->arrUser['dist_id'] ? 'selected="selected"' : ''; ?>><?php echo $arrDistrict['dist_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Mật khẩu hiện tại:</span>
+                            <input id="old_password" type="password" name="old_password" placeholder="Nhập vào mật khẩu hiện tại nếu muốn đổi mật khẩu mới"/>
+                        </label>
+                        <label>
+                            <span>Mật khẩu mới:</span>
+                            <input id="new_password" type="password" name="new_password" placeholder="Nhập mật khẩu hiện mới"/>
+                        </label>
+                        <label>
+                            <span>Nhập lại mật khẩu mới:</span>
+                            <input id="re_new_password" type="password" name="re_new_password" placeholder="Nhập lại mật khẩu mới"/>
+                        </label>
+                        <label>
+                            <span>&nbsp;</span>
+                            <input type="submit" class="button" value="Chấp nhận" />
+                        </label>  
+                    </form>
+                </div>
+                <div style="clear: both;"></div>
+            </div>   
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var day = '<?php echo date('d', $this->arrUser['user_birthdate']); ?>';
+
+    Profile.index();
+</script>

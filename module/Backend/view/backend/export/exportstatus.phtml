@@ -1,0 +1,95 @@
+<?php
+if ($this->arrOrders) {
+    $tr = '';
+    $trTotal = '';
+    $totalOrders = 0;
+    foreach ($this->arrOrders as $key => $arrOrders) {
+        $countRecevied += (int) $arrOrders['Recevied'];
+        $countPaid += (int) $arrOrders['Paid'];
+        $countRunning += (int) $arrOrders['Running'];
+        $countinWarehouse += (int) $arrOrders['inWarehouse'];
+        $countgetReturn += (int) $arrOrders['getReturn'];
+        $countCancel += (int) $arrOrders['Cancel'];
+
+        $count_Orders += (int) $arrOrders['Recevied'] + (int) $arrOrders['Paid'] + (int) $arrOrders['Running'] + (int) $arrOrders['inWarehouse'] + (int) $arrOrders['getReturn'] + (int) $arrOrders['Cancel'];
+
+        $tr .= '<tr><td style="text-align: center">' . $arrOrders['user_change_status'] . '</td>';
+        $tr .= '<td style="text-align: center">' . $arrOrders['Recevied'] . '</td>';
+        $tr .= '<td style="text-align: center">' . $arrOrders['Paid'] . '</td>';
+        $tr .= '<td style="text-align: center">' . $arrOrders['Running'] . '</td>';
+        $tr .= '<td style="text-align: center">' . $arrOrders['inWarehouse'] . '</td>';
+        $tr .= '<td style="text-align: center">' . $arrOrders['getReturn'] . '</td>';
+        $tr .= '<td style="text-align: center">' . $arrOrders['Cancel'] . '</td></tr>';
+
+        $totalReceived += $arrOrders['totalReceived'];
+        $totalPaid += $arrOrders['totalPaid'];
+        $totalRunning += $arrOrders['totalRunning'];
+        $totalinWarehouse += $arrOrders['totalinWarehouse'];
+        $totalgetReturn += $arrOrders['totalgetReturn'];
+        $totalCancel += $arrOrders['totalCancel'];
+        $totalOrders += $arrOrders['totalReceived'] + $arrOrders['totalPaid'] + $arrOrders['totalRunning'] + $arrOrders['totalinWarehouse'] + $arrOrders['totalgetReturn'] + $arrOrders['totalCancel'];
+    }
+
+    $trTotal .= '<tr style="color: red; font-size: 14px; font-weight: 700"><td style="text-align:center;"><b>Thành tiền</b></td>';
+    $trTotal .= '<td style="text-align: center;">' . number_format($totalReceived) . '</td>';
+    $trTotal .= '<td style="text-align: center">' . number_format($totalPaid) . '</td>';
+    $trTotal .= '<td style="text-align: center">' . number_format($totalRunning) . '</td>';
+    $trTotal .= '<td style="text-align: center">' . number_format($totalinWarehouse) . '</td>';
+    $trTotal .= '<td style="text-align: center">' . number_format($totalgetReturn) . '</td>';
+    $trTotal .= '<td style="text-align: center">' . number_format($totalCancel) . '</td>';
+    $trTotal .= '<td style="text-align: center">' . number_format($totalOrders) . '</td></tr>';
+}
+?>
+<meta charset='UTF-8'>
+<table border="1">
+    <tr>
+        <td rowspan="3" colspan="6" style="vertical-align:middle;text-align: center">
+            <h4>Thống kê trạng thái đơn hàng từ ngày <?php echo $this->date['from'] ?> đến ngày <?php echo $this->date['to'] ?></h4>
+        </td>
+        <td style="text-align: center;"><b>Tổng đơn</b></td>
+        <td style="text-align: center;"><?php echo $this->totalOrders ?></td>
+    </tr>
+    <tr>
+        <td style="text-align: center;"><b>Chờ duyệt</b></td>
+        <td style="text-align: center;"><?php echo $this->waitingOrders ?></td>
+    </tr>
+    <tr>
+        <td style="text-align: center;"><b>Khách tự đặt</b></td>
+        <td style="text-align: center;"><?php echo $this->cusOrders ?></td>
+    </tr>
+</table>
+<table border="1">
+    <thead>
+        <tr>
+            <td style="text-align: center;"><b>Nhân viên</b></td>
+            <td style="text-align: center;"><b>Đã nhận hàng</b></td>
+            <td style="text-align: center;"><b>Đã thu tiền</b></td>
+            <td style="text-align: center;"><b>Đang giao hàng</b></td>
+            <td style="text-align: center;"><b>Hàng đang về</b></td>
+            <td style="text-align: center;"><b>Khách trả hàng</b></td>
+            <td style="text-align: center;"><b>Hủy đơn hàng</b></td>
+            <td style="text-align: center;"><b>Tổng</b></td>
+        </tr>
+    </thead>
+    <tbody>
+            <?php echo $tr ?>
+            <?php if ($tr) { ?>
+                <tr style="color: red; font-size: 14px; font-weight: 700">
+                    <td style="text-align: center;"><b>Tổng</b></td>
+                    <td style="text-align: center"><?php echo $countRecevied ?></td>
+                    <td style="text-align: center"><?php echo $countPaid ?></td>
+                    <td style="text-align: center"><?php echo $countRunning ?></td>
+                    <td style="text-align: center"><?php echo $countinWarehouse ?></td>
+                    <td style="text-align: center"><?php echo $countgetReturn ?></td>
+                    <td style="text-align: center"><?php echo $countCancel ?></td>
+                    <td style="text-align: center"><?php echo $count_Orders ?></td>
+                </tr>
+                <?php
+                echo $trTotal;
+            } else {
+                echo '<tr><td colspan="8" style="text-align: center">Không tìm thấy đơn hàng</td></tr>';
+            }
+            ?>
+    </tbody>
+</table>
+						

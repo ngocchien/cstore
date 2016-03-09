@@ -1,0 +1,117 @@
+
+<section class="wrapper site-min-height">   
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-times-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-messenge')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách phí vận chuyển
+        </header>
+        <div class="panel-body">    
+            <div class="adv-table editable-table ">  
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">                  
+                        <div id="editable-sample_length" class="dataTables_length no-padding">
+                            <a class="btn btn-primary" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'ShippingFee', 'action' => 'add')); ?>" ><i class="icon-plus-sign-alt"></i> Thêm</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <form id="frm" class="form-horizontal" role="form" method="GET">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <select name="city" id="city" class="selectbox selectpicker" data-live-search="true" title="Chọn một thành phố">>
+                                        <?php foreach ($this->arrCityList as $arrCity): ?>
+                                            <option value="<?php echo $arrCity['city_id']; ?>" <?php echo $this->params['city'] == $arrCity['city_id'] ? "selected" : ''; ?>><?php echo $arrCity['city_name']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <select name="district" id="district" class="form-control selectbox" data-live-search="true">
+                                        <option value="">Vui lòng chọn Quận / Huyện</option>
+                                        <?php
+                                        if (!empty($this->arrDistrictList)):
+                                            foreach ($this->arrDistrictList as $key => $arrDistrict) {
+                                                ?>
+                                                <option value="<?php echo $arrDistrict['dist_id']; ?>" <?php echo $this->params['district'] == $arrDistrict['dist_id'] ? "selected" : ''; ?>><?php echo $arrDistrict['dist_name']; ?></option>
+                                                <?php
+                                            }
+                                        endif;
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    <button type="submit"  class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br/>
+                <section id="unseen">
+                    <table class="table table-bordered table-striped table-condensed cf">
+                        <thead class="cf">
+                            <tr>
+                                <th class="text-center"><i class=""></i> ID</th>
+                                <th class=""><i class=""></i>Thỉnh Thành</th>
+                                <th class=""><i class=""></i> Quận huyện</th>
+                                <th class=""><i class=""></i> Phí</th>
+                                <th class="text-center"><i class=""></i> Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($this->arrShippingFeeList):
+                                foreach ($this->arrShippingFeeList as $arrShippingFee):
+                                    ?>
+                                    <tr>
+                                        <td  class="text-center" width="80">
+                                            <?php echo $arrShippingFee['ship_fee_id']; ?>
+                                        </td>
+                                        <td ><?php echo $arrShippingFee['city_name']; ?> </td>
+                                        <td ><?php echo $arrShippingFee['dist_name']; ?></td>
+                                        <td ><?php echo number_format($arrShippingFee['ship_fee'], 0, '.', ','); ?></td>
+                                        <td class="text-center visible-lg visible-sm visible-md visible-xs" width="200">
+                                            <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'ShippingFee', 'action' => 'edit', 'id' => $arrShippingFee['ship_fee_id'])); ?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Sửa thông tin"  rel="<?php echo $arrShippingFee['user_id'] ?>"><i class="icon-pencil"></i> Sửa</a>
+                                            <a  class="btn btn-danger btn-xs remove tooltips" data-placement="top" data-original-title="Xóa" rel="<?php echo $arrShippingFee['ship_fee_id'] ?>"><i class="icon-trash "></i> Xóa</a>
+                                        </td>
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="6" class="text-center">Hiện tại chưa có người dùng nào.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div>
+                <?php echo $this->paging; ?>
+            </div>
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Shipping.del();
+    Shipping.index();
+</script>

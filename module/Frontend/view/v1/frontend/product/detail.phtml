@@ -1,0 +1,662 @@
+<?php
+
+use My\General;
+
+$arrProductCookieList = $this->arrProductCookieList;
+$general = new General();
+$arrDetaiProduct = $this->arrDetaiProduct;
+$arrDetailBrand = $this->arrDetailBrand;
+$mainCategory = $this->mainCategory;
+$arrParentCommentList = $this->arrParentCommentList;
+$arrListCommentChildren = $this->arrListCommentChildren;
+$arrListUserComment = $this->arrListUserComment;
+$images = json_decode($arrDetaiProduct['prod_image_sub'], true);
+$arrPropertiesList = $this->arrPropertiesList;
+$arrProductBestSelling = $this->arrProductBestSelling;
+$arrProductTagsList = $this->arrProductTagsList;
+$arrTags = $this->arrTags;
+$arrCateParent = $this->arrCateParent;
+$arrCateInProduct = $this->arrCateInProduct;
+$arrContentList = $this->arrContentList;
+//p($arrContentList);die;
+$arrPropertiesParentList = array();
+foreach ($this->arrPropertiesParentList as $key => $value) {
+    $arrPropertiesParentList[$value['prop_id']] = $value;
+}
+?>
+<script type="text/javascript">
+    var url_like_comment = '<?php echo $this->serverUrl() . $this->Url('comment', array('controller' => 'comment', 'action' => 'like')); ?>';
+    var url_comment = '<?php echo $this->serverUrl() . $this->Url('comment', array('controller' => 'comment', 'action' => 'add')); ?>';
+    var getCommentURL = '<?php echo $this->serverUrl() . $this->Url('comment', array('controller' => 'comment', 'action' => 'get-comment')); ?>';
+    var ProductID = '<?php echo $arrDetaiProduct['prod_id']; ?>';
+    var advisoryURL = '<?php echo $this->serverUrl() . $this->Url('frontend-order', array('controller' => 'order', 'action' => 'advisory')); ?>';
+</script>
+
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb">            
+            <div class="br-hidden">
+                <?php
+                if (!empty($this->arrGradeList)):
+                    foreach ($this->arrGradeList as $key => $value):
+                        ?>
+                        <div class="item">
+                            <div class="ar-right">
+                                <div class="cont">
+                                    <a href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'action' => 'index', 'categorySlug' => $value["cate_slug"], 'categoryID' => $value["cate_id"])) ?>"><?php echo $value['cate_name'] ?></a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+                <div class="active">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrDetaiProduct["prod_slug"], 'productId' => $arrDetaiProduct["prod_id"])) ?>"><?php echo $arrDetaiProduct['prod_name']; ?></a>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+
+    <div class="block-content c-dt">
+        <div class="main">                       
+            <h1 class="title"><?php echo $arrDetaiProduct['prod_name']; ?></h1>
+            <div class="mn-if">
+                <div class="item brand"> 
+                    Thương hiệu <a href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'action' => 'index', 'categorySlug' => $mainCategory["cate_slug"], 'categoryID' => $mainCategory["cate_id"], 'brand' => $arrDetailBrand["cate_slug"])) ?>"><?php echo $arrDetailBrand['cate_name']; ?></a>
+                </div>
+                <div class="item rate">
+                    <div class="start" data-average="<?php echo round($arrDetaiProduct['prod_rate'] / $arrDetaiProduct['prod_count_rate']);
+                ?>" data-id="<?php echo $arrDetaiProduct['prod_id'] ?>"></div>
+                </div>
+                <div class="item">
+                    <a href="#box-comment"><?php echo $this->totalComment; ?> Bình luận</a>
+                </div>
+                <div class="item">
+                    <a href="#box-comment">Mời bình luận</a>
+                </div>
+            </div>
+            <div class="prod">
+                <div>
+                    <div class="im-pd f-left">
+                        <div class="clearfix sub-im" >
+                            <ul class="clearfix" >
+                                <?php
+                                foreach ($images as $keyImage => $valueImage) :
+                                    ?>
+                                    <li>
+                                        <a href='javascript:void(0);' rel="{gallery: 'gal1', smallimage: '<?php echo json_decode($valueImage, true)['sourceImage'] ?>',largeimage: '<?php echo json_decode($valueImage, true)['sourceImage'] ?>'}">
+                                            <img src='<?php echo json_decode($valueImage, true)['thumbImage']['50x50'] ?>' >
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="clearfix main-im">
+                            <?php $arrDetaiProduct['prod_image'] = empty($images[0]) ? $arrDetaiProduct : $images[0]; ?>
+                            <a href="<?php echo json_decode($arrDetaiProduct['prod_image'], true)['sourceImage'] ?>" class="jqzoom" rel='gal1'  title="<?php echo $arrDetaiProduct['prod_name']; ?>" >
+                                <img class="lazy" data-original="<?php echo json_decode($arrDetaiProduct['prod_image'], true)['sourceImage'] ?>"  title="<?php echo $arrDetaiProduct['prod_name']; ?>" >
+                            </a>                                  
+                        </div>
+                    </div>
+                    <div class="if-pd f-left">
+                        <div class="pr">
+                            Giá : <span itemprop="price"><?php if ($arrDetaiProduct['prod_call_price'] == 1) { ?><span class="current">Liên hệ để biết giá</span><?php } else { ?><span class="current"><?php echo ($arrDetaiProduct['prod_is_promotion'] == 1) ? number_format($arrDetaiProduct['prod_promotion_price'], 0, ",", ".") : number_format($arrDetaiProduct['prod_price'], 0, ",", ".") ?> VNĐ</span> <?php if ($arrDetaiProduct['prod_is_promotion'] == 1) { ?><span class="promot"><?php echo number_format($arrDetaiProduct['prod_price'], 0, ",", ".") ?></span> <span itemprop="priceCurrency" content="USD">VNĐ</span></span><?php
+                                }
+                            }
+                            ?>
+                            </span>
+                            <!--<div style=" clear: both"></div>-->
+                            <?php if (IS_ACP == 1): ?>
+                                <button class="bt-send f-r btn-print" rel="13">IN ĐƠN HÀNG</button>
+                            <?php endif; ?>
+                        </div>
+                        <div class="nt">
+                            <div class="item">
+                                Mã sản phẩm: <strong><?php echo General::PREFIX_IN . sprintf("%03d", $arrDetaiProduct['prod_code']) ?></strong>
+                            </div>
+                            <?php
+                            if (count($arrPropertiesList) > 0) :
+                                foreach ($arrPropertiesList as $keyProp => $valueProp) :
+                                    ?>
+                                    <div class="item">
+                                        <?php echo $arrPropertiesParentList[$valueProp['prop_parent']]['prop_name'] . ':'; ?> <strong><?php echo $valueProp['prop_name'] ?></strong>
+                                    </div>
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
+                            <div style="clear: both"></div>
+                        </div>
+                        <div class="st">
+                            Tình trạng: <span><?php echo ($arrDetaiProduct['prod_status'] == 1) ? 'Còn hàng' : 'Hết Hàng' ?></span>
+                        </div>
+                        <?php if ($arrDetaiProduct['prod_call_price'] != 1): ?>
+                            <?php if (!empty($arrStand) && $arrDetaiProduct['prod_status'] == 0): ?>
+
+                            <?php else: ?>
+                                <div class="nm">
+                                    Số lượng : 
+                                    <select  title="Số lượng" id = "number" class="quantity">
+                                        <?php for ($i = 1; $i <= 20; $i++): ?>
+                                            <option value="<?php echo $i ?>" <?php if ($i == 1): ?>selected<?php endif; ?>><?php echo $i ?></option>
+                                        <?php endfor; ?>
+                                    </select>
+                                </div>
+                                <div class="bt-buy">
+                                    <button class="addcart" rel="<?php echo $arrDetaiProduct['prod_id']; ?>">Mua Ngay</button>
+                                    <div class="im-help">
+                                        Hướng dẫn mua hàng
+                                    </div>
+
+                                    <div class="add-cart">
+                                        <a class="addcart" rel="<?php echo $arrDetaiProduct['prod_id']; ?>"> <span class="icon i-min-cart" ></span> Thêm vào giỏ hàng</a>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                        <?php endif; ?>
+                        <div class="info">
+                            <?php echo html_entity_decode($arrDetaiProduct['prod_description']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="social">
+
+            </div>
+            <div class="tbs">
+                <div class="hd">
+                    <div class="item">
+                        <a href="javascript:;"  data-id="#tab-a" class="active">Chi tiết sản phẩm</a>
+                    </div>
+                    <div class="item">
+                        <a href="#box-comment">Nhận xét của khách hàng</a>
+                    </div>
+                    <div class="item">
+                        <a href="javascript:;" data-id="#tab-c">Chính sách vận chuyển</a>
+                    </div>
+                </div>
+                <div class="ct">
+                    <div id="tab-a" class="item active">
+                        <div class="cont">
+                            <div class="desc" >
+                                <h3  class="title"><?php echo $arrDetaiProduct['prod_name']; ?></h3>
+                                <?php echo html_entity_decode($arrDetaiProduct['prod_detail']); ?>
+                            </div>
+                            <div class="r-box" style="    width: 260px;
+                                 height: 179px;
+                                 background: #fff1b9;
+                                 margin: 0 auto;">
+                                <div class="cont" style="    display: inline;">
+                                    <div class="call">
+                                        <span class="icon i-phone"></span>
+                                        <div>Tư vấn mua hàng</div>
+                                        <strong><?php echo HOTLINE_NUMBER ?></strong>
+                                    </div>
+
+                                    <div class="call-phone">
+                                        <div>Hoặc để lại <strong>SĐT</strong> Chuyên Viên Tư Vấn sẽ gọi lại ngay cho bạn</div>
+                                        <div class="ip-data">
+                                            <input class="input phoneadvisory" value="">
+                                            <center><div class="img-loading"></div></center>
+                                            <center><button class="bt-send">Gửi</button></center>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="brand">
+
+                                <div class="line"></div>
+                                <div class="title">                            
+                                    <h2 style="margin:0px">Thông tin thương hiệu <a class="title" href="<?php echo $this->serverUrl() . $this->Url('brand', array('controller' => 'brand', 'action' => 'index', 'brandSlug' => $arrDetailBrand["cate_slug"])) ?>"><?php echo $arrDetailBrand['cate_name'] ?></a></h2>                                    
+                                </div>
+                                <div style="float:left ; margin-right: 10px">
+                                    <img class="lazy" data-original="<?php echo json_decode($arrDetailBrand['cate_image'], true)['thumbImage']['116x116'] ?>"/>
+                                </div>
+                                <?php echo html_entity_decode($arrDetailBrand['cate_description']) ?>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--                    <div id="tab-b" class="item">
+                                        </div>
+                                        <div id="tab-c" class="item">
+                                        </div>-->
+                </div>
+            </div>
+            <?php if (count($arrProductTagsList) > 0) : ?>
+                <div class="pr-sm">
+                    <div class="title">
+                        Sản phẩm mua cùng
+                    </div>
+                    <div class="box-pr-sm" id="box-pr-sm">
+                        <!-- Slides Container -->
+                        <div u="slides" class="cursor"> 
+                            <?php
+                            foreach ($arrProductTagsList as $keyTags => $valueTags) :
+                                ?>
+                                <div class="item">
+                                    <?php
+                                    if ($valueTags['prod_call_price'] != 1) {
+                                        if ($valueTags['prod_is_promotion'] == 1) {
+                                            $percent = 100 - ($valueTags['prod_promotion_price'] * 100 / $valueTags['prod_price']);
+                                            ?>
+                                            <div class="icon">
+                                                <div class="gift"></div>
+                                                <div class="discount"><?php echo number_format($percent, 0, ",", ".") ?>%</div>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                    <div class="image">
+                                        <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $valueTags["prod_slug"], 'productId' => $valueTags['prod_id'])); ?>" title="<?php echo $valueTags['prod_name'] ?>" rel="nofollow"><img class="lazy" data-original="<?php echo json_decode($valueTags['prod_image'], true)['thumbImage']['224x224']; ?>"/></a>
+                                    </div>
+                                    <div class="info">
+                                        <div class="cont">
+                                            <div class="title"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $valueTags["prod_slug"], 'productId' => $valueTags['prod_id'])); ?>"><?php echo $valueTags['prod_name']; ?></a></div>
+                                            <?php if ($valueTags['prod_call_price'] == 1) { ?><div class="disprice">Liên hệ để biết giá</div> <?php } else { ?>
+                                                <?php if ($valueTags['prod_is_promotion'] == 1) { ?><div class="price"><?php echo number_format($valueTags['prod_price'], 0, ",", "."); ?> vnđ</div> <?php } ?>
+                                                <div class="disprice"><?php echo ($valueTags['prod_is_promotion'] == 1) ? number_format($valueTags['prod_promotion_price'], 0, ",", ".") : number_format($valueTags['prod_price'], 0, ",", "."); ?> vnđ</div><?php } ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                            endforeach;
+                            ?>
+                        </div>
+                        <!-- Arrow Left -->
+                        <span u="arrowleft" class="jssora04l  arrowleft">
+                        </span>
+                        <!-- Arrow Right -->
+                        <span u="arrowright" class="jssora04r  arrowright">
+                        </span>
+
+                    </div>
+                </div>
+
+            <?php endif; ?>
+            <div class="comm" id="box-comment">
+                <h2 class="title">Nhận xét của khách hàng về <?php echo $arrDetaiProduct['prod_name'] ?></h2>
+                <div class='cont'>
+                    <!--<div class="tt">Bạn đánh giá sản phẩm này như thế nào?</div>-->
+                    <div class="form">
+                        <div>
+                            <span class="errormain"></span>
+                        </div>
+                        <div class="avatar f-left">
+                            <img class="lazy" data-original="<?php echo (UID) ? ( ((json_decode(AVATAR, true)[0]['thumbImage']['50x50'])) ? (json_decode(AVATAR, true)[0]['thumbImage']['50x50']) : STATIC_URL . '/f/v1/images/no-avatar.jpg' ) : STATIC_URL . '/f/v1/images/no-avatar.jpg' ?>"/>
+                        </div>
+                        <div class="input f-left">
+                            <div class="textarear">
+                                <textarea class="input-comment"></textarea>
+                            </div>
+                            <div class="input-info  f-left">
+                                <?php if (!UID) { ?>
+                                    <div class="f-left"> 
+                                        <a href="#login-frame" rel="facebox" class="button login" title="Đăng nhập">Đăng nhập</a>
+                                    </div>
+                                <?php } ?>
+                                <div class="f-right">
+                                    <div class="name f-left">
+                                        <input type="text" class="input input-username" value="<?php echo (FULLNAME) ? FULLNAME : ""; ?>" placeholder="Nhập tên bắt buộc">
+                                    </div>
+                                    <div class="email f-left">
+                                        <input type="text" class="input input-email" value="<?php echo (EMAIL) ? EMAIL : ""; ?>" placeholder="Email"> 
+                                    </div>
+
+                                    <div class="icon f-left">
+                                        <img class="lazy" data-original="<?php echo STATIC_URL ?>/f/v1/images/icon-smile.jpg"/> 
+                                    </div>
+                                    <div class="button f-left">
+                                        <button class="button send-command" rel="<?php echo $arrDetaiProduct['prod_id'] ?>" parent="0">Gửi bình luận</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>                   
+                </div>
+                <div class="comm-list">
+                    <?php if (!empty($arrParentCommentList)) : ?>
+                        <?php foreach ($arrParentCommentList as $keyParent => $valueParent): ?>
+                            <div class="item">
+                                <div class="c-box">
+                                    <div class="avatar f-left">
+                                        <img class="lazy" data-original="<?php echo (!empty($valueParent['user_id'])) ? (json_decode($arrListUserComment[$valueParent['user_id']]['user_avatar'], true)[0]['thumbImage']['50x50'] ? json_decode($arrListUserComment[$valueParent['user_id']]['user_avatar'], true)[0]['thumbImage']['50x50'] : STATIC_URL . '/f/v1/images/no-avatar.jpg') : STATIC_URL . '/f/v1/images/no-avatar.jpg' ?>"/> 
+                                    </div>
+                                    <div class="input-info  f-left">
+                                        <div class="head">
+                                            <div class="name f-left">
+                                                <?php echo $valueParent['user_fullname']; ?>
+                                            </div>
+                                            <div class="date-rate f-left">
+                                                <span><?php echo $general->formatDateString($valueParent['comm_created']); ?></span> 
+                                            </div>
+                                        </div>
+                                        <div class="desc">
+                                            <?php echo $valueParent['comm_content']; ?>
+                                        </div>
+                                        <div class="action">
+                                            <a title="Trả lời" class="action-com-reply">Trả lời (<?php echo count($arrListCommentChildren[$valueParent['comm_id']]); ?>)</a> 
+                                            <span class="icon-com-like"><?php echo $valueParent['comm_like']; ?><span class="ic" rel="<?php echo $valueParent['comm_id'] ?>"></span></span>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                    </div>
+                                    <div style="clear: both"></div>                            
+                                </div><!-- END BOX -->
+                                <div class="input-reply input-reply">
+                                    <div class="form">
+                                        <div>
+                                            <span class="errormain"></span>
+                                        </div>
+                                        <div class="avatar f-left">
+                                            <img class="lazy" data-original="<?php echo (UID) ? ((json_decode(AVATAR, true)[0]['thumbImage']['50x50']) ? (json_decode(AVATAR, true)[0]['thumbImage']['50x50']) : STATIC_URL . '/f/v1/images/no-avatar.jpg') : STATIC_URL . '/f/v1/images/no-avatar.jpg' ?>"/> 
+                                        </div>
+                                        <div class="input f-left">
+                                            <div class="textarear">
+                                                <textarea class="input-comment"></textarea>
+                                            </div>
+                                            <div class="input-info  f-left">
+                                                <div class="f-right">
+                                                    <div class="name f-left">
+                                                        <input type="text" class="input input-username" placeholder="Nhập tên bắt buộc" value="<?php echo (UID) ? FULLNAME : NULL; ?>">
+                                                    </div>
+                                                    <div class="email f-left">
+                                                        <input type="text" class="input input-email" placeholder="Email" value="<?php echo (UID) ? EMAIL : NULL; ?>"> 
+                                                    </div>
+
+                                                    <div class="icon f-left">
+                                                        <img class="lazy" data-original="<?php echo STATIC_URL ?>/f/v1/images/icon-smile.jpg"/> 
+                                                    </div>
+                                                    <div class="button f-left">
+                                                        <button class="button send-command" rel="<?php echo $arrDetaiProduct['prod_id'] ?>" parent="<?php echo $valueParent['comm_id'] ?>">Gửi bình luận</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="clear: both"></div>
+                                    </div>                   
+                                </div>
+                                <div class="reply reply<?php echo $valueParent['comm_id'] ?>">
+                                    <?php if (!empty($arrListCommentChildren[$valueParent['comm_id']])): ?>
+                                        <?php foreach ($arrListCommentChildren[$valueParent['comm_id']] as $keyChildren => $valueChildren) : ?>
+                                            <div class="item item<?php echo $valueChildren['comm_id']; ?>" >
+                                                <div class="c-box">
+                                                    <div class="avatar f-left">
+                                                        <img class="lazy" data-original="<?php echo (!empty($valueChildren['user_id'])) ? (json_decode($arrListUserComment[$valueChildren['user_id']]['user_avatar'], true)[0]['thumbImage']['50x50'] ? json_decode($arrListUserComment[$valueChildren['user_id']]['user_avatar'], true)[0]['thumbImage']['50x50'] : STATIC_URL . '/f/v1/images/no-avatar.jpg') : STATIC_URL . '/f/v1/images/no-avatar.jpg' ?>"/> 
+                                                    </div>
+                                                    <div class="input-info  f-left">
+                                                        <div class="head">
+                                                            <div class="name f-left">
+                                                                <?php echo $valueChildren['user_fullname']; ?>
+                                                            </div>
+                                                            <?php if ($valueChildren['user_name_group'] != ''): ?>
+                                                                <div class="group f-left">
+                                                                    <?php echo $valueChildren['user_name_group']; ?>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                            <div class="date-rate f-left">
+                                                                <span><?php echo $general->formatDateString($valueChildren['comm_created']); ?></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="desc">
+                                                            <?php echo $valueChildren['comm_content']; ?>
+                                                        </div>
+                                                        <div class="action">
+                                                            <a title="Trả lời" class="action-com-reply">Trả lời </a> 
+                                                            <span class="icon-com-like"><?php echo $valueChildren['comm_like']; ?><span class="ic" rel="<?php echo $valueChildren['comm_id'] ?>"></span></span>
+                                                        </div>
+                                                        <div style="clear: both"></div>
+                                                    </div>
+                                                    <div style="clear: both"></div>                                       
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </div>
+                <div class="paging">
+                    <?php echo $this->pagingComment; ?>
+                </div>
+            </div>
+
+            <?php if (count($arrTags) > 0 || !empty($this->listKeyword)): ?>
+                <div class="tags">
+                    <div class="line"></div>
+                    <div class="tag-content">
+                        <?php
+                        foreach ($arrTags as $tags) {
+                            $url = $this->serverUrl() . $this->Url('tags', array('controller' => 'tags', 'action' => 'index', 'tagsSlug' => $tags["tags_slug"], 'tagsID' => $tags['tags_id']));
+                            ?>
+                            <a href="<?php echo $url ?>"> <?php echo $tags['tags_name']; ?> </a>
+                            <?php
+                            echo '&nbsp';
+                        }
+                        ?>
+                        <?php if (!empty($this->listKeyword)): ?>
+                            <?php
+                            foreach ($this->listKeyword as $word) {
+                                $url = $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 'keySlug' => $word['word_slug']));
+                                ?>
+                                <a href="<?php echo $url ?>"> <?php echo $word['word_key']; ?> </a>
+                                <?php
+                                echo '&nbsp';
+                            }
+                            ?>
+                        <?php endif ?>
+                    </div>
+                    <div class="open-tag"><a href="javascript:;">Xem nhiều hơn</a></div>
+                </div>
+            <?php endif ?>
+            <?php if (!empty($arrProductCookieList)) : ?>
+                <div class="pr-sm">
+                    <div class="title">
+                        Sản phẩm đã xem
+                    </div>
+                    <div class="box-pr-sm" id="box-pr-hs-sm"  style="height: 116px;" >    <!-- sửa ID -->
+                        <!-- Slides Container -->
+                        <div u="slides" class="cursor"> 
+                            <?php
+                            foreach ($arrProductCookieList as $val) {
+                                $img = json_decode($val['prod_image'], TRUE)['thumbImage']['83x83'];
+                                ?>
+                                <div class="item">  
+                                    <a href="<?php echo $this->serverUrl() . $this->Url('product', array('productslug' => $val['prod_slug'], 'productId' => $val['prod_id'])); ?>" title="<?php echo $val['prod_name']; ?>"><img width="80" src="<?php echo $img; ?>"/></a>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                        <!-- Arrow Left -->
+                        <span u="arrowleft" class="jssora04l  arrowleft">
+                        </span>
+                        <!-- Arrow Right -->
+                        <span u="arrowright" class="jssora04r  arrowright">
+                        </span>
+
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="right">
+            <?php if (!empty($arrStand)):
+                ?>
+                <div class="stand">
+                    <div class="img">
+                        <?php
+                        $arrLogo = json_decode($arrStand["stan_logo"], true);
+                        ?>
+                        <img width="50" src="<?php echo empty($arrLogo["thumbImage"]["80x80"]) ? STATIC_URL . "/f/v1/images/no-images.jpg" : $arrLogo["thumbImage"]["80x80"] ?>"/>
+
+
+                    </div>
+                    <div class="name">
+                        <?php echo $arrStand["stan_name"] ?>
+                    </div>
+                    <div class="phone" style="font-size: 12px;margin: 3px 0;">
+                        Liên Hệ: <strong><?php echo $arrStand["stan_phone"] ?></strong>
+                    </div>
+                    <div class="link">
+                        <a href="<?php echo $this->serverUrl() . $this->Url('frontend-view-stand', array('controller' => 'stand', 'action' => 'view', 'id' => $arrStand["stan_id"])) ?>">Xem gian hàng</a>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+            <?php endif;
+            ?>
+            <div class="r-box" style="  padding: 10px 3px;">
+                <div class="cont">
+                    <div class="call">
+                        <span class="icon i-phone"></span>
+                        <div>Tư vấn mua hàng</div>
+                        <strong><?php echo HOTLINE_NUMBER ?></strong>
+                    </div>
+                    <div class="note">
+                        <ul>
+                            <li><span class="icon i-checked"></span> Cam kết hàng chính hãng</li>
+                            <li><span class="icon i-checked"></span> Thanh toán sau khi nhận hàng</li>
+                            <li><span class="icon i-checked"></span> Đổi trả hàng trong 14 ngày</li>
+                            <!--<li><span class="icon i-checked"></span> Miễn phí giao hàng <?php echo ($arrDetaiProduct['prod_price'] <= 500000) ? "hóa đơn trên 500k" : ""; ?> </li>-->
+                            <li><span class="icon i-checked"></span> Giao hàng toàn quốc và quốc tế</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="r-box" style="  padding: 10px 3px;  background: #fff1b9;">
+                <div class="cont">
+                    <div class="call">
+                        <span class="icon i-phone"></span>
+                        <div>Tư vấn mua hàng</div>
+                        <strong><?php echo HOTLINE_NUMBER ?></strong>
+                    </div>
+
+                    <div class="call-phone">
+                        <div>Hoặc để lại <strong>SĐT</strong> Chuyên Viên Tư Vấn sẽ gọi lại ngay cho bạn</div>
+                        <div class="ip-data">
+                            <input class="input phoneadvisory" value="">
+                            <center><div class="img-loading"></div></center>
+                            <center><button class="bt-send">Gửi</button></center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="r-box">
+                <div class="head">Sản phẩm bán chạy</div>
+                <div class="cont">
+                    <div class="box-best-buy" id="box-best-buy">
+                        <div u="slides" class="cursor">                                                         
+                            <?php
+                            if (count($arrProductBestSelling) > 0) {
+                                foreach ($arrProductBestSelling as $keyBest => $valueBest) {
+                                    if ($keyBest % 5 == 0 || $keyBest == 0) {
+                                        echo '<div><!--sta-->';
+                                    }
+                                    ?>
+                                    <div class="item">
+                                        <div class="img">
+                                            <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $valueBest["prod_slug"], 'productId' => $valueBest['prod_id'])); ?>" rel="nofollow"><img src="<?php echo json_decode($valueBest['prod_image'], true)['thumbImage']['224x224']; ?>"/></a>
+                                        </div>
+                                        <div class="detail">
+                                            <div class="tt"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $valueBest["prod_slug"], 'productId' => $valueBest['prod_id'])); ?>"><strong><?php echo $valueBest['prod_name']; ?></strong></a></div>
+                                            <div class="pr">
+                                                <?php if ($valueBest['prod_call_price'] == 1) { ?><div class="current">Liên hệ để biết giá</div><?php } else { ?>
+                                                    <?php if ($valueBest['prod_is_promotion'] == 1) { ?><div class="promot"> <?php echo number_format($valueBest['prod_price'], 0, ",", "."); ?> đ</div><?php } ?>
+                                                    <div class="current"><?php echo ($valueBest['prod_is_promotion'] == 1) ? number_format($valueBest['prod_promotion_price'], 0, ",", ".") : number_format($valueBest['prod_price'], 0, ",", ".") ?> đ</div><?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    if ((($keyBest + 1) % 5 == 0) || $keyBest + 1 == count($arrProductBestSelling)) {
+                                        echo '</div><!--end-->';
+                                    }
+                                    ?>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                        <!-- Arrow Left -->
+                        <span u="arrowleft" class="jssora08l arrowleft">
+                        </span>
+                        <!-- Arrow Right -->
+                        <span u="arrowright" class="jssora08r arrowright">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <?php if (!empty($arrContentList)): ?>
+                <div class="block-box">
+                    <div class="news">
+                        <div class="box-slide-news news-list height-590" slide="false" id="">
+                            <!-- Slides Container -->
+                            <div u="thumb" class="title">
+                                <span>Thông tin cần biết</span>
+                            </div>
+                            <!-- Slides Container -->
+                            <div u="slides" class="cursor" style="height:auto">                                                         
+                                <?php
+                                echo '<div><!--sta-->';
+                                foreach ($arrContentList as $keyContent => $valueContent) :
+                                    ?>
+                                    <div class="item">
+                                        <div class="img f-left">
+                                            <a href="<?php echo $this->serverUrl() . $this->url('content_detail', array('contslug' => $valueContent['cont_slug'], 'contId' => $valueContent['cont_id'])); ?>" rel="nofollow"><img  src="<?php echo json_decode($valueContent['cont_image'], true)['thumbImage']['116x116']; ?>"/></a>
+                                        </div>
+                                        <div class="detail f-left">
+                                            <div class="tt"><a href="<?php echo $this->serverUrl() . $this->url('content_detail', array('contslug' => $valueContent['cont_slug'], 'contId' => $valueContent['cont_id'])); ?>"><?php echo $valueContent['cont_title']; ?></a></div>
+                                            <div class="date-view">
+                                                <span class="date"><?php echo date('d/m/Y', $valueContent['cont_created']); ?></span> | 
+                                                <span class="view"><?php echo $valueContent['cont_viewer']; ?> đã xem</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                endforeach;
+                                echo '</div><!--end-->';
+                                ?>
+                            </div>
+                            <!-- Arrow Left -->
+                            <span u="arrowleft" class="jssora06l arrowleft">
+                            </span>
+                            <!-- Arrow Right -->
+                            <span u="arrowright" class="jssora06r arrowright">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div style="clear: both;"></div>
+    </div><!-- End block-content -->
+</div>
+
+<script>
+    ProductID = '<?php echo $arrDetaiProduct['prod_id']; ?>';
+    proOrderURL = '<?php echo $this->serverUrl() . $this->url('product_order', array()); ?>';
+//    proPrintURL = '<?php // echo $this->serverUrl() . $this->url('product_print', array());                                                    ?>';
+    inserOrderURL = '<?php echo $this->serverUrl() . $this->url('insert_order', array()); ?>';
+</script>

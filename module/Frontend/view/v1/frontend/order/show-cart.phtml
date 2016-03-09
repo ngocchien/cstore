@@ -1,0 +1,116 @@
+<?php
+$arrProductListCookie = $this->arrProductListCookie;
+$listProductCart = $this->listProductCart;
+$totalPrice = 0;
+?>
+<div id="cart-frame">
+    <div id="view-cart" class="view-cart">
+        <div class="new_cart">
+            <form id="cart-items-list-form" action="/cart/" method="post">
+                <span class="cartintro">Bạn có <?php echo count($arrProductListCookie); ?> sản phẩm trong giỏ hàng.</span>
+                <table class="width_100 text-center" id="tableheader">
+                    <tbody><tr>
+                            <td class="width_15"></td>
+                            <td class="width_40"></td>
+                            <td class="width_20">Giá</td>
+                            <td class="width_10">Số lượng</td>
+                            <td class="width_20">Tổng cộng</td>
+                        </tr>
+                    </tbody></table>
+                <div class="scrollable">
+                    <?php
+                    foreach ($listProductCart as $arrProduct) {
+                        if ($arrProduct['prod_is_promotion'] == 1) {
+                            $totalPrice = $totalPrice + $arrProductListCookie[$arrProduct['prod_id']]['quantity'] * $arrProduct['prod_promotion_price'];
+                        } else {
+                            $totalPrice = $totalPrice + $arrProductListCookie[$arrProduct['prod_id']]['quantity'] * $arrProduct['prod_price'];
+                        }
+                        ?>
+                        <table class="width_100">                        
+                            <tbody>
+                                <tr>
+                                    <td class="width_15">
+                                        <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrProduct["prod_slug"], 'productId' => $arrProduct['prod_id'])); ?>">
+                                            <img src="<?php echo json_decode($arrProduct['prod_image'], true)['thumbImage']['116x116']; ?>" width="117" height="117" alt="" onerror="">
+                                        </a>
+                                    </td>
+                                    <td class="width_40">
+                                        <div class="title"><?php echo $arrProduct['prod_name']; ?></div>
+                                        <div class="detail">Black & Decker</div>
+                                        <span class="stock instock">
+                                            <?php echo ($arrProduct['prod_status'] == 1) ? '✓ Còn hàng' : 'Hết hàng' ?>
+                                        </span>
+
+                                        <span class="productlink">
+                                            <a href="javascript:;" id = "remove" class="remove" rel="<?php echo $arrProduct['prod_id'] ?>" >
+                                                Xóa                                   
+                                            </a>
+                                        </span>
+                                    </td>
+                                    <td class="width_20 text-right">
+                                        <span class="price-current"><?php echo ($arrProduct['prod_is_promotion'] == 1) ? number_format($arrProduct['prod_promotion_price'], 0, ",", ".") : number_format($arrProduct['prod_price'], 0, ",", ".") ?> VNĐ </span><br>
+                                        <?php if ($arrProduct['prod_is_promotion'] == 1) { ?>
+                                            <span class="">
+                                                <span class="price-old"><?php echo number_format($arrProduct['prod_price'], 0, ",", "."); ?> VNĐ</span>
+                                            </span><br>
+                                            <span class="num-discount">
+                                                <?php
+                                                $percent = 100 - ($arrProduct['prod_promotion_price'] * 100 / $arrProduct['prod_price']);
+                                                ?>
+                                                Giảm giá <?php echo number_format($percent, 0, ",", ".") ?>%                                  
+                                            </span>
+                                        <?php } ?>
+                                    </td>
+                                    <td class="width_10 number center">
+                                        <select  title="Số lượng" id = "quantity" class="quantity" rel="<?php echo $arrProduct['prod_id'] ?>">
+                                            <?php for ($i = 1; $i <= 100; $i++): ?>
+                                                <option value="<?php echo $i ?>" <?php if ($arrProductListCookie[$arrProduct['prod_id']]['quantity'] == $i) : ?> selected <?php endif; ?> ><?php echo $i ?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                    </td>
+                                    <td class="width_20 sum">
+                                        <?php echo ($arrProduct['prod_is_promotion'] == 1) ? number_format($arrProductListCookie[$arrProduct['prod_id']]['quantity'] * $arrProduct['prod_promotion_price'], 0, ",", ".") : number_format($arrProductListCookie[$arrProduct['prod_id']]['quantity'] * $arrProduct['prod_price'], 0, ",", ".") ?> VNĐ
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> 
+                    <?php } ?>
+                </div>
+                <div id="subtotal">
+                    <table class="width_100 text-right">
+                        <tbody>
+                            <tr class="sub">
+                                <td colspan="2" rowspan="4" class="width_60">
+                                </td>
+                                <td class="width_20">Tổng cộng</td>
+                                <td class="width_30">
+                                    <div><?php echo number_format($totalPrice, 0, ",", "."); ?> VNĐ</div>
+                                </td>
+                            </tr>
+                            <tr class="total">
+                                <td class="width_20">Thành tiền</td>
+                                <td class="width_30">
+                                    <div><?php echo number_format($totalPrice, 0, ",", "."); ?> VNĐ</div>
+                                    <div class="vatinclude">Đã bao gồm VAT</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="totalAmountCartItems" value="7">
+
+                <div class="cart_btn_row">
+                    <div class="closelink">
+                        <a onclick="$.facebox.close()" id="cartContinueShopping" class="facebox_close sel-continue-shopping" >
+                            <span>► Thêm sản phẩm khác vào giỏ hàng</span>
+                        </a>
+                    </div>
+                    <div class="proceedtocheckout">
+                        <a href="<?php echo $this->serverUrl() . $this->Url('checkout_step_one', array('controller' => 'checkout', 'action' => 'step-one')); ?>" class="submit_btn mtssel-cart-checkout-button">
+                            <span class="cart_submit_text">Tiến hành đặt hàng »</span><span class="cart_submit_icon"></span>
+                        </a>
+                    </div>
+                </div>
+            </form></div>
+    </div>
+</div>

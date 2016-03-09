@@ -1,0 +1,135 @@
+<?php
+    $brand = $this->strBrandSlugList;
+    $arrCategoryParentList = $this->arrCategoryParentList;
+    $BrandDetailListID = array();
+    foreach ($this->arrBrandDetailList as $key => $value) {
+        $BrandDetailListID[] = $value['cate_id'];
+    }
+?>
+<!--<div class="left">-->
+    <?php
+    if ($this->arrCateGradeList[0]) {
+        $arrCategoryList = $this->arrCateGradeList;
+        ?>
+        <div class="box">
+            <div class="head box-head">
+                <?php echo $arrCategoryList[0]['cate_name'] ?>
+            </div>
+            <div class="cont">
+                <ul class="menu ">
+                    <?php
+                    $arrCate = array();
+                    foreach ($arrCategoryList as $key => $value) {
+                        $arrCate[$key] = $value;
+                        $arrParams = array('controller' => 'brand', 'action' => 'index', 'categorySlug' => $value["cate_slug"], 'categoryID' => $value["cate_id"], 'brandSlug' => $brand, 'price' => $this->params['price']);
+                        $cateLink = $this->serverUrl() . $this->Url('brand', $arrParams);
+                        $arrCate[$key]["cate_link"] = $cateLink;
+                    }
+                    $arrInput = My\General::arrCateInput($arrCate, $arrCate[0]['cate_id']);
+                    echo My\General::arrCateOutput($arrInput, 1, $this->getDetailCategory['cate_id'])["result"];
+                    ?>
+                </ul>
+            </div>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="box">
+            <div class="head box-head">
+                Tìm kiếm theo danh mục
+            </div>
+            <div class="cont">
+                <ul class="menu ">
+                    <?php
+                    foreach ($arrCategoryParentList as $value) {
+                        $arrParams = array('controller' => 'brand', 'action' => 'index', 'categorySlug' => $value["cate_slug"], 'categoryID' => $value["cate_id"], 'brandSlug' => $brand, 'price' => $this->params['price']);
+                        $cateLink = $this->serverUrl() . $this->Url('brand', $arrParams);
+                        ?>
+                        <li class="item unopened"><a href="<?php echo $cateLink; ?>"><?php echo $value['cate_name']; ?></a></li>
+                    <?php }
+                    ?>
+                </ul>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+    <div class="box">
+        <div class="head">Giá sản phẩm</div>
+        <div class="cont">
+            <div class="sider-select">
+                <input class="range-slider" type="hidden" value="<?php echo $this->min_price;?>,<?php echo $this->max_price;?>"/>
+            </div>
+            <div class="texbox">
+                <?php
+                $arrParams = array('controller' => 'brand', 'action' => 'index', 'brandSlug' => $brand, 'categoryID' => $this->params['categoryID'], 'categorySlug' => $this->params['categorySlug']);
+                $linkPrice = $this->serverUrl() . $this->Url('brand', $arrParams);
+                ?>
+                <input class="text price-from" value="<?php echo $this->min_price;?>" name="start"/> VNĐ ->  
+                <input class="text  price-to" value="<?php echo $this->max_price; ?>" name="end"/> VNĐ 
+                <form method="GET" action="<?php echo $linkPrice; ?>">
+                    <?php echo $this->params['s'] ? '<input type="hidden" name="s" value="' . $this->params['s'] . '" />' : NULL; ?>
+                    <input type="hidden" name="price" class="price_search" value="" />
+                    <?php echo $this->params['sort'] ? '<input type="hidden" name="sort" value="' . $this->params['sort'] . '" />' : NULL; ?>
+                    <button class="search" type="submit">Tìm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+    <div class="box">
+        <div class="head">Thương hiệu</div>
+        <div class="cont">
+            <div class="selected">
+                <?php
+                $arrParams = array('controller' => 'brand', 'action' => 'index', 'categoryID' => $this->params['categoryID'], 'categorySlug' => $this->params['categorySlug'], 'price' => $this->params['price']);
+                foreach ($this->arrBrandDetailList as $key => $value):
+                    $temp = $this->arrBrandSlugList;
+                    ?>
+                    <div class="item">
+                        <input type="checkbox" class="css-checkbox search-brand" id="<?php echo $value['cate_name'] ?>" name="brand[]" value="<?php echo $value['cate_slug'] ?>" checked="checked" >
+                        <?php
+                        foreach ($temp as $k => $v) {
+                            if ($v == $value['cate_slug']) {
+                                unset($temp[$k]);
+                            }
+                            $arrParams['brandSlug'] = implode('--', $temp);
+                        }
+                        $linkBrand = $this->serverUrl() . $this->Url('brand', $arrParams);
+                        ?>
+                        <label for="<?php echo $value['cate_name'] ?>" class="css-label lite-green-check"><?php echo $value['cate_name']; ?></label>
+                        <input type="hidden" value="<?php echo $linkBrand; ?>" />
+                    </div>
+                <?php endforeach; ?>
+                <?php
+                foreach ($this->arrAllBrand as $val) {
+                    if (!in_array($val['cate_id'], $BrandDetailListID)) {
+                        if (!in_array($val['cate_slug'], $this->params['brand'])) {
+                            $arrParams['brandSlug'] = $brand . '--' . $val['cate_slug'];
+                        } else {
+                            $arrParams['brandSlug'] = $brand;
+                        }
+                        ?>
+                        <div class="item">
+                            <input type="checkbox" class="css-checkbox search-brand" id="<?php echo $val['cate_name'] ?>" name="brand[]" value="<?php echo $val['cate_slug'] ?>" <?php
+                            foreach ($this->params['brand_name'] as $value) {
+                                if ($value == $val['cate_name']) {
+                                    $arrParams['brandSlug'] = $arrParams['brandSlug'] . '--'; //ex : a--b--c--
+                                    $arrParams['brandSlug'] = trim(str_replace($val['cate_slug'] . '--', NULL, $arrParams['brandSlug']), '--');
+                                    break;
+                                }
+                            }
+                            $linkBrand = $this->serverUrl() . $this->Url('brand', $arrParams);
+                            ?>>
+                            <label for="<?php echo $val['cate_name'] ?>" class="css-label lite-green-check"><?php echo $val['cate_name']; ?></label>
+                            <input type="hidden" value="<?php echo $linkBrand; ?>" />
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+<!--</div>-->

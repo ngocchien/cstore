@@ -1,0 +1,103 @@
+<?php
+
+use My\General;
+?>
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">            
+            <div class="br-hidden">
+                <div class="item item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none" itemprop="url"><span itemprop="title">Gian hàng</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <?php
+        echo $this->render('frontend/leftmenu-order');
+        ?>
+        <div class="main">
+            <h2 class="text-center">Đăng ký gian hàng</h2>
+            <div class="panel-body" id="checkOrder">
+                <?php
+                if (!empty($errors)):
+                    ?>
+                    <div class="stand-erorr"><?php echo implode("<br/>", $errors); ?></div>
+                    <?php
+                endif;
+                ?>
+                <form id="kt" method="POST">
+                    <label>
+                        <span>Tên gian hàng:</span>
+                        <input type="text" name="stan_name" value="<?php echo empty($params["stan_name"]) ? "" : $params["stan_name"] ?>" class="form-control" placeholder="Nhập tên gian hàng">
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Email:</span>
+                        <input type="text" name="stan_email" value="<?php echo empty($params["stan_email"]) ? "" : $params["stan_email"] ?>" class="form-control" placeholder="Địa chỉ email">
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Số điện thoại:</span>
+                        <input type="text" name="stan_phone" value="<?php echo empty($params["stan_phone"]) ? "" : $params["stan_phone"] ?>" class="form-control" placeholder="Số điện thoại">
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Địa chỉ:</span>
+                        <input type="text" name="stan_address" value="<?php echo empty($params["stan_address"]) ? "" : $params["stan_address"] ?>" class="form-control" placeholder="Địa chỉ gian hàng">
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Logo gian hàng:</span>
+                        <div>
+                            <div style="margin: 0 0 0 108px;">
+                                <input style=" padding: 10px 0 0 20px;" type="file" name="stan_logo" id="stan_logo" class="ignore"/>
+                                <div>
+                                    <ul class="image-list">
+                                        <?php
+                                        $cont_image = json_decode($params['stan_logo'], TRUE);
+                                        if ($cont_image):
+                                            ?>
+                                            <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
+                                                <img class="image" src="<?php echo $cont_image['thumbImage']['80x80'] ?>" alt="" style="display: block;margin-bottom: 10px;">
+                                                <span style="display: block;text-align: right;">
+                                                    <a title="Xem" class="view" href="<?php echo $cont_image['sourceImage'] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a>
+                                                    <a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
+                                                    <div id="jsonData">
+                                                        <input name="stan_logo" type="hidden" value="<?php echo $this->escapeHtml($params['stan_logo']) ?>">
+                                                    </div>
+                                                </span>
+                                            </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                    <div id="progress"></div>
+                                </div>
+                            </div>
+                            <div style="clear: both"></div>
+                        </div>
+
+                    </label>
+                    <div style="    margin: 0 20px 0 0;" class="text-right"><button type="submit" class="btn-pre">Đăng ký gian hàng</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+<script>
+    stand.upload();
+</script>

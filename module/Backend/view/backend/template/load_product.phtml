@@ -1,0 +1,87 @@
+<div class="col-lg-12" style="padding-right: 0px">
+    <div class="col-xs-7 col-xs-push-1 no-padding">
+        <div class="dataTables_filter no-padding per-100">
+            <label><input type="text" name="text" value="<?php echo $this->params['keyword']?>" aria-controls="editable-sample" class="per-100 input-seaching form-control medium search_product"></label>
+        </div>
+    </div>
+    <div class="col-xs-4 col-xs-push-1 no-padding-right">
+        <button type="button" class="btn btn-white btn-searchProduct ajaxLoadpage"><i class="icon-search"></i> Tìm kiếm</button>
+    </div>
+</div>
+<div class="searchproduct">
+    <table class="table table-striped table-bordered" cellspacing="0">
+
+        <thead>
+            <tr>
+                <th style="text-align:center;width:25%" class="numeric">Chức năng</th>
+                <th>Id</th>
+                <th style="width:75%">Tên sản phẩm</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <?php
+            if ($this->arrProductList) {
+                foreach ($this->arrProductList as $arrProductList) {
+                    ?>
+                    <tr id="<?php echo $arrProductList['prod_id']; ?>">
+                        <td style="text-align: center">
+                            <a class="btn btn-success btn-xs censor btn-addProduct" data-placement="top" data-original-title="Thêm SP" data-id="<?php echo $arrProductList['prod_id']; ?>"><i class="icon-arrow-left"></i> Add</a>
+                        </td>
+                        <td><?php echo $arrProductList['prod_id'] ?></td>
+                        <td>
+                            <?php echo $arrProductList['prod_name']; ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            } else {
+                ?>
+                <tr class="none-product">
+                    <td colspan="2" style="text-align:center;">Hiện tại chưa có sản phẩm nào.</td>
+                </tr>
+            <?php } ?>
+
+        </tbody>
+    </table>
+    <div style="padding-top: 15px;">
+        
+        <?php $intCurrentPage= $this->paging['curentP']; 
+        $intTotalPage= $this->paging['pageTotal'];
+        ?>
+        <div style="text-align:right;" class="row">
+            <ul class="dataTables_paginate paging_bootstrap pagination" style=" padding: 0px;margin-bottom: 8px;">
+                <?php 
+            if ($intCurrentPage == 1) {
+                $intPage = 1;
+                $intLimitPage = 6;
+            } else {
+                $intPage = ($intCurrentPage > 3) ? ($intCurrentPage == $intTotalPage && $intTotalPage > 6) ? $intCurrentPage - 6 : $intCurrentPage - 3 : 1;
+                $intLimitPage = ($intTotalPage < 7) ? $intTotalPage : $intCurrentPage + 5;
+                ?>
+                <li style="margin: 0 2px;border:0px;"><a class="ajaxLoadpage" data-page="1" style="cursor:pointer">« Đầu</a></li>
+                <li  style="margin: 0 2px;border:0px;"><a class="ajaxLoadpage" data-page="<?php echo $intCurrentPage-1 ?>" style="cursor:pointer">← Trước</a></li>
+                <?php        
+            }
+            for ($intPage; $intPage <= $intTotalPage && $intPage <= $intLimitPage; $intPage++) {
+                if ($intPage == $intCurrentPage) {
+                    ?>
+                    <li  style="margin: 0 2px;border:0px;" class="active"><a  style="cursor:pointer"><?php echo $intPage?></a></li>
+                    <?php
+                } else {
+                    ?>
+                    <li  style="margin: 0 2px;border:0px;"><a class="ajaxLoadpage" data-page="<?php echo $intPage ?>" rel="text"  style="cursor:pointer"><?php echo $intPage?></a></li>
+                    <?php
+                }
+            }
+            if ($intCurrentPage != $intTotalPage) {
+                ?>
+                <li  style="margin: 0 2px;border:0px;"><a class="ajaxLoadpage" data-page="<?php echo $intCurrentPage+1 ?>" style="cursor:pointer">Sau →</a></li>
+                <li style="margin: 0 2px;border:0px;"><a class="ajaxLoadpage" data-page="<?php echo $intTotalPage ?>" style="cursor:pointer">Cuối »</a></li>
+                <?php
+            }
+            ?>
+           </ul></div>
+        
+    </div>
+</div>

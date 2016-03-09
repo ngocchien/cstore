@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <?php
+        echo $this->headTitle()->setAutoEscape(false);
+        echo $this->headMeta();
+        echo $this->headLink();
+        ?>
+        <script type="text/javascript">
+            var CKEDITOR_BASEPATH = '<?php echo STATIC_URL; ?>/b/js/library/ckeditor/';
+        </script>
+        <?php echo $this->headScript();
+        ?>
+
+        <script type="text/javascript">
+            var baseurl = '<?php echo $this->serverUrl(); ?>';
+            var module = '<?php echo MODULE; ?>';
+            var staticurl = '<?php echo STATIC_URL; ?>';
+            var fullname = '<?php echo FULLNAME; ?>';
+            var role = '<?php echo USER_ROLE; ?>';
+        </script>
+
+    </head>
+    <body>
+        <section>
+            <?php
+            echo $this->render('backend/header');
+            echo $this->render('backend/sidebar');
+            ?>
+            <section id="main-content">
+                <?php echo $this->layout()->content; ?>
+            </section>
+            <footer class="site-footer">
+                <div class="text-center">
+                    2015 &copy; CSTORE.COM
+                    <a href="#" class="go-top">
+                        <i class="icon-angle-up"></i>
+                    </a>
+                </div>
+            </footer>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,59 @@
+<?php   $sessionCart = $this->sessionCart;
+        $listProductCart = $this->listProductCart;
+        $arrData = $this->arrData;
+?>
+<div class="table-custom">  
+    <?php
+    if ($arrData['error'] == 1) {
+        echo '<h2 style="color: red; text_lign:center">Sản phẩm đã tồn tại trong giỏ hàng</h2><br><br>';
+    }
+    ?>
+    <div class="like-error" style="display: none"></div>
+    <ul class="thead">
+        <li>Hình ảnh</li><li>Tên sản phẩm</li><li>Giá</li><li>Số lượng</li><li>Tổng cộng</li>
+    </ul>
+    <div class="tbody">
+        <div class="wrap">
+            <?php
+            $totalPri = 0;
+            foreach ($listProductCart as $product):
+
+                //$product_image = json_decode($topic['product_images']);
+                //$product_image= $product_image->main_image;
+                $sumPrice= $product['call_for_price'] ? 0 : $topic['is_promoted'] ? $topic['promoted_price']*$sessionCart[$topic['topic_id']]['quantity'] : $topic['topic_price']*$sessionCart[$topic['topic_id']]['quantity'];
+                $totalPrice+=$sumPrice;
+                ?>
+                <div class="thumbnail style-5 card-info">
+                    <img src="<?php echo URL_IMAGE.$topic_image->thumbImage->{'100x100'} ?>" alt="<?php echo $topic['topic_name'] ?>" class="img-responsive"/>
+                    <div class="caption">
+                        <h3 class="title-1"><?php echo $topic['topic_name'] ?></h3>
+                        <ul class="list-inline">
+                            <li><span class="icon-check">&nbsp;</span><span class="text pink">Còn hàng</span></li>
+                            <li data-id="<?php echo $topic['topic_id']?>" data-user="<?php echo UID ?>" class="like-topic btn"><a title="Thêm vào yêu thích"><span class="icon-like">&nbsp;</span><span class="text violet">Thêm vào yêu thích</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="price">
+                        <p><?php echo $topic['call_for_price'] ? 'Thương lượng' : ($topic['is_promoted'] ? number_format($topic['promoted_price']) : number_format($topic['topic_price'])).' VND' ?></p>
+                        <input class="price-topic" type="hidden" value="<?php echo $topic['call_for_price'] ? '0' : $topic['is_promoted'] ? $topic['promoted_price'] : $topic['topic_price'] ?>">
+                    </div>
+                    <div class="choose">
+                        <input data-id="<?php echo $topic['topic_id'] ?>" class="updateQuantity" type="quantity" value="<?php echo $sessionCart[$topic['topic_id']]['quantity'] ?>" size="3">
+                    </div>
+
+                    <div class = "sum">
+                        <p><?php echo $topic['call_for_price'] ? 'Thương lượng' : ($topic['is_promoted'] ? number_format($topic['promoted_price']*$sessionCart[$topic['topic_id']]['quantity']) : number_format($topic['topic_price']*$sessionCart[$topic['topic_id']]['quantity'])).' VND' ?></p>
+                    </div>
+                    <div class="btn trash removeTopicCard" data-id="<?php echo $topic['topic_id'] ?>"><a  title="Xóa Sản phẩm">&nbsp;</a></div>
+                </div>
+            <?php endforeach; ?>
+
+        </div>
+        <div class="footer">
+            <div class="pull-left"><a href="<?php echo $this->serverUrl() ?>" title="Tiếp tục muc sắm" class="link-2"><span class="text">Tiếp tục muc sắm</span><span class="icon-arrow"></span></a></div>
+            <div class="pull-right">
+                <div class="price-all"><strong>Tổng cộng</strong><span class="price sum-total-price"><?php echo number_format($totalPrice) ?> VND</span></div>
+                <a href="<?php echo $this->serverUrl().$this->url(array(),'view-cart'); ?>#main" title="Tiến hành mua hàng" class="link-3"><span class="text">Tiến hành mua hàng</span><span class="icon-arrow"></span></a>
+            </div>
+        </div>
+    </div>
+</div>

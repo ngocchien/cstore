@@ -1,0 +1,46 @@
+<html>
+    <head>
+    <head>
+        <style>
+            body{-webkit-print-color-adjust:exact;}
+            *{margin: 0 auto; padding: 0;}
+            .page-order{overflow: hidden; margin: 0 auto; width: 396px; border: 2px solid #000;}
+            .page-order .page{ position: relative;}
+            .page-order .page .header{margin-top: 1px;}
+            .page-order .page .header img{width: 99.5%; display: block; text-align: center;}
+            .page-order .page .header_2{width: 99.5%;  background-color: #fff; overflow: hidden; font-size: 16x; line-height: 30px; }
+            .page-order .page .header_2 .left{ padding: 8px;}
+            .page-order .page .header_2 .left .top{line-height: 17px;font-size: 15px;}
+            .page-order .page .header_2 .left .top .id-cus{overflow: hidden; height: 22px;}
+            .page-order .page .header_2 .left .address{text-align: justify;font-size: 16px;}
+            .page-order .page .header_2 .left .bottom{}
+            .page-order .page .header_2 .left .bottom .tracking{width: 369px;height:38px; float: left; word-wrap: break-word; text-align: justify; overflow: hidden; font-size: 16px; line-height: 18px;}
+            .text{width: 369px; height: 40px; float: left; word-wrap: break-word; text-align: justify; overflow: hidden; margin-top: 3px;font-size: 16px;line-height: 20px;}
+            .page-order .page .header_2 .right{float: left; width: 165px;}
+            .page-order .page .header_2 .right .chart{width: 80px;height: 80px;margin-top: 8px;}
+            .page-order .page .header_2 .right .barcode{ margin-top: 7px;}
+            .page-order .page .header_3{bottom: 20px; left: 0px; color: #fff; height: 19px; font-size: 16px; font-weight: bold; text-align: center; width: 100%; margin-top: 1px; background: #000; line-height: 15px;}
+        </style>
+    <body>
+        <div class="page-order">
+            <div class="page">
+                <div class="header_2">
+                    <div align="center"><img src="http://static.megavita.vn/f/v1/images/logo-email.png" title="Megavita"></div>
+                    <div  class="left">
+                        <div class="top">
+                            <div class="cus-name">Anh/Chị: <strong> <?php echo $this->arrUser->fullname ?></strong> (<?php echo My\General::PREFIX_IN . $arrDetailOrder['orde_code'].$this->arrDetailOrder['orde_id'] ?>)</div>
+                            <div class="address">Địa chỉ: <strong> <?php echo $this->arrUser->address ?></strong></div>
+                            <div class="phone">Điện thoại: <strong> <?php echo $this->arrUser->phone ?></strong></div>
+                            <div class="email">Thu hộ: <strong> <?php echo number_format($arrDetailOrder['orde_total_price']) ?></strong></div>
+                            <div class="cus-name">Ngày tạo : <strong> <?php echo date('d/m/Y', $arrDetailOrder['orde_created']) ?></strong> </div>
+                        </div>
+                    </div>
+                    <div align="center">
+                        <img width="" height="" src="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'print', 'action' => 'renderbarcode', 'code' => My\General::PREFIX_IN . $arrDetailOrder['orde_code'].$arrDetailOrder['orde_id'])); ?>">                     
+                    </div>
+                </div>
+                <div class="header_3">www.megavita.vn</div>
+            </div>
+        </div>
+    </body>
+</html>

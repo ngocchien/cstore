@@ -1,0 +1,226 @@
+<?php
+$menuLeft = $this->menuLeft;
+?>
+<script type="text/javascript">
+    var mTable = [];
+    var bTable = [];
+</script>
+<div class="col-lg-2 tab-bg-dark-navy-blue">
+    <ul class="sidebar-menu" style="margin-top: 10px !important;">
+        <?php
+        foreach ($menuLeft as $key => $menus) {
+            if ($key == 0) {
+                ?>
+                <li class="active"><span class="icon <?php echo $menus['classicon'] ?>"></span><a data-toggle="tab" href="#menuleft_<?php echo $key ?>"><?php echo $menus['title'] ?></a></li>
+                <?php
+            } else {
+                ?>
+                <li><span class="icon <?php echo $menus['classicon'] ?>"></span><a data-toggle="tab" href="#menuleft_<?php echo $key ?>"><?php echo $menus['title'] ?></a></li>
+                <?php
+            }
+        }
+        ?>   
+    </ul>
+</div>
+<div class="panel-body panel col-lg-10">
+    <div class="tab-content tasi-tab">
+        <?php
+        foreach ($menuLeft as $key => $menus) {
+            ?>
+            <div id="menuleft_<?php echo $key ?>" data-key="<?php echo $key ?>" class="tab-pane menuleft_info <?php echo $key == 0 ? 'active' : '' ?>">
+                <div class="col-lg-12">
+                    <header class="panel-heading tab-bg-dark-navy-blue">
+                        <ul class="nav nav-tabs ">
+                            <li class="active">
+                                <a data-toggle="tab" href="#titleMenu_<?php echo $key ?>">
+                                    <strong>Thông tin tiêu đề</strong>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#subMenu_<?php echo $key ?>">
+                                    <strong>Sub menu</strong>
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" class="" href="#banerMenu_<?php echo $key ?>">
+                                    <strong>Banner</strong>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="panel-body panel">
+                        <div class="tab-content tasi-tab">
+                            <div id="titleMenu_<?php echo $key ?>" class="tab-pane active">
+                                <div class="panel-body form-horizontal tasi-form">
+                                    <form action="" method="POST">
+                                        <div class="form-group">
+                                            <label class="col-lg-3 col-md-3 col-sm-3 control-label">Tiêu đề</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                                <input class="form-control name" type="text" name="title" value="<?php echo $menus['title'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-3 col-md-3 col-sm-3 control-label"> Sort</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                                <input class="form-control sort" type="text" name="sort" value="<?php echo $menus['sort'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-3 col-md-3 col-sm-3 control-label">Class icon</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                                <input class="form-control classicon" type="text" name="classicon" value="<?php echo $menus['classicon'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-3 col-md-3 col-sm-3 control-label">Url</label>
+                                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                                <input class="form-control url" type="text" name="url" value="<?php echo $menus['url'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-3 col-md-3 col-sm-3 control-label"></label>
+                                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                                <button data-bb-handler="main" type="button" class="btn btn-primary save-title-temp1<?php echo $key ?>"><i class="icon-save"></i> Hoàn tất</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="subMenu_<?php echo $key ?>" class="tab-pane">
+                                <header class="panel-heading">
+                                    &nbsp;<button class="add_menu_temp1<?php echo $key ?> btn btn-success" style="float: right; margin: -5px 0px 0px 0px !important; ">Add Menu</button>
+                                </header>
+                                <div class="panel-body">
+                                    <div class="adv-table">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered table-menu-left-info" id="table-menu-info_<?php echo $key ?>">
+                                            <thead>
+                                                <tr>
+                                                    <td></td>
+                                                    <th>Id</th>
+                                                    <th>Title</th>
+                                                    <th>Url</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <?php
+                                                foreach ($menus['category'] as $k => $menu):
+                                                    ?>
+                                                    <tr>
+                                                        <td><img data-parent="null" data-bind="<?php echo $menu['title'] ?>" src="<?php echo STATIC_URL ?>/b/images/details_open.png"></td>
+                                                        <td><?php echo $k ?></td>
+                                                        <td><strong><?php echo $menu['title'] ?></strong></td>
+                                                        <td><?php echo $menu['url'] ?></td>
+                                                        <td>
+                                                            <a class="btn btn-danger remove_menu_temp1<?php echo $key ?>" data-parent="null" data-key="<?php echo $k ?>"><i class="icon-trash "></i></a>
+                                                    </tr>
+                                                    <?php
+                                                    if (count($menu['sub']) > 0):
+                                                        foreach ($menu['sub'] as $i => $sub):
+                                                            ?>
+                                                            <tr>
+                                                                <td><img data-parent="<?php echo $k ?>" data-bind="<?php echo $sub['title'] ?>" src="<?php echo STATIC_URL ?>/b/images/details_open.png"></td>
+                                                                <td><?php echo $i ?></td>
+                                                                <td>&rdsh;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $sub['title'] ?></td>
+                                                                <td><?php echo $sub['url'] ?></td>
+                                                                <td>
+                                                                    <a class="btn btn-danger remove_menu_temp1<?php echo $key ?>" data-parent="<?php echo $k ?>" data-key="<?php echo $i ?>"><i class="icon-trash "></i></a>
+                                                            </tr>
+                                                            <?php
+                                                        endforeach;
+                                                    endif;
+
+                                                endforeach;
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        Template.tem1LeftMenu(<?php echo $key ?>);
+                                    });
+                                </script>
+                            </div>
+                            <div id="banerMenu_<?php echo $key ?>" class="tab-pane"> 
+                                <header class="panel-heading">
+                                    &nbsp;<button class="add_image_temp1<?php echo $key ?> btn btn-success" style="float: right; margin: -5px 0px 0px 0px !important; ">Add baner</button>
+                                </header>
+                                <div class="panel-body">
+                                    <div class="adv-table">
+                                        <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="table_image_info_<?php echo $key ?>">
+                                            <thead>
+                                                <tr>
+                                                    <td>Id</td>
+                                                    <th>IMG</th>
+                                                    <th>Title</th>
+                                                    <th>Url</th>
+                                                    <th>Sort</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                <?php
+                                                foreach ($menus['banner'] as $index => $arrImage):
+                                                    $img = json_decode($arrImage['img'], TRUE);
+                                                    ?>
+                                                    <tr>
+                                                        <td><?php echo $index ?></td>
+                                                        <td><a title="Xem" class="view" href="<?php echo $img['sourceImage']?>" target="_blank" ><?php echo $img['thumbImage']['50x40'] ? '<img src="' . $img['thumbImage']['50x40'] . '">' : ''; ?></a></td>
+                                                        <td><?php echo $arrImage['title'] ?></td>
+                                                        <td><?php echo $arrImage['url'] ?></td>
+                                                        <td><?php echo $arrImage['sort'] ?></td>
+                                                        <td>
+                                                            <a class="btn btn-danger remove_image_temp1<?php echo $key?>" data-key="<?php echo $index ?>"><i class="icon-trash "></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                endforeach;
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        Template.tem1LeftBanner(<?php echo $key ?>);
+                                    });
+                                </script>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body form-horizontal tasi-form" id="html_add_menu_left_tem1<?php echo $key ?>" style="display: none">
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label"> Chọn danh mục cha:</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        <select class="parent" name="parent" class="form-control loca">
+                            <option value="null">Chọn danh mục cha</option>
+                            <?php foreach ($menus['category'] as $key => $category) { ?>
+                                <option value="<?php echo $key ?>"><?php echo $category['title'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label"> Tên menu</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        <input class="form-control title" type="text" name="title">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 col-md-3 col-sm-3 control-label"> Url</label>
+                    <div class="col-lg-9 col-md-9 col-sm-9">
+                        <input class="form-control url" type="text" name="url">
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
+    </div>
+
+</div>                  
+

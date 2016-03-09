@@ -1,0 +1,193 @@
+<?php
+$arrBrandListSlug = $this->arrBrandSlug;
+$arrData = array(
+    'controller' => 'category',
+    'action' => 'index',
+    'categorySlug' => $this->arrDetailCategory['cate_slug'],
+    'categoryID' => $this->arrDetailCategory['cate_id'],
+);
+$cateDetailList = $this->arrCateGradeList;
+$brandDetailList = $this->BrandDetailList;
+//    $brand = implode('--', $this->arrBrandSlug);
+?>
+
+<?php
+if ($this->arrCategoryParentList) {
+    ?>
+    <div class="box">
+        <div class="head box-head">
+            <?php echo $this->arrMainCategory['cate_name']; ?>
+        </div>
+        <div class="cont">
+            <ul class="menu ">
+                <?php
+                $arrCate = array();
+                foreach ($this->arrCategoryParentList as $key => $value) {
+                    $arrCate[$key] = $value;
+                    $arrParams = array('controller' => 'category', 'action' => 'index', 'categorySlug' => $value["cate_slug"], 'categoryID' => $value["cate_id"], 'brand' => $brand);
+                    $this->params['price'] ? $arrParams['price'] = $this->params['price'] : '';
+                    $this->params['s'] ? $arrParams['s'] = str_replace(' ', '+', $this->params['s']) : '';
+                    $this->params['sort'] ? $arrParams['sort'] = str_replace(' ', '+', $this->params['sort']) : '';
+                    $cateLink = $this->serverUrl() . $this->Url('category', $arrParams);
+                    $arrCate[$key]["cate_link"] = $cateLink;
+                }
+                $arrInput = My\General::arrCateInput($arrCate, $arrCate[0]['cate_id']);
+                echo My\General::arrCateOutput($arrInput, 1, $this->params['categoryID'])["result"];
+                ?>
+
+            </ul>
+        </div>
+    </div>
+    <?php
+}
+if ($this->min_price && $this->max_price) {
+    ?>
+    <div class="box">
+        <div class="head">Giá sản phẩm</div>
+        <div class="cont">
+            <div class="sider-select">
+                <input class="range-slider" type="hidden" value="<?php echo $this->min_price; ?>,<?php echo $this->max_price; ?>"/>
+            </div>
+            <div class="texbox">
+                <?php
+                if (!empty($this->arrBrandSlug)) {
+
+                    $arrParams = array('controller' => 'category', 'action' => 'index', 'brand' => implode('--', $this->arrBrandSlug), 'categoryID' => $this->params['categoryID'], 'categorySlug' => $this->params['categorySlug']);
+                } else {
+                    $arrParams = array('controller' => 'category', 'action' => 'index', 'categoryID' => $this->params['categoryID'], 'categorySlug' => $this->params['categorySlug']);
+                }
+
+                $linkPrice = $this->serverUrl() . $this->Url('category', $arrParams);
+                ?>
+                <input class="text price-from" value="<?php echo $this->min_price; ?>" name="start"/> VNĐ ->  
+                <input class="text  price-to" value="<?php echo $this->max_price; ?>" name="end"/> VNĐ 
+                <form method="GET" action="<?php echo $linkPrice; ?>">
+                    <?php echo $this->params['s'] ? '<input type="hidden" name="s" value="' . $this->params['s'] . '" />' : NULL; ?>
+                    <input type="hidden" name="price" class="price_search" value="" />
+                    <?php echo $this->params['sort'] ? '<input type="hidden" name="sort" value="' . $this->params['sort'] . '" />' : NULL; ?>
+                    <button class="search" type="submit">Tìm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+?>
+<div class = "line"></div>
+<?php if ($this->arrAllBrandList) { ?>
+    <div class = "box">
+        <div class = "head">Thương hiệu</div>
+        <div class = "cont">
+            <div class = "selected">
+                <?php
+                if (!empty($this->arrBrandDetailList)):
+                    $arrParams = array('controller' => 'category', 'action' => 'index', 'categoryID' => $this->params['categoryID'], 'categorySlug' => $this->params['categorySlug']);
+                    $this->params['price'] ? $arrParams['price'] = $this->params['price'] : '';
+                    $this->params['s'] ? $arrParams['s'] = str_replace(' ', '+', $this->params['s']) : '';
+                    $this->params['sort'] ? $arrParams['sort'] = str_replace(' ', '+', $this->params['sort']) : '';
+                    foreach ($this->arrBrandDetailList as $key => $value):
+                        ?>
+                        <div class="item">
+                            <input type="checkbox" class="css-checkbox search-brand" id="<?php echo $value['cate_name'] ?>" name="brand[]" value="<?php echo $value['cate_slug'] ?>" checked="checked" >
+                            <label for="<?php echo $value['cate_name'] ?>" class="css-label lite-green-check"><?php echo $value['cate_name']; ?></label>
+                            <?php
+                            $arrTempSlug = $arrBrandListSlug;
+                            foreach ($arrTempSlug as $k => $v) {
+                                if ($v == $value['cate_slug'])
+                                    unset($arrTempSlug[$k]);
+                            }
+                            $strTempSlug = implode('--', $arrTempSlug);
+                            $arrBrandChecked = $arrData;
+                            empty($strTempSlug) ? $arrBrandChecked : $arrBrandChecked['brand'] = $strTempSlug;
+                            empty($this->params['price']) ? $arrBrandChecked : $arrBrandChecked['price'] = $this->params['price'];
+                            ?>
+                            <input type="hidden" value="<?php echo $this->serverUrl() . $this->Url('category', $arrBrandChecked); ?>" />
+                        </div>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+                <?php
+                foreach ($this->arrAllBrandList as $arrBrandList) :
+                    if (!in_array($arrBrandList['cate_slug'], $arrBrandListSlug)) :
+                        ?>
+                        <div class="item">
+                            <input type="checkbox" class="css-checkbox search-brand" id="<?php echo $arrBrandList['cate_name'] ?>" name="brand[]" value="<?php echo $arrBrandList['cate_slug'] ?>" >
+                            <label for="<?php echo $arrBrandList['cate_name'] ?>" class="css-label lite-green-check"><?php echo $arrBrandList['cate_name']; ?></label>
+                            <?php
+                            $arrBrandNoChecked = $arrData;
+                            empty($this->params['brand']) ? $arrBrandNoChecked['brand'] = $arrBrandList['cate_slug'] : $arrBrandNoChecked['brand'] = $this->params['brand'] . '--' . $arrBrandList['cate_slug'];
+                            empty($this->params['price']) ? $arrBrandNoChecked : $arrBrandNoChecked['price'] = $this->params['price'];
+                            ?>
+                            <input type="hidden" value="<?php echo $this->serverUrl() . $this->Url('category', $arrBrandNoChecked); ?>" />
+                        </div>
+                        <?php
+                    endif;
+                endforeach;
+                ?>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+<?php } ?>
+<?php if (!empty($arrListNewsContent)): ?>
+    <div class="block-box">
+        <div class="news">
+            <div class="box-slide-news news-list height-590" slide="false" id="">
+                <!-- Slides Container -->
+                <div u="thumb" class="title">
+                    <span>Tin tức mới</span>
+                </div>
+                <!-- Slides Container -->
+                <div u="slides" class="cursor" style="height:auto">                                                         
+                    <?php
+                    echo '<div><!--sta-->';
+                    foreach ($arrListNewsContent as $keyContent => $valueContent) :
+                        ?>
+                        <div class="item">
+                            <div class="img f-left">
+                                <a href="<?php echo $this->serverUrl() . $this->url('content_detail', array('contslug' => $valueContent['cont_slug'], 'contId' => $valueContent['cont_id'])); ?>" rel="nofollow"><img  src="<?php echo json_decode($valueContent['cont_image'], true)['thumbImage']['116x116']; ?>"/></a>
+                            </div>
+                            <div class="detail f-left">
+                                <div class="tt"><a href="<?php echo $this->serverUrl() . $this->url('content_detail', array('contslug' => $valueContent['cont_slug'], 'contId' => $valueContent['cont_id'])); ?>"><?php echo $valueContent['cont_title']; ?></a></div>
+                                <div class="date-view">
+                                    <span class="date"><?php echo date('d/m/Y', $valueContent['cont_created']); ?></span> | 
+                                    <span class="view"><?php echo $valueContent['cont_viewer']; ?> đã xem</span>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    endforeach;
+                    echo '</div><!--end-->';
+                    ?>
+                </div>
+                <!-- Arrow Left -->
+                <span u="arrowleft" class="jssora06l arrowleft">
+                </span>
+                <!-- Arrow Right -->
+                <span u="arrowright" class="jssora06r arrowright">
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+<?php endif; ?>
+<script>
+    var minPrice = parseInt($('.price-from').val());
+    var maxPrice = parseInt($('.price-to').val());
+    $('.range-slider').jRange({
+        from: minPrice,
+        to: maxPrice,
+        step: 1,
+        format: '%s VN?',
+        width: 250,
+        showLabels: true,
+        isRange: true,
+        onstatechange: function (dt) {
+            data = dt.split(",");
+            $(".price-from").val(data[0]);
+            $(".price-to").val(data[1]);
+        }
+    });
+    Cate.price();
+</script>

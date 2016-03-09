@@ -1,0 +1,399 @@
+<?php
+
+use My\General;
+
+$arrData = array(
+    'controller' => 'search',
+    'action' => 'index',
+    's' => str_replace(' ', '+', $this->params['s'])
+);
+$keyword = $this->arrDataKeyword;
+?>
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+            <div class="br-hidden">
+                <div class="item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none" itemprop="url"><span itemprop="title">Tìm kiếm</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <div class="left listbrand">
+            <div class="box">
+                <div class="head box-head">
+                    Tìm kiếm theo danh mục
+                </div>
+                <div class="cont">
+                    <ul class="menu ">
+                        <?php foreach ($this->arrCateParentList as $value): ?>
+                            <li class="item unopened"><a href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'action' => 'index', 'categorySlug' => $value['cate_slug'], 'categoryID' => $value['cate_id'], 'brand' => $params['brand_name'])); ?>"><?php echo $value['cate_name']; ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="box">
+                <div class="head">Giá sản phẩm</div>
+                <div class="cont">
+                    <div class="sider-select">
+                        <input class="range-slider"  type="hidden" value="<?php echo empty($this->min_price) ? 0 : $this->min_price ?>,<?php echo $this->max_price ?>"/>
+                    </div>
+                    <div class="texbox">
+                        <input class="text price-from" value="<?php echo $this->params['price_start'] ? $this->params['price_start'] : (empty($this->min_price) ? 0 : $this->min_price) ?>" name="start"/> VNĐ ->  
+                        <input class="text  price-to" value="<?php echo $this->params['price_end'] ? $this->params['price_end'] : $this->max_price ?>" name="end"/> VNĐ 
+                        <?php
+                        $arrAction = $arrData;
+                        empty($this->params['brand']) ? $arrAction : $arrAction['brand'] = $this->params['brand'];
+                        ?>
+                        <form method="GET" action="<?php echo $this->serverUrl() . $this->Url('frontend-search', $arrAction) ?>">
+                            <?php echo $this->params['s'] ? '<input type="hidden" name="s" value="' . $this->params['s'] . '" />' : NULL; ?>
+                            <input type="hidden" name="price" class="price_search" value="" />
+                            <?php echo $this->params['sort'] ? '<input type="hidden" name="sort" value="' . $this->params['sort'] . '" />' : NULL; ?>
+                            <button class="search" type="submit">Tìm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="line"></div>
+        </div>
+
+        <div class="main">
+            <div class="banner">
+                <!--<img class="lazy" data-original="images/banner.png"/>-->
+            </div>
+            <div class="list-prod">
+                <div class="title">
+
+                    <?php
+                    if ($this->params['s'])
+                        $title .= '<div class="txt">Kết quả tìm kiếm : "</div><h1>' . $this->params['s'] . '</h1>"';
+                    echo $title;
+                    ?>
+                </div>
+                <?php if ($this->arrProductList) { ?>
+                    <div class="bar">
+                        <div class="tabs">
+                            <div class="item active" data-view="grid">
+                                <div class="icon grid">
+
+                                </div>
+                            </div>
+                            <div class="item" data-view="list">
+                                <div class="icon list">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chonse">
+                            <div class="sort">
+                                <?php
+                                $arrSort = $arrData;
+                                empty($this->params['brand']) ? $arrSort : $arrSort['brand'] = $this->params['brand'];
+                                empty($this->params['price']) ? $arrSort : $arrSort['brand'] = $this->params['price'];
+                                ?>
+                                Sắp xếp
+                                <select name="sort" id="sort">
+                                    <?php
+                                    $arrSort['sort'] = 'id_desc';
+                                    $linkSort = $this->serverUrl() . $this->Url('frontend-search', $arrSort);
+                                    ?>
+                                    <option value="<?php echo $linkSort; ?>" <?php echo $this->params['sort'] == 'id_desc' ? 'selected' : null ?>>Sản phẩm mới</option>
+                                    <?php
+                                    $arrSort['sort'] = 'id_asc';
+                                    $linkSort = $this->serverUrl() . $this->Url('frontend-search', $arrSort);
+                                    ?>
+                                    <option value="<?php echo $linkSort; ?>" <?php echo $this->params['sort'] == 'id_asc' ? 'selected' : null ?>>Sản phẩm cũ</option>
+                                    <?php
+                                    $arrSort['sort'] = 'price_desc';
+                                    $linkSort = $this->serverUrl() . $this->Url('frontend-search', $arrSort);
+                                    ?>
+                                    <option value="<?php echo $linkSort; ?>" <?php echo $this->params['sort'] == 'price_desc' ? 'selected' : null ?>>Giá giảm dần</option>
+                                    <?php
+                                    $arrSort['sort'] = 'price_asc';
+                                    $linkSort = $this->serverUrl() . $this->Url('frontend-search', $arrSort);
+                                    ?>
+                                    <option value="<?php echo $linkSort; ?>" <?php echo $this->params['sort'] == 'price_asc' ? 'selected' : null ?>>Giá tăng dần</option>
+                                </select>
+                            </div>
+                            <?php
+                            if ($this->countPage) {
+                                $arrParams = array('controller' => 'search', 'action' => 'index', 'brand' => $brand, 'categorySlug' => $this->params['categorySlug'], 'price' => $this->params['price']);
+                                $this->params['s'] ? $arrParams['s'] = str_replace(' ', '+', $this->params['s']) : '';
+                                $this->params['sort'] ? $arrParams['sort'] = str_replace(' ', '+', $this->params['sort']) : '';
+                                ?>
+                                <div class="pagging">
+                                    Xem
+                                    <select name="page" class="view-page">
+                                        <?php
+                                        for ($i = 1; $i <= $this->countPage; $i++) {
+                                            $arrParams['page'] = $i;
+                                            $linkPage = $this->serverUrl() . $this->Url('frontend-search', $arrParams);
+                                            ?>
+                                            <option value="<?php echo $linkPage; ?>" <?php echo $i == $this->params['page'] ? 'selected' : null ?>><?php echo $i; ?></option>
+                                        <?php } ?>
+                                    </select> /  Trang
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                <?php } ?>
+                <div class="sort-by">
+                    <?php
+                    $arrSortBy = $arrData;
+                    $this->params['sort'] ? $arrSortBy['sort'] = str_replace(' ', '+', $this->params['sort']) : '';
+                    if (!empty($this->arrBrandDetailList)) :
+                        foreach ($this->arrBrandDetailList as $val) :
+                            ?>
+                            <div class="item"><?php echo $val['cate_name'] ?> <span class="remove remove-brand">X</span>
+                                <?php
+                                $temarrSortBy = $arrBrandListSlug;
+                                foreach ($temarrSortBy as $key => $value) {
+                                    if ($value == $val['cate_slug']) {
+                                        unset($temarrSortBy[$key]);
+                                    }
+                                }
+                                empty($temarrSortBy) ? $arrSortBy : $arrSortBy['brand'] = implode('--', $temarrSortBy);
+                                empty($this->params['price']) ? $arrSortBy : $arrSortBy['price'] = $this->params['price'];
+                                $linkBrand = $this->serverUrl() . $this->Url('frontend-search', $arrSortBy);
+                                ?>
+                                <input type="hidden" value="<?php echo $linkBrand; ?>" />
+                            </div>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
+                    <?php
+                    $arrSortByPrice = $arrData;
+                    empty($this->params['brand']) ? $arrSortByPrice : $arrSortByPrice['brand'] = $this->params['brand'];
+                    if (!empty($this->params['price'])) {
+                        $arrPrice = explode('--', $this->params['price']);
+                        $linkPrice = $this->serverUrl() . $this->Url('frontend-search', $arrSortByPrice);
+                        $price_start = number_format(abs((int) $arrPrice[0]), 0, '', '.');
+                        $price_end = number_format(abs((int) $arrPrice[1]), 0, '', '.');
+                        ?>
+                        <div class="item">
+                            <?php echo $price_start . ' - ' . $price_end; ?><span class="remove remove-price">X</span>
+                            <input type="hidden" value="<?php echo $linkPrice; ?>" />
+                        </div>
+                    <?php } ?>
+                    <?php if ($this->params['brand'] || $this->params['price']) { ?>
+                        <div class="remove-all">
+                            <a style="cursor: pointer">Xóa tất cả</a>
+                            <?php
+                            $arrParams['brand'] = NULL;
+                            $arrParams['price'] = NULL;
+                            $linkRemoveAll = $this->serverUrl() . $this->Url('frontend-search', $arrParams);
+                            ?>
+                            <input type="hidden" value="<?php echo $linkRemoveAll; ?>" />
+                        </div>
+                    <?php } ?>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="view-list grid">
+                <?php
+                if ($this->arrProductList) {
+                    foreach ($this->arrProductList as $arrProductList) {
+                        $prodLink = $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrProductList["prod_slug"], 'productId' => $arrProductList['prod_id']));
+                        //                        
+                        ?>
+                        <div class="item">
+                            <div class="img">
+                                <a href="<?php echo $prodLink ?>" rel="nofollow" title="<?php echo $arrProductList['prod_name']; ?>" >
+                                    <img class="lazy" data-original="<?php echo json_decode($arrProductList['prod_image'], TRUE)['thumbImage']['170x170']; ?>" />
+                                </a>
+                            </div>
+                            <?php
+                            if ($arrProductList['prod_call_price'] != 1):
+                                if ($arrProductList['prod_is_promotion'] == 1):
+                                    $percent = 100 - ($arrProductList['prod_promotion_price'] * 100 / $arrProductList['prod_price']);
+                                    ?>
+                                    <div class="icon">
+                                        <!--<div class="gift"></div>-->
+                                        <div class="discount">
+                                            <?php
+                                            echo number_format($percent, 0, ",", ".") . '%';
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <?php
+                                endif;
+                            endif;
+                            ?>
+                            <div class="info">
+                                <div class="title">
+                                    <a href="<?php echo $prodLink ?>" title="<?php echo $arrProductList['prod_name']; ?>" ><?php echo $arrProductList['prod_name']; ?></a>
+                                </div>
+                                <div class="rate">
+                                    <?php
+                                    $rate = round($arrProductList['prod_rate'] / $arrProductList['prod_count_rate'], 0);
+                                    $rate = (round(($rate / 2), 0) * 2);
+                                    //                                    $rate = $rate >= 5 ? $rate : 5;
+                                    ?>
+                                    <div class="star star-<?php echo $rate > 20 ? 20 : $rate; ?>"> <?php echo $rate ? '( ' . $arrProductList['prod_count_rate'] . ' đánh giá )' : '( ' . $arrProductList['prod_count_rate'] . ' đánh giá )'; ?></div> <!-- 5,10,15,20,25,30,35,40,45,50 -->
+                                </div>
+                                <div class="price">
+                                    <div class="current">
+                                        <?php
+                                        if ($arrProductList['prod_call_price'])
+                                            echo 'Liên hệ để biết giá';
+                                        else if ($arrProductList['prod_is_promotion'] && !$arrProductList['prod_call_price'])
+                                            echo number_format($arrProductList['prod_promotion_price'], 0, '', '.') . ' VNĐ';
+                                        else if (!$arrProductList['prod_is_promotion'] && !$arrProductList['prod_call_price'])
+                                            echo number_format($arrProductList['prod_price'], 0, '', '.') . ' VNĐ';
+                                        ?>
+                                    </div>
+                                    <div class="promot">
+                                        <?php
+                                        if ($arrProductList['prod_call_price'])
+                                            echo '';
+                                        else if ($arrProductList['prod_is_promotion'] && !$arrProductList['prod_call_price'])
+                                            echo number_format($arrProductList['prod_price'], 0, '', '.') . ' VNĐ';
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="desc">
+                                    <?php echo html_entity_decode($arrProductList['prod_description']); ?>
+                                </div>
+                                <div class="read-more"><a href="<?php echo $prodLink ?>">Xem chi tiết</a></div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <?php
+                }else {
+                    ?>
+                    <p>Không tìm thấy sản phẩm ... vui lòng xem lại từ khóa cần tìm</p>
+                <?php } ?>
+            </div>
+            <div style="clear: both"></div>
+            <div class="paging">
+                <?php echo $this->paging; ?>
+            </div>
+            <div class="news-involve">
+                <div class="view-list list">
+                    <?php if (!empty($this->arrContentList)): ?>
+                        <div class="title">
+                            <h2>
+                                Kết quả tìm kiếm bài viết : " <?php echo $this->params['s']; ?> "
+                            </h2>
+                        </div>
+                        <?php
+                        $i = 0;
+                        foreach ($this->arrContentList as $cont) :
+//                            p(json_decode($cont['cont_image'],true)['thumbImage']['150x95']);die;
+                            $ContentLink = $this->serverUrl() . $this->Url('content_detail', array('controller' => 'content', 'action' => 'view', 'contslug' => $cont["cont_slug"], 'contId' => $cont["cont_id"]));
+                            ?>
+                            <div class="item">
+                                <div class="img">
+                                    <a href="<?php echo $ContentLink ?>" rel="nofollow" title="<?php echo $cont['cont_title']; ?>" >
+                                        <img class="lazy" data-original="<?php echo (empty(json_decode($cont['cont_image'], TRUE)['thumbImage']['170x170'])) ? json_decode($cont['cont_image'], true)['thumbImage']['150x95'] : json_decode($cont['cont_image'], TRUE)['thumbImage']['170x170']; ?>"/>
+                                    </a>   
+                                </div>
+                                <div class="info">
+                                    <div class="title co-title">
+                                        <h3><a href="<?php echo $ContentLink; ?>" title="news"> <?php echo $cont['cont_title'] ?></a></h3>
+                                    </div>
+                                    <div class="desc co-desc">
+                                        <?php echo html_entity_decode(strip_tags($cont['cont_summary'])); ?>
+                                        <?php echo html_entity_decode(substr(strip_tags($cont['cont_content']), 0, 400)); ?>
+                                    </div>
+                                    <?php if (!empty($keyword)): ?>
+                                        <div class="read-more"><b>Xem thêm:</b> <?php
+                                            for ($j = 0; $j < 4; $j++) {
+                                                if (!empty($keyword[$i])) {
+                                                    ?>
+                                                    <a href="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 'keySlug' => General::getSlug($keyword[$i]))) ?>"><?php echo $keyword[$i]; ?></a>
+                                                    <?php
+                                                }
+                                                if ($j != 3)
+                                                    echo ", ";
+                                                $i++;
+                                            }
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="tags">
+                <?php if (!empty($this->arrTagsList) || !empty($this->arrAllKeyword)): ?>
+                    <div class="tag-content">
+                        <div class="main">
+                            <?php
+                            $i = 0;
+                            foreach ($this->arrAllKeyword as $key => $value):
+                                ?>
+                                <a href="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 'keySlug' => $value["word_slug"])) ?>"><?php echo $value['word_key']; ?></a>
+                                <?php
+                                $i++;
+                                if (count($this->arrAllKeyword) != $i)
+                                    echo ',';
+                                ?>
+                            <?php endforeach; ?>
+
+                            <?php
+                            $i = 0;
+                            foreach ($this->arrTagsList as $key => $value):
+                                ?>
+                                <a href="<?php echo $this->serverUrl() . $this->Url('tags', array('controller' => 'tags', 'action' => 'index', 'tagsSlug' => $value["tags_slug"], 'tagsID' => $value["tags_id"])) ?>"><?php echo $value['tags_name']; ?></a>
+                                <?php
+                                $i++;
+                                if (count($this->arrTagsList) != $i)
+                                    echo ',';
+                                ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php if (count($this->arrTags) >= 10 || count($this->arrAllKeyword) >= 10): ?>
+                        <div class="open-tag"><a href="javascript:;">Xem nhiều hơn</a></div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+
+            <div class="seo-data">
+                <?php
+                foreach ($this->arrBrandList as $key => $value):
+                    ?>
+                    <a style=" font-size: 10px" href="<?php echo $this->serverUrl() . $this->Url('brand', array('controller' => 'brand', 'action' => 'index', 'brandSlug' => $value["cate_slug"])) ?>"><?php echo $value['cate_name']; ?></a>,
+                <?php endforeach; ?>
+            </div>
+
+
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div><!-- End block-content -->
+<?php
+$brand = implode(',', $this->arrBrandListSlug);
+?>
+<script>
+    var searchajaxUrl = '<?php echo $this->serverUrl() . $this->Url('search', array('controller' => 'search', 'action' => 'get-ajax')); ?>';
+    var categoryID = '<?php echo $this->params['categoryID'] ?>';
+    var s = '<?php echo $this->params['s']; ?>';
+    var price = '<?php echo $this->params['price']; ?>';
+    var brand = '<?php echo $brand; ?>';
+    var categorySlug = '<?php echo $this->params['categorySlug']; ?>';
+    Search.index();
+</script>

@@ -1,0 +1,62 @@
+<script>
+    var Controller = 'index';
+</script>
+<?php
+$arrTemplate = $this->arrTemplateList;
+$cookieProduct = unserialize($_COOKIE['cookieProduct']);
+$this->arrColor = array(
+    '1' => 'blue',
+    '2' => 'orange',
+    '3' => 'green',
+    '4' => 'purple',
+    '5' => 'blue-a',
+    '6' => 'pink',
+    '7' => 'purple-a'
+);
+$this->countTemplate = count($arrTemplate);
+$this->keyColor = 0;
+?>
+<div id="content">
+    <?php
+    foreach ($arrTemplate as $key => $template) {
+        $this->keyColor +=1;
+//        p($this->keyColor);die;
+        $this->template = $template;
+//        p($template);die;
+        $this->key = $key;
+
+        if ($this->keyColor > 7) {
+            $this->keyColor = 1;
+        }
+        echo $this->render('frontend/index/template_' . $template['template']);
+    }
+    ?>
+    <?php if (!empty($this->arrProductCookieList)) : ?>
+        <div class="block-box box-prod-viewer">
+            <div class="main">
+                <div class="title">Sản Phẩm Đã Xem</div>
+                <div class="prod-viewer" id="prod-viewer">
+                    <!-- Slides Container -->
+                    <div u="slides" class="cursor">
+                        <?php
+                        foreach ($this->arrProductCookieList as $val) {
+                            $img = json_decode($val['prod_image'], TRUE)['thumbImage']['83x83'];
+                            ?>
+                            <div class="item">  
+                                <a href="<?php echo $this->serverUrl() . $this->Url('product', array('productslug' => $val['prod_slug'], 'productId' => $val['prod_id'])); ?>" title="<?php echo $val['prod_name']; ?>"><img  style="width:85px;"   class="lazy" data-original="<?php echo $img; ?>"/></a>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <!-- Arrow Left -->
+                    <span u="arrowleft" class="jssora04l arrowleft"> </span>
+                    <!-- Arrow Right -->
+                    <span u="arrowright" class="jssora04r arrowright"></span>
+                </div>
+
+            </div>
+            <div style="clear: both"></div>
+        </div> <!-- END Sản Phẩm Đã Xem -->
+<?php endif; ?>
+</div>

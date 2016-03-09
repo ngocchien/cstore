@@ -1,0 +1,80 @@
+<?php
+
+use My\General;
+?>
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">            
+            <div class="br-hidden">
+                <div class="item item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none" itemprop="url"><span itemprop="title">Gian hàng</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <?php
+        echo $this->render('frontend/leftmenu-order');
+        ?>
+        <div class="main">
+            <h2>Sản phẩm của bạn</h2>
+            <div class="panel-body">
+                <table class="table table-bordered width_100">
+                    <thead class="cf">
+                        <tr>
+                            <th class="text-center"><i class=""></i>Tên sản phẩm</th>
+                            <th class="text-center"><i class="icon-dollar"></i>Đơn giá</th>
+                            <th class="text-center"><i class="icon-ok"></i>Ngày tạo</th>
+                            <th class="text-center"><i class=""></i> Trạng thái</th>
+                            <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($arrListProduct as $arrProduct):
+                            ?>
+                            <tr>
+                                <td class="text-center">
+                                    <a  href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrProduct["prod_slug"], 'productId' => $arrProduct['prod_id'])) ?>" target="_bank"  >
+                                        <?php echo $arrProduct["prod_name"] ?>
+                                    </a>
+                                </td>
+                                <td class="text-center"><?php echo number_format($arrProduct["prod_price"]) ?> VNĐ</td>
+                                <td class="text-center"><?php echo date("d/m/Y H:i:s", $arrProduct["prod_created"]) ?></td>
+                                <td class="text-center">
+                                    <?php echo $arrProduct["prod_status"] == 0 ? "<span class='wanning'>Chờ duyệt</span>" : "<span class='success'>Đã kiểm duyệt</span>"; ?>               
+                                </td>
+                                <td class="text-center" width="200">
+                                    <a href="<?php echo $this->serverUrl() . $this->Url('frontend-stand', array('controller' => 'profile', 'action' => 'edit-product', 'id' => $arrProduct["prod_id"])) ?>" class="pro-bt edit">Sửa</a> <a href="javascript:stand.remove('<?php echo $arrProduct["prod_id"] ?>')" class="pro-bt remove">Xóa</a>
+                                </td>
+                            </tr>
+                            <?php
+                        endforeach;
+                        ?>
+
+                    </tbody>
+                </table>
+                <div class="paging"> <?php echo $paging; ?></div>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+
+<script>
+    var standProdRemove = '<?php echo $this->serverUrl() . $this->Url('frontend-stand', array('controller' => 'stand', 'action' => 'remove-product')) ?>';
+</script>

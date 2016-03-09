@@ -1,0 +1,365 @@
+
+<?php
+$listMenu = json_decode($template['json_menu'], TRUE);
+$listImage = json_decode($template['json_image'], TRUE);
+$arrProduct = json_decode($template['json_product'], TRUE);
+$template['category_id'] = json_decode($template['category_id'], TRUE);
+?>
+<script type="text/javascript">
+    var pTable = [];
+</script>
+<section class="wrapper site-min-height">
+    <div class="row">
+        <div class="col-lg-8">
+            <header class="panel-heading tab-bg-dark-navy-blue">
+                <ul class="nav nav-tabs ">
+                    <li class="active">
+                        <a data-toggle="tab" href="#titeltemplte">
+                            <strong>Thông tin tiêu đề</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#listMenu">
+                            <strong>Danh sách menu</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" class="" href="#listBaner">
+                            <strong>Danh sách banner</strong>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" class="" href="#listProduction">
+                            <strong>Danh sách sản phẩm</strong>
+                        </a>
+                    </li>
+                </ul>
+            </header>
+            <div class="panel-body panel">
+                <div class="tab-content tasi-tab">
+                    <div id="titeltemplte" class="tab-pane active">
+                        <div class="panel-body form-horizontal tasi-form">
+                            <form action="" method="POST">
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Tiêu đề</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control name" type="text" name="title" value="<?php echo $template['title'] ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label"> Sort</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control sort" type="text" name="sort" value="<?php echo $template['sort'] ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label"> trạng thái</label>
+                                    <div class="col-lg-9">
+                                        <select name="sta" class="form-control" >
+                                            <option value="1" <?php echo $template['status'] == 1 ? 'selected="selected"' : '' ?>>Hiển thị</option>
+                                            <option value="0" <?php echo $template['status'] == 0 ? 'selected="selected"' : '' ?>>Đã đóng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label">Tiêu đề danh sách tin</label>
+                                    <div class="col-lg-9">
+                                        <input class="form-control name" type="text" name="category_id[title]" value="<?php echo $template['category_id']['title'] ?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cate_id" class="col-lg-3 control-label">Tin thuộc danh mục</label>
+                                    <div class="col-lg-9">
+                                        <select name="category_id[item][]" class="sumo-multiple-select-box form-control"  multiple="multiple"  id="categorySelectbox" data-placeholder="Chọn danh mục" >
+                                            <?php
+                                            $category_id = explode(',', $template["category_id"]['item']);
+                                            $category = $this->listCategory;
+                                            foreach ($category as $cate) {
+                                                echo '<option ' . ((in_array($cate['cate_id'], $category_id)) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
+                                            }
+                                            ?>
+                                            <?php echo $optionCategory ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <style type="text/css">
+                                    .ac{ background: #E0E2FF}
+                                </style>
+                                <div class="form-group">
+                                    <label for="html_form" class="col-lg-3 control-label">Chọn form mẩu</label>
+                                    <div class="col-lg-9 typer-formhtml">
+                                        <div data-id="form_calorin" class="col-lg-4 btn">
+                                            <img style="max-width: 70%" src="<?php echo STATIC_URL ?>/b/images/template/box-canngu.jpg" alt="Template 4">
+                                        </div>
+                                        <div data-id="health" class="col-lg-4 btn">
+                                            <img style="max-width: 70%" src="<?php echo STATIC_URL ?>/b/images/template/box-canngu.jpg" alt="Template 5">
+                                        </div>
+                                        <div data-id="image_banner" class="col-lg-4 btn">
+                                            <img style="max-width: 70%" src="<?php echo STATIC_URL ?>/b/images/template/images-5.png" alt="Template 6">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="html_form" class="col-lg-3 control-label">Html form</label>
+                                    <div class="col-lg-9">
+                                        <textarea class="html_form"><?php echo $template['html_form'] ?></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label"></label>
+                                    <div class="col-lg-9">
+                                        <button data-bb-handler="main" type="button" class="btn btn-primary save-title"><i class="icon-save"></i> Hoàn tất</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="listProduction" class="tab-pane">
+
+                        <header class="panel-heading alert-success">
+                            <ul class="nav nav-tabs ">
+
+                                <?php foreach ($arrProduct as $key => $arrPro): ?>
+                                    <li class="<?php echo $key == 0 ? 'active' : '' ?>">
+                                        <a data-toggle="tab" href="#tab_<?php echo $key + 1 ?>">
+                                            <strong><?php echo $arrPro['title'] ?></strong>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+
+                            </ul>
+                        </header>
+                        <div class="panel-body panel">
+                            <div class="tab-content tasi-tab">
+                                <?php foreach ($arrProduct as $key => $arrPro): ?>
+                                    <div id="tab_<?php echo $key + 1 ?>" class="tab-pane <?php echo $key == 0 ? 'active' : '' ?>">
+                                            <div class="col-lg-12">
+                                                <section class="panel">
+                                                    <header class="panel-heading"><?php echo $arrPro['title'] ?></header>
+                                                    <div class="panel-body listPdoduct_<?php echo $key + 1 ?>">
+                                                        <table class="table table-bordered datatableMulti_<?php echo $key + 1 ?>" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="40">Id</th>
+                                                                    <th>Tên sản phẩm</th>
+                                                                    <th style="text-align:center;width:25%" class="numeric">Chức năng</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                $listProduct = $this->listProduct;
+                                                                if (count($arrPro['item']) > 0) {
+                                                                    foreach ($arrPro['item'] as $id) {
+                                                                        if (isset($listProduct[$id])) {
+                                                                            ?>
+                                                                            <tr>
+                                                                                <td><?php echo $id ?></td>
+                                                                                <td>
+                                                                                    <?php echo $listProduct[$id]['prod_name']; ?>
+                                                                                </td>
+                                                                                <td style="text-align: center">
+                                                                                    <a class="btn btn-danger btn-xs btn-deleteProductTab" data-placement="top" data-original-title="Loại bỏ bài viết" data-key="<?php echo $key + 1 ?>" data-id="<?php echo $listProduct[$id]['prod_id']; ?>">Dele <i class="icon-arrow-right"></i></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <?php
+                                                                        }
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                        <script type="text/javascript">
+                                                            $(document).ready(function () {
+                                                                pTable[<?php echo $key + 1 ?>] = $('table.datatableMulti_<?php echo $key + 1 ?>').dataTable({
+                                                                    "aoColumnDefs": [
+                                                                        {"bSortable": false, "aTargets": [0]}
+                                                                    ],
+                                                                    //                "bSort": false
+                                                                    "aaSorting": [[1, 'asc']]
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <section class="panel">
+                                                    <header class="panel-heading">Danh sách sản phẩm 
+                                                        <button data-bind="<?php echo implode(',', $arrPro['item']) ?>" class="btn btn-primary load_produc" data-placement="top" data-original-title="Load product" style="float:right; margin-top: -5px"><i class="icon-refresh"></i>  Load Product</button>
+                                                    </header>
+                                                    <div class="panel-body unListProduc" data-id="<?php echo $key + 1 ?>"> 
+                                                        <!-- ajax --> 
+                                                    </div>
+                                                </section>
+                                            </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="listMenu" class="tab-pane">
+                        <header class="panel-heading">
+                            &nbsp;<button class="add_menu btn btn-success" style="float: right; margin: -5px 0px 0px 0px !important; ">Add Menu</button>
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="table-menu-info">
+                                    <thead>
+                                        <tr>
+                                            <td>Location</td>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Url</th>
+                                            <th>Sort</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        <?php
+                                        foreach ($listMenu as $key => $menus):
+                                            foreach ($menus as $k => $menuLoca):
+                                                ?>
+                                                <tr class="gradeU">
+                                                    <td><?php echo $key ?></td>
+                                                    <td><?php echo $k ?></td>
+                                                    <td><?php echo $menuLoca['name'] ?></td>
+                                                    <td><?php echo $menuLoca['url'] ?></td>
+                                                    <td><?php echo $menuLoca['sort'] ?></td>
+                                                    <td>
+                                                        <a class="btn btn-danger remove_menu" data-loca="<?php echo $key ?>" data-key="<?php echo $k ?>"><i class="icon-trash "></i></a>
+                                                </tr>
+                                                <?php
+                                            endforeach;
+                                        endforeach;
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="listBaner" class="tab-pane"> 
+                        <header class="panel-heading">
+                            &nbsp;<button class="add_image btn btn-success" style="float: right; margin: -5px 0px 0px 0px !important; ">Add baner</button>
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="table-image-info">
+                                    <thead>
+                                        <tr>
+                                            <td>Id</td>
+                                            <th>IMG</th>
+                                            <th>Title</th>
+                                            <th>Url</th>
+                                            <th>Sort</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        <?php
+                                        foreach ($listImage as $key => $arrImage):
+                                            $img = json_decode($arrImage['img'], TRUE);
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $key ?></td>
+                                                <td><a title="Xem" class="view" href="<?php echo $img['sourceImage']?>" target="_blank" ><?php echo $img['thumbImage']['50x40'] ? '<img src="' . $img['thumbImage']['50x40'] . '">' : ''; ?></a></td>
+                                                <td><?php echo $arrImage['title'] ?></td>
+                                                <td><?php echo $arrImage['url'] ?></td>
+                                                <td><?php echo $arrImage['sort'] ?></td>
+                                                <td>
+                                                    <a class="btn btn-danger remove_image" data-key="<?php echo $key ?>"><i class="icon-trash "></i></a>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        endforeach;
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-lg-4">
+            <img style="width: 100%" src="<?php echo STATIC_URL ?>/b/images/template/4.png" alt="Template 2">
+        </div>
+    </div> 
+</section>
+<div class="panel-body form-horizontal tasi-form" id="html_add_menu_hidden" style="display: none">
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Thuộc menu :</label>
+        <div class="col-lg-9">
+            <select name="loca" class="form-control loca">
+                <?php foreach ($listMenu as $key => $menu) { ?>
+                    <option value="<?php echo $key ?>">
+                        <?php echo $key ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Tên menu</label>
+        <div class="col-lg-9">
+            <input class="form-control name" type="text" name="name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Url</label>
+        <div class="col-lg-9">
+            <input class="form-control url" type="text" name="url">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-3 control-label"> Sort</label>
+        <div class="col-lg-9">
+            <input class="form-control sort" type="text" name="sort">
+        </div>
+    </div>
+</div>
+<div class="panel-body form-horizontal tasi-form" id="html_add_image_hidden" style="display: none">
+    <form action="" method="POST">
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Banner:</label>
+            <div class="col-lg-9">
+                <input type="file" name="img" class="img">
+                <div class="progress1"></div>
+                <ul></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label"> Title</label>
+            <div class="col-lg-9">
+                <input class="form-control title" type="text" name="title">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label"> Url</label>
+            <div class="col-lg-9">
+                <input class="form-control url" type="text" name="url">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label"> Sort</label>
+            <div class="col-lg-9">
+                <input class="form-control sort" type="text" name="sort">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    var baseURL = '<?php echo $this->serverurl() ?>';
+    var STATIS_URL = '<?php echo STATIC_URL ?>';
+    var tem_id = '<?php echo $template['tem_id'] ?>';
+    /* Formating function for row details */
+    Template.menu();
+    Template.image();
+    Template.title();
+    Template.product();
+    $('#categorySelectbox').SumoSelect();
+
+
+</script>

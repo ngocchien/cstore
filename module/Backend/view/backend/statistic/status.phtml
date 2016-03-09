@@ -1,0 +1,136 @@
+<section class="panel">
+    <header class="panel-heading">Trạng thái đơn hàng</header>
+    <div class="panel-body">
+        <!--        <div class="form-group">
+                    <label class="control-label col-md-3">Date Range</label>
+                        <div class="col-md-4">
+                            <div class="input-group input-large" data-date-format="dd/mm/yyyy">
+                                <input type="text" class="form-control dpd1" id="from" value="<?php echo $this->date['from'] ?>">
+                                <span class="input-group-addon">To</span>
+                                <input type="text" class="form-control dpd2" id="to" value="<?php echo $this->date['to'] ?>">
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2 no-padding-right">
+                            <button type="button" class="btn btn-white per-100 btn-rangeStatus" ><i class="icon-search"></i>Tìm</button>
+                        </div>
+                </div>-->
+        <div class="form-group">
+            <div class="col-md-offset-6 col-md-6">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="input-group input-large" data-date-format="dd/mm/yyyy">
+                            <input type="text" class="form-control dpd1" id="from" value="<?php echo $this->date['from'] ?>">
+                            <span class="input-group-addon">To</span>
+                            <input type="text" class="form-control dpd2" id="to" value="<?php echo $this->date['to'] ?>">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-white per-100 btn-rangeStatus" ><i class="icon-search"></i>OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="searchproduct">
+                    <div class="orverview" style="text-align: right">
+                        <span style="text-align: center"><b>Tổng đơn</b></span>
+                        <span style="text-align: center">&nbsp;&nbsp;&nbsp;<?php echo $this->totalOrders ?></span><br>
+                        <span style="text-align: center"><b>Chờ duyệt</b></span>
+                        <span style="text-align: center">&nbsp;&nbsp;&nbsp;<?php echo $this->waitingOrders ?></span><br>
+                        <span style="text-align: center"><b>Khách tự đặt</b></span>
+                        <span style="text-align: center">&nbsp;&nbsp;&nbsp;<?php echo $this->cusOrders ?></span<br>
+                    </div>
+                    <div class="panel-body">
+                        <a href="#" class="btn-export-status"><button type="button" class="btn btn-shadow btn-success">Xuất excel</button></a>
+                    </div>
+                    <table class="table table-striped table-bordered" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;width:7%">Nhân viên</th>
+                                <th style="text-align:center;width:10%">Đã nhận hàng</th>
+                                <th style="text-align:center;width:10%">Đã thu tiền</th>
+                                <th style="text-align:center;width:10%">Đang giao hàng</th>
+                                <th style="text-align:center;width:10%">Hàng đang về</th>
+                                <th style="text-align:center;width:10%">Khách trả hàng</th>
+                                <th style="text-align:center;width:10%">Hủy đơn hàng</th>
+                                <th style="text-align:center;width:10%">Tổng</th>
+                            </tr>
+                            <?php
+                            if ($this->arrOrders) {
+                                $tr = '';
+                                $trTotal = '';
+                                $totalOrders = 0;
+                                foreach ($this->arrOrders as $key => $arrOrders) {
+                                    $countRecevied += (int) $arrOrders['Recevied'];
+                                    $countPaid += (int) $arrOrders['Paid'];
+                                    $countRunning += (int) $arrOrders['Running'];
+                                    $countinWarehouse += (int) $arrOrders['inWarehouse'];
+                                    $countgetReturn += (int) $arrOrders['getReturn'];
+                                    $countCancel += (int) $arrOrders['Cancel'];
+
+                                    $count_Orders += (int) $arrOrders['Recevied'] + (int) $arrOrders['Paid'] + (int) $arrOrders['Running'] + (int) $arrOrders['inWarehouse'] + (int) $arrOrders['getReturn'] + (int) $arrOrders['Cancel'];
+
+                                    $tr .= '<tr><td style="text-align: center">' . $arrOrders['user_change_status'] . '</td>';
+                                    $tr .= '<td style="text-align: center">' . $arrOrders['Recevied'] . '</td>';
+                                    $tr .= '<td style="text-align: center">' . $arrOrders['Paid'] . '</td>';
+                                    $tr .= '<td style="text-align: center">' . $arrOrders['Running'] . '</td>';
+                                    $tr .= '<td style="text-align: center">' . $arrOrders['inWarehouse'] . '</td>';
+                                    $tr .= '<td style="text-align: center">' . $arrOrders['getReturn'] . '</td>';
+                                    $tr .= '<td style="text-align: center">' . $arrOrders['Cancel'] . '</td></tr>';
+
+                                    $totalReceived += $arrOrders['totalReceived'];
+                                    $totalPaid += $arrOrders['totalPaid'];
+                                    $totalRunning += $arrOrders['totalRunning'];
+                                    $totalinWarehouse += $arrOrders['totalinWarehouse'];
+                                    $totalgetReturn += $arrOrders['totalgetReturn'];
+                                    $totalCancel += $arrOrders['totalCancel'];
+                                    $totalOrders += $arrOrders['totalReceived'] + $arrOrders['totalPaid'] + $arrOrders['totalRunning'] + $arrOrders['totalinWarehouse'] + $arrOrders['totalgetReturn'] + $arrOrders['totalCancel'];
+                                }
+
+                                $trTotal .= '<tr style="color: red; font-size: 14px; font-weight: 700"><td sytle="text-align: center;"><b>Thành tiền</b></td>';
+                                $trTotal .= '<td style="text-align: center;">' . number_format($totalReceived) . '</td>';
+                                $trTotal .= '<td style="text-align: center">' . number_format($totalPaid) . '</td>';
+                                $trTotal .= '<td style="text-align: center">' . number_format($totalRunning) . '</td>';
+                                $trTotal .= '<td style="text-align: center">' . number_format($totalinWarehouse) . '</td>';
+                                $trTotal .= '<td style="text-align: center">' . number_format($totalgetReturn) . '</td>';
+                                $trTotal .= '<td style="text-align: center">' . number_format($totalCancel) . '</td>';
+                                $trTotal .= '<td style="text-align: center">' . number_format($totalOrders) . '</td></tr>';
+                            }
+                            ?>
+
+                        </thead>
+                        <tbody>
+                            <?php echo $tr ?>
+                            <?php if ($tr) { ?>
+                                <tr style="color: red; font-size: 14px; font-weight: 700">
+                                    <td style="text-align: center;"><b>Tổng</b></td>
+                                    <td style="text-align: center"><?php echo $countRecevied ?></td>
+                                    <td style="text-align: center"><?php echo $countPaid ?></td>
+                                    <td style="text-align: center"><?php echo $countRunning ?></td>
+                                    <td style="text-align: center"><?php echo $countinWarehouse ?></td>
+                                    <td style="text-align: center"><?php echo $countgetReturn ?></td>
+                                    <td style="text-align: center"><?php echo $countCancel ?></td>
+                                    <td style="text-align: center"><?php echo $count_Orders ?></td>
+                                </tr>
+                                <?php
+                                echo $trTotal;
+                            } else {
+                                echo '<tr><td colspan="8" style="text-align: center">Không tìm thấy đơn hàng</td></tr>';
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" >
+                        <?php //echo $this->paging;  ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Statistic.index();
+    Statistic.status();
+</script>

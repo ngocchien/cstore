@@ -1,0 +1,30 @@
+<div>
+    <h2>Danh sách sản phẩm</h2>
+</div>
+<div style="margin: auto;width: 1300px">
+    <?php foreach($this->arrProdutList as $arrProductList){?>
+    <div style="width:300px;height:200px;border:1px solid #003cb3;float: left; margin-left:5px;margin-bottom:5px">
+        <p>Tên sp : <a href="<?php ?>"><?php echo $arrProductList['prod_name'];?></a></p>
+        <p>Tên sp : <?php echo $arrProductList['prod_price'];?></p>
+        <p>Tên sp : <?php echo $arrProductList['prod_description'];?></p>
+    </div>
+    <?php } ?>
+</div>
+<div style="">
+    <div>
+        <?php echo $this->paging;?>
+    </div>
+</div>
+<img class='captcha' src=""/>
+<script>
+    $(document).ready(function () {
+        captchaURL = baseurl+ '/frontend/captcha';
+        $.ajax({
+            type : 'POST',
+            url : captchaURL,
+            success: function (result) {
+                $(".captcha").attr('src', result);
+            }
+        });
+    });
+</script>

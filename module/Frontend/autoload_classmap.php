@@ -1,0 +1,27 @@
+<?php
+
+return array(
+    'Frontend\Module' => __DIR__ . '/Module.php',
+    'Frontend\Controller\IndexController' => __DIR__ . '/src/Frontend/Controller/IndexController.php',
+    'Frontend\Controller\AuthController' => __DIR__ . '/src/Frontend/Controller/AuthController.php',
+    'Frontend\Controller\ProfileController' => __DIR__ . '/src/Frontend/Controller/ProfileController.php',
+    'Frontend\Controller\OrderController' => __DIR__ . '/src/Frontend/Controller/OrderController.php',
+    'Frontend\Controller\OrdertrackingController' => __DIR__ . '/src/Frontend/Controller/OrdertrackingController.php',
+    'Frontend\Controller\CategoryController' => __DIR__ . '/src/Frontend/Controller/CategoryController.php',
+    'Frontend\Controller\ProductController' => __DIR__ . '/src/Frontend/Controller/ProductController.php',
+    'Frontend\Controller\CaptchaController' => __DIR__ . '/src/Frontend/Controller/CaptchaController.php',
+    'Frontend\Controller\SearchController' => __DIR__ . '/src/Frontend/Controller/SearchController.php',
+    'Frontend\Controller\CheckoutController' => __DIR__ . '/src/Frontend/Controller/CheckoutController.php',
+    'Frontend\Controller\ContentController' => __DIR__ . '/src/Frontend/Controller/ContentController.php',
+    'Frontend\Controller\CommentController' => __DIR__ . '/src/Frontend/Controller/CommentController.php',
+    'Frontend\Controller\BrandController' => __DIR__ . '/src/Frontend/Controller/BrandController.php',
+    'Frontend\Controller\TagsController' => __DIR__ . '/src/Frontend/Controller/TagsController.php',
+    'Frontend\Controller\TagsContentController' => __DIR__ . '/src/Frontend/Controller/TagsContentController.php',
+    'Frontend\Controller\GeneralController' => __DIR__ . '/src/Frontend/Controller/GeneralController.php',
+    'Frontend\Controller\SitemapController' => __DIR__ . '/src/Frontend/Controller/SitemapController.php',
+    'Frontend\Controller\ErrorController' => __DIR__ . '/src/Frontend/Controller/ErrorController.php',
+    'Frontend\Controller\MenuController' => __DIR__ . '/src/Frontend/Controller/MenuController.php',
+    'Frontend\Controller\SitemapController' => __DIR__ . '/src/Frontend/Controller/SitemapController.php',
+    'Frontend\Controller\StandController' => __DIR__ . '/src/Frontend/Controller/StandController.php',
+    'Frontend\Controller\UploaderController' => __DIR__ . '/src/Frontend/Controller/UploaderController.php',
+);

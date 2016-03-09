@@ -1,0 +1,122 @@
+<?php
+$value = $this->template;
+$key = $this->key;
+$keyColor = $this->keyColor;
+$arrColor = $this->arrColor;
+?>  
+<div class="block-box box-<?php echo $arrColor[$keyColor-1];?>" id="box-s-data-<?php echo $key ?>">
+    <div class="header">
+        <div class="lg">
+            <div class="rg">
+                <div class="cg">
+                    <div class="num-rg"><div class="num"><?php echo sprintf("%02d",$key); ?></div></div>
+                    <div class="title-rg"><div class="title"><?php echo $value['title']; ?></div></div>
+                    <div class="desc-rg">
+                        <div class="desc">   
+                            <div class="text">   
+                                <div class="box-slide-text" id="box-slide-<?php echo $key ?>">
+                                    <!-- Slides Container -->
+                                    <div u="slides" class="cursor">
+                                        <?php foreach ((json_decode($value['json_menu'], true)['top']) as $menuTopList) { ?>
+                                            <div>  <a href="<?php echo $menuTopList['url']; ?>"><?php echo $menuTopList['name']; ?></a></div>
+                                        <?php } ?>
+                                    </div>
+                                    <!-- Arrow Left -->
+                                    <span u="arrowleft" class="jssora04l arrowleft">
+                                    </span>
+                                    <!-- Arrow Right -->
+                                    <span u="arrowright" class="jssora04r arrowright">
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pg">
+                        <?php
+                        $itemp = 0;
+                        for ($i = 1; $i < $countTemplate; $i++):
+                            $itemp = ($itemp >= count($arrColor)) ? $temp = 1 : $itemp+=1;
+                            ?>
+                            <a href="#box-s-data-<?php echo $i ?>" class="item br-<?php echo $arrColor[$itemp] ?>"><?php echo ($i); ?></a>
+                            <?php
+                        endfor;
+                        ?>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="left f-left">
+            <ul class="menu">
+                <?php foreach (json_decode($value['json_menu'], true)['left'] as $menuLeftList) { ?>
+                    <li><a href="<?php echo $menuLeftList['url']; ?>"> <?php echo $menuLeftList['name'] ?> </a></li>
+                <?php } ?>
+            </ul>
+        </div>
+        <div class="cont f-left">
+            <div class="prod prod-left  f-left">
+                <?php
+                $sortarray = array();
+                foreach (json_decode($value['json_image'], true) as $key => $arrImageList) {
+                    $sortarray[$arrImageList['sort']] = json_decode($arrImageList['img'], true);
+                    $sortarray[$arrImageList['sort']]['url'] = $arrImageList['url'];
+                    $sortarray[$arrImageList['sort']]['title'] = $arrImageList['title'];
+                }
+                ?>
+                <div class="m-item i-big-main">
+                    <a href="<?php echo (!empty($sortarray[1])) ? $sortarray[1]['url'] : NULL ?> " title="<?php echo (!empty($sortarray[1])) ? $sortarray[1]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[1])) ? $sortarray[1]['sourceImage'] : STATIC_URL . '/f/v1/images/untitled-25_9693716256.jpg' ?> "></a>
+                </div>
+                <div class="m-item i-haft">
+                    <a href="<?php echo (!empty($sortarray[2])) ? $sortarray[2]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[2])) ? $sortarray[2]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[2])) ? $sortarray[2]['sourceImage'] : STATIC_URL . '/f/v1/images/untitled-26_2973645292.jpg' ?> "></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[3])) ? $sortarray[3]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[3])) ? $sortarray[3]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[3])) ? $sortarray[3]['sourceImage'] : STATIC_URL . '/f/v1/images/image-b.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[4])) ? $sortarray[4]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[4])) ? $sortarray[4]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[4])) ? $sortarray[4]['sourceImage'] : STATIC_URL . '/f/v1/images/image-c.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[5])) ? $sortarray[5]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[5])) ? $sortarray[5]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[5])) ? $sortarray[5]['sourceImage'] : STATIC_URL . '/f/v1/images/image-b.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[6])) ? $sortarray[6]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[6])) ? $sortarray[6]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[6])) ? $sortarray[6]['sourceImage'] : STATIC_URL . '/f/v1/images/image-c.jpg' ?>"></a>
+                </div>                               
+            </div>
+            <div class="prod-right f-left">
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[7])) ? $sortarray[7]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[7])) ? $sortarray[7]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[7])) ? $sortarray[7]['sourceImage'] : STATIC_URL . '/f//v1/images/logo-1.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[8])) ? $sortarray[8]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[8])) ? $sortarray[8]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[8])) ? $sortarray[8]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-2.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[9])) ? $sortarray[9]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[9])) ? $sortarray[9]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[9])) ? $sortarray[9]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-3.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[10])) ? $sortarray[10]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[10])) ? $sortarray[10]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[10])) ? $sortarray[10]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-4.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[11])) ? $sortarray[11]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[11])) ? $sortarray[11]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[11])) ? $sortarray[11]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-5.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[12])) ? $sortarray[12]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[12])) ? $sortarray[12]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[12])) ? $sortarray[12]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-6.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[13])) ? $sortarray[13]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[13])) ? $sortarray[13]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[13])) ? $sortarray[13]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-7.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[14])) ? $sortarray[14]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[14])) ? $sortarray[14]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[14])) ? $sortarray[14]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-8.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[15])) ? $sortarray[15]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[15])) ? $sortarray[15]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[15])) ? $sortarray[15]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-9.jpg' ?>"></a>
+                </div>
+                <div class="m-item">
+                    <a href="<?php echo (!empty($sortarray[16])) ? $sortarray[16]['url'] : NULL ?>" title="<?php echo (!empty($sortarray[16])) ? $sortarray[16]['title'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[16])) ? $sortarray[16]['sourceImage'] : STATIC_URL . '/f/v1/images/logo-10.jpg' ?>"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+</div>

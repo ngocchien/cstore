@@ -1,0 +1,104 @@
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-menu')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <div class="row" id="frmAddCity">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header id="frmTitle" class="panel-heading">Thêm Menu</header>
+                <div class="panel-body">
+                    <form id="frm" role="form" class="form-horizontal tasi-form" method="POST">
+                        <div class="form-group">
+                            <label class="col-lg-3 col-sm-3 col-md-3  control-label"> Tên Menu</label>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <input class="form-control" type="text" name="MenuName">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="menuType" class="col-lg-3 col-sm-3 col-md-3 control-label">Chọn phiên bản</label>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <select class="form-control menutype" name="menuType" id="localtion">
+                                        <option>Chọn phiên bản</option>
+                                        <option value="0">Destop</option>
+                                        <option value="1">Mobile</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="Url" class="col-lg-3 col-sm-3 col-md-3 control-label">Đường dẫn URL</label>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <input class="form-control" type="text" name="Url">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="localtion" class="col-lg-3 col-sm-3 col-md-3 control-label">Vị trí menu</label>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <select class="form-control localtion" name="localtion" id="localtion">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="class_icon" class="col-lg-3 col-sm-3 col-md-3 control-label">Class Icon</label>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <select class="form-control" name="class_icon" id="class_icon">
+                                    <option value="">Chọn icon</option>
+                                    <?php foreach (My\General::getClassIcon() as $class => $valus):
+                                        ?>
+                                        <option  value="<?php echo $class ?>"><span class="icon <?php echo $class ?>"></span><?php echo $valus; ?></option>
+                                        <?php
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Status" class="col-lg-3 col-sm-3 col-md-3 control-label">Trạng thái</label>
+                            <div class="radios col-lg-9 col-md-9 col-sm-9">
+                                <label class="label_radio" for="radio" name="Status">
+                                    <input type="radio" name="Status" value="1" checked>Hiển thị &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" name="Status" value="0">Không hiển thị
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-10">
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
+                                <input value="0" name="is_close" class="is_close" type="hidden" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Menu.index();
+</script>

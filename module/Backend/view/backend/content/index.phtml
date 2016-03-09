@@ -1,0 +1,176 @@
+<?php
+$arrCategoryDetailList = $this->arrCategoryDetailList;
+$param = $this->params;
+?>
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-content')->getMessages(), $this->flashMessenger()->setNamespace('success-edit-content')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">Danh sách bài viết</header>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-4">                  
+                            <div id="editable-sample_length" class="dataTables_length no-padding">
+                                <a class="btn btn-primary" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'content', 'action' => 'add')); ?>" ><i class="icon-plus-sign-alt"></i> Thêm</a>
+                                <a class="btn btn-danger delete-all" href="javascript:;" ><i class="icon-trash "></i> Xóa</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form id="frm" class="form-horizontal" role="form" method="GET">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-3">              
+                                        <select id="cate" class="selectbox selectpicker"  data-live-search="true" multiple="multiple"  title="Chọn danh mục">
+                                            <?php
+                                            if (is_array($param['cate_id'])) {
+                                                $listCate = $param['cate_id'];
+                                            } else {
+                                                $listCate = explode(',', $param['cate_id']);
+                                            }
+                                            //p($listCate);die;
+                                            foreach ($arrCategoryDetailList as $category) {
+                                                $depth = substr_count($category['cate_grade'], ':') - 1;
+                                                $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
+                                                ?>
+                                                <option <?php echo in_array($category['cate_id'], $listCate) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                   
+                                    <input type="hidden" name="cate_id" id ="cate_id" value="<?php echo $this->params['cate_id'] ?>">
+                                </div>
+                                <div class="col-xs-6 col-lg-3 col-md-4 col-sm-7 no-padding">
+                                    <div class="dataTables_filter no-padding per-100">
+                                        <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-lg-2 col-md-2 col-sm-3 no-padding-right">
+                                    <button type="submit"  class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <section id="unseen">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    <th class="numeric text-center">#</th>
+                                    <th class="numeric text-center visible-xs visible-sm visible-md visible-lg">Tiêu đề</th>
+                                    <th class="numeric text-center">Danh mục</th>
+                                    <th class="numeric text-center hidden-md hidden-sm hidden-xs">Ngày tạo</th>
+                                    <th class="numeric text-center hidden-xs">Trạng thái</th>
+                                    <th class="numeric text-center hidden-xs">Viewer</th>
+                                    <th class="numeric text-center hidden-md hidden-sm hidden-xs">User</th>
+                                    <th class="numeric text-center visible-xs visible-sm visible-md visible-lg">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($this->arrContentList):
+                                    foreach ($this->arrContentList as $arrContentList):
+                                        ?>
+                                        <tr>
+                                            <td class="text-center data-id"><input type="checkbox" name="data-id[]" clas value="<?php echo $arrContentList['cont_id'] ?>"/></td>
+                                            <td class="visible-xs visible-sm visible-md visible-lg"><a href="<?php ?>"><?php echo $arrContentList['cont_title']; ?></a></td>
+                                            <td class="numeric productCategory" style="  text-transform: lowercase;">
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle btn-xs" type="button"><?php echo $arrCategoryDetailList[$arrContentList['main_cate_id']]['cate_name'] ?> <span class="caret"></span></button>
+                                                    <ul role="menu" class="dropdown-menu">
+                                                        <?php
+                                                        $result = explode(',', $arrContentList['cate_id']);
+                                                        foreach ($result as $key => $value):
+                                                            if (isset($arrCategoryDetailList[$value]['cate_name']) && $arrCategoryList['main_cate_id'] != $value) :
+                                                                echo '<li><a>' . $arrCategoryDetailList[$value]['cate_name'] . '</a></li>';
+
+                                                            endif;
+                                                        endforeach;
+                                                        ?>
+                                                    </ul>
+                                                </div>
+
+                                            </td>
+                                            <td class="numeric producPrice text-center hidden-md hidden-sm hidden-xs"><?php echo date('d/m/Y', $arrContentList['cont_created']); ?></td>
+                                            <td  class="text-center hidden-xs"><?php if ($arrContentList['cont_status'] == 1): ?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang hiện"><i class="icon-ok color-success"></a><?php
+                                                endif;
+                                                if ($arrContentList['cont_status'] == 0):
+                                                    ?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang ẩn"><i class="icon-minus-sign color-danger"></i></a><?php endif; ?></td>
+                                            <td class="numeric productCreated text-center hidden-xs"><?php echo $arrContentList['cont_viewer'] ?> </td>
+                                            <td class="numeric productCreated text-center hidden-md hidden-sm hidden-xs">
+                                                <?php
+                                                $user_id = ($arrContentList['user_updated'] == NULL) ? $arrContentList['user_created'] : $arrContentList['user_updated'];
+                                                if (isset($arrUserDetailList[$user_id]['user_fullname'])) {
+                                                    echo $arrUserDetailList[$user_id]['user_fullname'];
+                                                }
+                                                ?> 
+                                            </td>
+                                            <td class="numeric text-center visible-xs visible-sm visible-md visible-lg" width="200">  
+                                                <a href="<?php echo $this->serverUrl() . $this->Url('content_detail', array('controller' => 'content', 'action' => 'view', 'contslug' => $arrContentList['cont_slug'], 'contId' => $arrContentList['cont_id'])) ?>" target="_bank"  class="btn btn-primary btn-xs"><i class="icon-eye-open"></i> Xem</a>
+                                                <a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'content', 'action' => 'edit', 'id' => $arrContentList['cont_id'])); ?>" class="btn btn-primary btn-xs edit"><i class="icon-pencil"></i> Sửa</a>
+                                                <!--<a class="btn btn-danger btn-xs remove-conten" data-id="<?php echo $arrContentList['cont_id'] ?>"><i class="icon-trash "></i> Xóa</a>-->
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="8"><center>Hiện tại chưa có dữ liệu.</center></td></tr>
+                            <?php endif ?>
+                            </tbody>
+                        </table>
+                    </section>
+                    <div>
+                        <div class="row">
+                            <div  class="col-lg-6 col-xs-12">
+                                <div class="form-group">
+                                    <div  class="col-sm-3 col-xs-3">
+                                        <select name="limit" class="form-control" onchange="window.location.href = this.value">
+                                            <option value="<?php echo $this->serverUrl() . $this->Url('backend-content-search', array('controller' => 'content', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"], 'cate_id' => $this->params["cate_id"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-content-search', array('controller' => 'content', 'action' => 'index', 'limit' => 30, 's' => $this->params["s"], 'cate_id' => $this->params["cate_id"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-content-search', array('controller' => 'content', 'action' => 'index', 'limit' => 100, 's' => $this->params["s"], 'cate_id' => $this->params["cate_id"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-content-search', array('controller' => 'content', 'action' => 'index', 'limit' => 300, 's' => $this->params["s"], 'cate_id' => $this->params["cate_id"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 300 ? "selected" : "" ?>>300</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-content-search', array('controller' => 'content', 'action' => 'index', 'limit' => 500, 's' => $this->params["s"], 'cate_id' => $this->params["cate_id"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 500 ? "selected" : "" ?>>500</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-content-search', array('controller' => 'content', 'action' => 'index', 'limit' => 1000, 's' => $this->params["s"], 'cate_id' => $this->params["cate_id"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 1000 ? "selected" : "" ?>>1000</option>
+                                        </select>
+                                    </div>
+                                    <div class = "col-sm-3" style = "padding-top: 10px">Dòng</div>
+                                </div>
+                            </div>
+                            <div class = "col-lg-6">
+                                <?php echo $this->paging;
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    $('.sumo-multiple-select-box').SumoSelect();
+    Content.del_all();
+    Content.del();
+    Content.getSelect();
+</script>

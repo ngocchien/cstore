@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <style>
+            .pagination > li{
+                float: left;
+                padding: 10px;
+            }
+        </style> 
+        <title>Archive -  <?php echo $this->title; ?> Trang <?php echo $this->intPage ?></title>        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-language" content="vi" />
+        <!--<meta name="robots" content="INDEX, FOLLOW" />-->
+        <meta http-equiv="Expires" content="0" />
+        <meta name='revisit-after' content='1 days' />
+        <meta http-equiv="REFRESH" content="1200" />
+        <meta property="article:author" content="https://www.facebook.com/megavita.vn" />
+        <meta name="keywords" content="megavita, suc khoe, lam dep, online, mua sam, truc tiep, gia re">
+        <meta name="description" content="Megavita cung cấp mỹ phẩm, thực phẩm chức năng với số lượng &amp; chủng loại đa dạng nhất Việt Nam, đáp ứng trọn vẹn mọi nhu cầu về làm đẹp và sức khỏe.">
+    </head>
+    <body>
+        <h1>Archive -  <?php echo $this->title; ?> Trang <?php echo $this->intPage ?></h1>
+        <?php
+        foreach ($this->arrKeywordList as $value):
+            ?>
+            <a href="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('keySlug' => $value['word_slug'])) ?>"><?php echo $value['word_key'] ?></a><br/>
+        <?php endforeach; ?>
+        <div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <ul class="pagination" style="width:auto;">
+                        <?php
+                        $intPage = ($intPage - 2 < 0) ? 1 : $intPage - 2;
+                        $lmPage = ($intTotal / $intLimit > 50) ? 50 : round($intTotal / $intLimit);
+
+                        if ($intPage + 50 > round($intTotal / $intLimit)) {
+                            $intPage = round($intTotal / $intLimit) - 49;
+                            $lmPage = round($intTotal / $intLimit) + 1;
+                        }
+                        ?>
+                        <li>
+                            <a href="/sitemap/keyword.html?page=1">Đầu</a>
+                        </li>
+                        <?php
+                        for ($i = $intPage; $i < $lmPage; $i++) {
+                            ?>
+                            <li>
+                                <a href="/sitemap/keyword.html?page=<?php echo $i ?>"><?php echo $i ?></a>
+                            </li>
+                        <?php }
+                        ?>
+                        <li>
+                            <a href="/sitemap/keyword.html?page=<?php echo round($intTotal / $intLimit) ?>">Cuối</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,215 @@
+<?php
+$arrListProduct = $this->arrListProduct;
+$arrListContent = $this->arrListContent;
+$value = $this->template;
+//p($value);die;
+$key = $this->key;
+$keyColor = $this->keyColor;
+$arrColor = $this->arrColor;
+?>
+<div class="block-box box-<?php echo $arrColor[$keyColor]; ?>" id="box-s-data-<?php echo $key; ?>">
+    <div class="header">
+        <div class="lg">
+            <div class="rg">
+                <div class="cg">
+                    <div class="num-rg"><div class="num"><?php echo sprintf("%02d", $key); ?></div></div>
+                    <div class="title-rg"><div class="title"><?php echo $value['title'] ?></div></div>
+                    <div class="desc-rg">
+                        <div class="desc">   
+                            <div class="text">   
+                                <div class="box-slide-text" id="box-slide-<?php echo $key ?>">
+                                    <!-- Slides Container -->
+                                    <div u="slides" class="cursor">
+                                        <?php foreach ((json_decode($value['json_menu'], true)['top']) as $menuTopList) : ?>
+                                            <div>  <a href="<?php echo $menuTopList['url']; ?>"><?php echo $menuTopList['name']; ?></a></div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <!-- Arrow Left -->
+                                    <span u="arrowleft" class="jssora04l arrowleft"> </span>
+                                    <!-- Arrow Right -->
+                                    <span u="arrowright" class="jssora04r arrowright"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pg">
+                        <?php
+                        $itemp = 0;
+                        for ($i = 1; $i < $countTemplate; $i++):
+                            $itemp = ($itemp >= count($arrColor)) ? $temp = 1 : $itemp+=1;
+                            ?>
+                            <a href="#box-s-data-<?php echo $i ?>" class="item br-<?php echo $arrColor[$itemp] ?>"><?php echo ($i); ?></a>
+                            <?php
+                        endfor;
+                        ?>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="cont-banner">
+            <?php
+            $sortarray = array();
+            foreach (json_decode($value['json_image'], true) as $arrImageList) :
+                $sortarray[$arrImageList['sort']] = json_decode($arrImageList['img'], true);
+                $sortarray[$arrImageList['sort']]['url'] = $arrImageList['url'];
+                $sortarray[$arrImageList['sort']]['title'] = $arrImageList['title'];
+            endforeach;
+            ?>
+            <div class="banner"><a href="<?php echo (!empty($sortarray[1])) ? $sortarray[1]['url'] : NULL ?>"><img   class="lazy" data-original="<?php echo (!empty($sortarray[1])) ? $sortarray[1]['sourceImage'] : STATIC_URL . '/f/v1/images/bn-b.jpg' ?>"/></a></div>
+            <div class="slide">
+                <div class="box-slide-logo" id="box-slide-logo-<?php echo $key ?>">
+                    <!-- Slides Container -->
+                    <div u="slides" class="cursor">
+                        <?php
+                        foreach ($sortarray as $k => $v) :
+                            if ($k > 1) :
+                                ?>
+                                <div>  <a href="<?php echo $v['url'] ?>"><img   class="lazy" data-original="<?php echo $sortarray[$k]['thumbImage']['50x40']; ?>"/></a></div>
+                                <?php
+                            endif;
+                        endforeach;
+                        ?>
+                    </div>
+                    <!-- Arrow Left -->
+                    <span u="arrowleft" class="jssora02l arrowleft"> </span>
+                    <!-- Arrow Right -->
+                    <span u="arrowright" class="jssora02r arrowright"></span>
+                </div>
+            </div>
+
+            <div class="tabs" id="tabs_container-<?php echo $key ?>">
+                <!-- Slides Container -->
+                <div u="slides" class="tab-slides">
+                    <?php
+//                    p($key);die;
+//                        p(json_decode($value['json_product'], true));die;
+                    ?>
+                    
+                    <?php foreach (json_decode($value['json_product'], true) as $ke => $arrProductList) : ?>
+                    <?php // p($arrProductList['item']);die;?>
+                        <div>
+                            <div u="thumb"><?php echo $arrProductList['title']; ?></div>                                       
+                            <div>
+                                <div class="box-slide-prod prod-list" id="box-slide-prod<?php echo $key . "-" . $ke ?>">
+                                    <!-- Slides Container -->
+                                    <div u="slides" class="cursor">
+                                        <?php foreach ($arrProductList['item'] as $arrProduct) :
+                                             if(isset($arrListProduct[$arrProduct])):
+                                            ?>
+                                            <div class="item">
+                                                <?php
+                                               
+                                                if($arrListProduct[$arrProduct]['prod_call_price'] != 1):
+                                                if ($arrListProduct[$arrProduct]['prod_is_promotion'] == 1) :
+                                                    $percent = 100 - ($arrListProduct[$arrProduct]['prod_promotion_price'] * 100 / $arrListProduct[$arrProduct]['prod_price']);
+                                                    ?>
+                                                    <div class="icon">
+                                                        <div class="gift"></div>
+                                                        <div class="discount"><?php echo number_format($percent, 0, ",", ".") ?>%</div>
+                                                    </div>
+                                                <?php endif; endif;?>
+                                                <div class="image">
+                                                    <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrListProduct[$arrProduct]['prod_slug'], 'productId' => $arrListProduct[$arrProduct]['prod_id']));?>" title="<?php echo $arrListProduct[$arrProduct]['prod_name'] ?>"><img  src="<?php echo json_decode($arrListProduct[$arrProduct]['prod_image'], true)['thumbImage']['224x224']; ?>"/></a>
+                                                </div>
+                                                <div class="info">
+                                                    <div class="cont">
+                                                        <div class="title"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrListProduct[$arrProduct]['prod_slug'], 'productId' => $arrListProduct[$arrProduct]['prod_id']));?>"><?php echo $arrListProduct[$arrProduct]['prod_name']; ?></a></div>
+                                                        <?php if($arrListProduct[$arrProduct]['prod_call_price'] == 1){?>
+                                                        <div class="price" style="color:#ccff00">Giá Liên hệ</div>
+                                                        <?php } else{?>
+                                                        <div class="price"><?php echo ($arrListProduct[$arrProduct]['prod_is_promotion'] == 1) ? number_format($arrListProduct[$arrProduct]['prod_promotion_price'], 0, ",", ".") : number_format($arrListProduct[$arrProduct]['prod_price'], 0, ",", ".") ?> vnđ</div>
+                                                        <?php if ($arrListProduct[$arrProduct]['prod_is_promotion'] == 1) : ?>
+                                                            <div class="disprice"><?php echo number_format($arrListProduct[$arrProduct]['prod_price'], 0, ",", "."); ?> vnđ</div>
+                                                        <?php endif; }?>
+                                                    </div>
+                                                </div>
+                                                <div class="button"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrListProduct[$arrProduct]['prod_slug'], 'productId' => $arrListProduct[$arrProduct]['prod_id']));?>">Xem ngay</a></div>
+                                            </div>
+                                        
+                                        <?php  endif; endforeach; ?>
+                                    </div>
+
+                                    <!-- Arrow Left -->
+                                    <span u="arrowleft" class="jssora05l arrowleft">
+                                    </span>
+                                    <!-- Arrow Right -->
+                                    <span u="arrowright" class="jssora05r arrowright">
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <div u="thumbnavigator" class="jssort12" style="left:0px; top: 0px;">
+                    <!-- Thumbnail Item Skin Begin -->
+                    <div u="slides" style="cursor: default; top: 0px; left: 0px; border-left: 1px solid gray;">
+                        <div u="prototype" class="p">
+                            <div class=w><div u="thumbnailtemplate" class="c"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="cont-right">
+            <div class="news">
+                <div class="box-slide-news news-list" id="box-slide-news-<?php echo $key ?>">
+                    <!-- Slides Container -->
+                    <div u="thumb" class="title">
+                        <span><?php echo json_decode($value['category_id'], true)['title']; ?></span>
+                    </div>
+                    <!-- Slides Container -->
+                    <div u="slides" class="cursor">                                                         
+                        <?php
+                        $listCate=  json_decode($value['category_id'], true)['item'];
+                        $listCate=  explode(',', $listCate);
+                        $arrContent=array();
+                        foreach ($arrListContent as $conten):
+                            if(in_array($conten['main_cate_id'],$listCate)):
+                                $arrContent[]=$conten;
+                            endif;
+                        endforeach;
+                        foreach ($arrContent as $keyContent => $valueContent) :
+                            if ($keyContent % 3 == 0 || $keyContent == 0) :
+                                echo '<div><!--sta-->';
+                            endif;
+                            ?>
+                            <div class="item">
+                                <div class="img f-left">
+                                    <a href="<?php echo $this->serverUrl().$this->url('content_detail',array('contslug'=>$valueContent['cont_slug'], 'contId'=>$valueContent['cont_id'])); ?>"><img  src="<?php echo json_decode($valueContent['cont_image'], true)['thumbImage']['116x116']; ?>"/></a>
+                                </div>
+                                <div class="detail f-left">
+                                    <div class="tt"><a href="<?php echo $this->serverUrl().$this->url('content_detail',array('contslug'=>$valueContent['cont_slug'], 'contId'=>$valueContent['cont_id'])); ?>"><?php echo $valueContent['cont_title']; ?></a></div>
+                                    <div class="date-view">
+                                        <span class="date"><?php echo date('d/m/Y', $valueContent['cont_created']); ?></span> | 
+                                        <span class="view"><?php echo $valueContent['cont_viewer']; ?> đã xem</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                            if ((($keyContent + 1) % 3 == 0) || $keyContent + 1 == count($arrContent)) :
+                                echo '</div><!--end-->';
+                            endif;
+                        endforeach;
+                        ?>
+                    </div>
+                    <!-- END Slides Container -->
+                    <!-- Arrow Left -->
+                    <span u="arrowleft" class="jssora06l arrowleft">
+                    </span>
+                    <!-- Arrow Right -->
+                    <span u="arrowright" class="jssora06r arrowright">
+                    </span>
+                </div>
+            </div>
+
+            <div class="html">
+                <?php echo $value['html_form']; ?>
+            </div>
+        </div> <!-- END RIGHT -->
+    </div>
+    <div style="clear: both"></div>
+</div>

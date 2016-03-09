@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <label class="col-xs-9 col-lg-9 col-md-12 col-sm-12">
+            <input type="text" name="text" aria-controls="editable-sample" class="input-seaching form-control search_contenttags">
+        </label>
+        <div class="col-lg-3 col-sm-12 col-md-12 col-xs-3">
+            <button type="button" onclick="loadPage(1,'get-content')" class="form-control btn btn-white btn-searchProductTags"><i class="icon-search"></i> Tìm kiếm</button>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="searchcontenttags">
+            <table class="table table-striped table-bordered" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="width:75%">Tên sản phẩm</th>
+                        <th style="text-align:center;width:25%" class="numeric">Chức năng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($this->arrContentTags) {
+                        foreach ($this->arrContentTags as $arrContentTags) {
+                            ?>
+                            <tr id="<?php echo $arrContentTags['cont_id']; ?>">
+                                <td>
+                                    <?php echo $arrContentTags['cont_title']; ?>
+                                </td>
+                                <td style="text-align: center">
+                                    <a class="btn btn-danger btn-xs btn-deleteContnetTags" data-placement="top" data-original-title="Loại bỏ bài viết" data-id="<?php echo $arrContentTags['cont_id']; ?>">Loại bỏ <i class="icon-arrow-right"></i></a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                        <tr class="none-contenttags">
+                            <td colspan="2" style="text-align:center;">Hiện tại chưa có sản phẩm nào.</td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" >
+                <?php echo $this->paging; ?>
+            </div>
+        </div>
+    </div>
+</div>
+

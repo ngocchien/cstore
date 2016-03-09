@@ -1,0 +1,124 @@
+<section class="wrapper site-min-height">
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách Tư vấn 
+        </header>
+        <div class="panel-body">    
+            <div class="adv-table editable-table ">  
+                <div class="row">
+                    <div class="col-lg-6">                  
+                    </div>
+                    <div class="col-lg-6" style="margin-bottom: 7px">
+                        <form id="frm" class="form-horizontal" role="form" method="GET">
+                            <div class="col-xs-5">
+                                 <select class="form-control" name="type">
+                                     <option <?php echo ($this->params['type'] == "") ? 'selected' : '' ?> value="">Tình trạng duyệt</option>
+                                    <?php for ($i = 1; $i <= 5; $i++) { ?>  
+                                                <option <?php echo ($this->params['type'] == $i) ? 'selected' : '' ?> value="<?php echo $i ?>"><?php echo My\General::getStatusAdvisory()[$i] ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <select class="form-control" name="status">
+                                  
+                                    <option <?php echo ($this->params['status'] == 0) ? 'selected' : '' ?> value="0">Chưa duyệt </option>
+                                    <option <?php echo ($this->params['status'] == -1) ? 'selected' : '' ?> value="-1">Hết hàng</option>
+                                    <option <?php echo ($this->params['status'] == 1) ? 'selected' : '' ?> value="1">Còn hàng</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 no-padding-right">
+                                <button type="submit" class="btn btn-white per-100"><i class="icon-search"></i> Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <section id="unseen">
+                    <table class="table table-bordered table-striped table-condensed cf">
+                        <thead class="cf">
+                            <tr>
+                                <th class="text-center"><i class="icon-list"></i> ID</th>
+                                <th class="text-center"><i class="icon-list-alt"></i> Số điện thoại</th>
+                                <th class="text-center"><i class="icon-ok"></i> Sản phẩm cần tư vấn</th>
+                                <th class="text-center"><i class="icon-ok"></i> Ngày chăm sóc</th>
+                                <th class="text-center"><i class="icon-check"></i> Ngày tạo </th>
+                                <th class="text-center"><i class="icon-edit"></i> Trạng thái</th>
+                                <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
+                                <th class="text-center"><i class="icon-edit"></i> Tình trạng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($this->arrAdvisoryList):
+                                foreach ($this->arrAdvisoryList as $arrAdvisory):
+                                    ?>
+                                    <tr>
+                                        <td  class="text-center" width="80">
+                                            <?php echo $arrAdvisory['advi_id']; ?>
+                                        </td>
+                                        <td class="text-center" width="100">
+                                            <?php echo $arrAdvisory['advi_phone']; ?>
+                                        </td>
+                                        <td width="250">
+                                            <a  href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrAdvisory["prod_slug"], 'productId' => $arrAdvisory["prod_id"])); ?>" target="_bank"><?php echo $arrAdvisory['prod_name']; ?></a>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td  class="text-center"><?php echo date('d/m/Y', $arrAdvisory['advi_created']); ?></td>
+                                        <td  class="text-center" width="80"><?php if ($arrAdvisory['advi_status'] == 1): ?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đã tư vấn"><i class="icon-ok color-success"></a><?php
+                                            endif;
+                                            if ($arrAdvisory['advi_status'] == 0):
+                                                ?>
+                                                <a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang chờ tư vấn"><i class="icon-minus-sign color-danger"></i></a><?php endif; ?></td>
+                                        <td class="text-center">
+                                            <a  href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrAdvisory["prod_slug"], 'productId' => $arrAdvisory["prod_id"])); ?>" target="_bank"  class="btn btn-primary btn-xs"><i class="icon-eye-open"></i> Xem sản phẩm</a>
+        <?php if ($arrAdvisory["advi_status"] == 0): ?><a  href="javascript:;"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Duyệt tư vấn"  rel="<?php echo $arrAdvisory['advi_id'] ?>"><i class="icon-ok"></i> Duyệt</a><?php endif; ?>
+                                        </td>
+                                        <td width="150">
+                                            <select class="form-control changeType" data-id="<?php echo $arrAdvisory['advi_id']; ?>">
+                                                <option value="0">Chưa duyệt </option>
+                                                <option value="-1" <?php if ($arrAdvisory['prod_status'] == -1): ?> selected <?php endif; ?>>Hết hàng</option>
+                                                <option value="1" <?php if ($arrAdvisory['prod_status'] == 1): ?> selected <?php endif; ?>>Còn hàng</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="8" class="text-center">Hiện tại chưa có tư vấn nào.</td></tr>
+<?php endif; ?>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div>
+                <div class="row">
+                    <div  class="col-lg-6">
+                        <div class="form-group">
+                            <div  class="col-sm-3 col-xs-3">
+                                <select name="limit" class="form-control" onchange="window.location.href = this.value">
+                                    <option value="<?php echo $this->serverUrl() . $this->Url('backend-advisory-search', array('controller' => 'advisory', 'action' => 'index', 'limit' => 15)); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend-advisory-search', array('controller' => 'advisory', 'action' => 'index', 'limit' => 30)); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend-advisory-search', array('controller' => 'advisory', 'action' => 'index', 'limit' => 100)); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend-advisory-search', array('controller' => 'advisory', 'action' => 'index', 'limit' => 300)); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 300 ? "selected" : "" ?>>300</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend-advisory-search', array('controller' => 'advisory', 'action' => 'index', 'limit' => 500)); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 500 ? "selected" : "" ?>>500</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend-advisory-search', array('controller' => 'advisory', 'action' => 'index', 'limit' => 1000)); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 1000 ? "selected" : "" ?>>1000</option>
+                                </select>
+                            </div>
+                            <div class = "col-sm-3" style = "padding-top: 10px">Dòng</div>
+                        </div>
+                    </div>
+                    <div class = "col-lg-6">
+                        <?php echo $this->paging;
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Advisory.index();
+</script>

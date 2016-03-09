@@ -1,0 +1,174 @@
+<section class="wrapper site-min-height firework">
+    <div class="row state-overview">
+        <div class="col-lg-3 col-sm-6">
+            <section class="panel">
+                <div class="symbol terques">
+                    <i class="icon-user"></i>
+                </div>
+                <div class="value">
+
+                    <h1 class="countUser">
+                        <?php echo $this->NumUser; ?>
+                    </h1>
+                    <p>Users</p>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <section class="panel">
+                <div class="symbol red">
+                    <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'order')); ?>">
+                        <i class="icon-shopping-cart"></i>
+                    </a>
+                </div>
+                <div class="value">
+
+                    <h1 class="countOrder">
+                        <?php echo $this->NumOrderNo; ?>
+                    </h1>
+                    <p><?php echo $this->NumOrderNo . '/' . $this->NumOrder . ' đơn hàng chưa xử lý' ?></p>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <section class="panel">
+                <div class="symbol yellow">
+                    <i class="icon-tags"></i>
+                </div>
+                <div class="value">
+
+                    <h1 class="countProduct">
+                        <?php echo $this->NumProduct; ?>
+                    </h1>
+                    <p>Sản phẩm</p>
+                </div>
+            </section>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <section class="panel">
+                <div class="symbol blue">
+                    <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment')); ?>">
+                        <i class="icon-comments-alt"></i>
+                    </a>
+                </div>
+                <div class="value">
+
+                    <h1 class=" countComment">
+                        <?php echo $this->NumCommentNo; ?>
+                    </h1>
+                    <p><?php echo $this->NumCommentNo . '/' . $this->NumComment . ' comment chưa duyệt' ?></p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <?php
+    $permission = json_decode(PERMISSION, true);
+    $per = array();
+    foreach ($permission as $key => $value) {
+        $per[$value["controller"]][$value["action"]] = true;
+    }
+
+    if (!empty($per['order']['getorderforchart']) || !empty($per['statistic']) || FULL_ACCESS):
+        ?>
+
+        <section class="panel  panel-report">
+            <div class="row">
+
+                <div class="col-lg-12">
+
+                    <header class="panel-heading tab-blue">
+                        <ul class="nav nav-tabs ">
+                            <?php if (!empty($per['order']['getorderforchart']) || FULL_ACCESS): ?>
+                                <li class="active">
+                                    <a data-toggle="tab" href="#order" id="home_report">
+                                        <strong>Thống kê đơn hàng</strong>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (!empty($per['statistic']['revenue']) || FULL_ACCESS): ?>
+                                <li>
+                                    <a data-toggle="tab" href="#DoanhSo" id="sales">
+                                        <strong>Doanh số</strong>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (!empty($per['statistic']['status']) || FULL_ACCESS): ?>
+                                <li>
+                                    <a data-toggle="tab" href="#menuTop" id="status-orders">
+                                        <strong>Trạng thái đơn hàng</strong>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (!empty($per['statistic']['method-payment']) || FULL_ACCESS): ?>
+                                <li class="payment">
+                                    <a data-toggle="tab" href="#menuLeft">
+                                        <strong>Thanh toán</strong>
+                                    </a>
+                                </li>
+
+                            <?php endif; ?>
+                            <?php if (!empty($per['statistic']['ship']) || FULL_ACCESS): ?>
+                                <li>
+                                    <a data-toggle="tab" href="#ship" id="ship">
+                                        <strong>Hướng vận chuyển</strong>
+                                    </a>
+                                </li>
+
+                            <?php endif; ?>
+                            <?php if (!empty($per['statistic']['product']) || FULL_ACCESS): ?>
+                                <li>
+                                    <a data-toggle="tab" class="" href="#product" id="product">
+                                        <strong>Phân tích sản phẩm</strong>
+                                    </a>
+                                </li>
+
+                            <?php endif; ?>
+                            <?php if (!empty($per['statistic']['cusreturn']) || FULL_ACCESS): ?>
+                                <li>
+                                    <a data-toggle="tab" class="" href="#cusReturn" id="cusReturn">
+                                        <strong>Khách trả hàng</strong>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (!empty($per['order']['productFull']) || FULL_ACCESS): ?>
+                                <li>
+                                    <a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'order', 'action' => 'product_full')); ?>" id="cusReturn">
+                                        <strong>Danh sách sản phẩm</strong>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+
+                    </header>
+
+                </div>
+
+            </div>
+            <input type="hidden" class="form-control" id="main-from" value="<?php echo $this->date['from'] ?>">
+            <input type="hidden" class="form-control" id="main-to" value="<?php echo $this->date['to'] ?>">
+
+            <div class="panel-body panel">
+                <div class="tab-content tasi-tab report">
+
+                </div>               
+            </div>
+            <div class="loadReport">
+                <div class="shadow"></div>
+                <div class="imgload">
+                    <img src="<?php echo STATIC_URL . '/b/images/loading_1.gif' ?>">
+                </div>
+            </div>
+        </section>
+    <?php endif; ?>
+</section>
+<script>
+<?php if (!empty($per['order']['getorderforchart']) || !empty($per['statistic']) || FULL_ACCESS): ?>
+        Statistic.index();
+        Statistic.chart_order();
+<?php endif; ?>
+<?php if (UID == 683): ?>
+        jQuery(function ($) {
+            var firework = Xteam.fireworkShow('.firework', 400);
+        });
+<?php endif; ?>
+</script>

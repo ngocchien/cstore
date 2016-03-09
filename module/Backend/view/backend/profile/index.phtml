@@ -1,0 +1,54 @@
+
+<section class="wrapper site-min-height">
+    <div class="row">
+        <aside class="profile-nav col-lg-3">
+            <section class="panel">
+                <div class="user-heading round avatar">
+                    <a id="uploadPreview" style="margin-bottom:8px;position: relative">
+                        <?php if ($this->arrUser['user_gender'] == 1 && !$this->arrUser['user_avatar']) { ?>
+                            <img src = "<?php echo STATIC_URL . '/b/images/no_avatar_male.jpg' ?>">
+                        <?php } else if ($this->arrUser['user_gender'] == 2 && !$this->arrUser['user_avatar']) { ?>
+                            <img src = "<?php echo STATIC_URL . '/b/images/no_avatar_female.jpg' ?>">
+                            <?php
+                        } else if ($this->arrUser['user_avatar']) {
+                            $user_avatar = json_decode($this->arrUser['user_avatar'], TRUE);
+//                            p($user_avatar[0]['sourceImage']);die();
+                            ?>
+                            <img class="image" style="position:relative" src="<?php echo $user_avatar[0]['sourceImage'] ?>" alt="" style="display: block">
+                        <?php } ?>
+                    </a>
+
+                    <form style="width: 100%;height:100%;position: absolute;top:0px;left:0px" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="btn btn-primary btn-file btn-lg" style="opacity: 0;width: 110px;height:110px;top:40px;left:20px" >
+                            <input type="file" id="categoryImages" class=" fileupload-new" title="Ảnh cá nhân"/>
+                        </div>
+                        <div class="btn btn-file btn-lg" style="opacity: 1;width: 40px;height:35px;top:0px;left:0px;padding: 0px" >
+                            <i class="icon-camera" style="font-size: 25px;opacity: 1"><input type="file" id="camera" class=" fileupload-new" title="Ảnh cá nhân"/></i>
+                        </div>
+                    </form>
+                    <div class="get-alert-upload"></div>
+                    <h1 class="get-fullname"><?php echo $this->arrUser['user_fullname']
+                        ?></h1>
+                    <p class="get-email"><?php echo $this->arrUser['user_email'] ?></p>
+                </div>
+
+                <ul class="nav nav-pills nav-stacked menu">
+                    <li class="">
+                        <a style="cursor:pointer" id="info"> <i class="icon-user"></i>Thông tin cá nhân</a>
+                    </li>
+                    <li class="">
+                        <a style="cursor:pointer" id="edit"> <i class="icon-pencil"></i>Chỉnh sửa  thông tin cá nhân</a>
+                    </li>
+                </ul>
+
+            </section>
+        </aside>
+        <aside class="profile-info col-lg-9">
+            <!-- ajax -->
+        </aside>
+    </div>
+</section>
+<script type="text/javascript">
+    $('.profile-info').load(baseurl + '/backend/profile/info'); //load view info
+    Profile.index();
+</script>

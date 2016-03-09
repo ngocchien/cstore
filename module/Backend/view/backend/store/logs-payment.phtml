@@ -1,0 +1,109 @@
+<?php
+?>
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-content')->getMessages(), $this->flashMessenger()->setNamespace('success-edit-content')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">Lịch sử thanh toán</header>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">                  
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                            <form id="frm" class="form-horizontal" role="form" method="GET">
+                                <div class="col-xs-9 no-padding">
+                                    <div class="dataTables_filter no-padding per-100">
+                                        <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 no-padding-right">
+                                    <button type="submit" class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <section id="unseen">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    <th class="numeric text-center">Mã sản phẩm</th>
+                                    <th class="numeric text-center">Tên sản phẩm</th>
+                                    <th class="numeric text-center">Mã NCC</th>
+                                    <th class="numeric text-center">Sô tiền</th>
+                                    <th class="numeric text-center">Thời gian</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($this->arrPayment):
+                                    
+                                    foreach ($this->arrPayment as $Paym):
+                                        ?>
+                                        <tr>
+                                            <td class="text-center"><?php echo $Paym['prod_id']; ?></td>
+                                            <td class="text-left"><?php echo $Paym['store_prod_name']; ?></td>
+                                            <td class="text-center"><?php echo $Paym['prov_code']; ?></td>
+                                            <td class="text-center"><?php echo number_format($Paym['paym_money']); ?></td>
+                                            <td class="text-center"><?php echo date('d-m-Y',$Paym['paym_time']); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="5"><center>Hiện tại chưa có lịch sử thanh toán nào.</center></td></tr>
+                            <?php endif ?>
+                            </tbody>
+                        </table>
+                    </section>
+                    <div>
+                        <div class="row">
+                            <div  class="col-lg-6">
+                                <div class="form-group">
+                                    <div  class="col-sm-3 col-xs-3">
+                                        <select name="limit" class="form-control" onchange="window.location.href = this.value">
+                                            <option value="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'store', 'action' => 'logsPayment', 'limit' => 15, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'store', 'action' => 'logsPayment', 'limit' => 30, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'store', 'action' => 'logsPayment', 'limit' => 100, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'store', 'action' => 'logsPayment', 'limit' => 300, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 300 ? "selected" : "" ?>>300</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'store', 'action' => 'logsPayment', 'limit' => 500, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 500 ? "selected" : "" ?>>500</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'store', 'action' => 'logsPayment', 'limit' => 1000, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 1000 ? "selected" : "" ?>>1000</option>
+                                        </select>
+                                    </div>
+                                    <div class = "col-sm-3" style = "padding-top: 10px">Dòng</div>
+                                </div>
+                            </div>
+                            <div class = "col-lg-6">
+                                <?php echo $this->paging;
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+</script>

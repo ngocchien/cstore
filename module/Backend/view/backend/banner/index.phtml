@@ -1,0 +1,165 @@
+<?php
+$listBanner = $this->listBanner;
+$arrCategory = $this->arrCategory;
+?>
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-times-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-banner')->getMessages(),$this->flashMessenger()->setNamespace('success-add-banner')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+        <?php
+    endif;
+    $param = $this->params;
+    ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Danh sách banner
+                </header>
+                <div class="panel-body">
+                    <section>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-12">                  
+                                <div id="editable-sample_length" class="dataTables_length no-padding">
+                                    <a class="btn btn-primary" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'banner', 'action' => 'add')); ?>"><i class="icon-plus-sign-alt"></i> Thêm</a>
+                                    <a class="btn btn-danger  delete_all"><i class="icon-trash"></i> Xóa</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                <form class="form-horizontal" role="form" method="GET">
+                                    <div class="col-lg-4 col-md-5 col-sm-5 col-xs-6">
+                                        <select name="ban_cate_id[]" class="selectbox selectpicker"  multiple="multiple"  data-live-search="true" title="Chọn danh mục">                                         
+                                            <?php
+                                            if (is_array($param['ban_cate_id'])) {
+                                                $listCate = $param['ban_cate_id'];
+                                            } else {
+                                                $listCate = explode(',', $param['ban_cate_id']);
+                                            }
+                                            foreach ($arrCategory as $category) {
+                                                $depth = substr_count($category['cate_grade'], ':') - 1;
+                                                $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
+                                                ?>
+                                                <option <?php echo in_array($category['cate_id'], $listCate) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <select name="ban_location[]" class="sumo-multiple-select-box col-lg-10" multiple="multiple" data-placeholder="Chọn vị trí">
+                                            <?php
+                                            if (is_array($params['ban_location'])) {
+                                                $listBrand = $params['ban_location'];
+                                            } else {
+                                                $listBrand = explode(',', $params['ban_location']);
+                                            }
+                                            foreach (My\General::getBannerLocation() as $key => $banner) {
+                                                ?>
+                                                <option <?php echo in_array($key, $listBrand) ? 'selected="selected"' : '' ?> value="<?php echo $key ?>"><?php echo $banner ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                        <input type="text" name="s" value="<?php echo $params['s'] ?>" aria-controls="editable-sample" class="input-seaching form-control medium" placeholder="Search">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 no-padding-right">
+                                        <button type="submit" class="btn btn-white per-100 btn-searchIndex"><i class="icon-search"></i> Tìm kiếm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="getindex">
+                            <style type="text/css">
+                                td.imgbanner img {max-width: 100%}
+                            </style>
+                            <table class="table table-bordered table-striped table-condensed cf">
+                                <thead class="cf">
+                                    <tr>
+                                        <th style="width:2%;text-align: left"><input type="checkbox" name="select_all" class="select_all"></th>
+                                        <th style="width:20%;text-align: left">Tiêu đề</th>
+                                        <th class="hidden-xs hidden-sm" style="width:25%;text-align: left">Mô tả</th>
+                                        <th class="hidden-xs hidden-sm" style="width:10%;text-align: left">URL</th>	
+                                        <th class="hidden-xs" style="width:15%;text-align: center">Danh mục</th>	
+                                        <th style="width:15%;text-align: center">Vị trí</th>
+                                        <th style="width:7%;text-align: center">Trạng thái</th>	
+                                        <th style="width:15%;text-align: center">Chức năng</th>	
+                                    </tr>
+                                </thead>
+                                <tbody style="text-align:center">
+                                    <?php
+                                    if ($listBanner) :
+                                        foreach ($listBanner as $banner):
+//                                        $ban_image = json_decode($banner['ban_image'], TRUE);
+                                            ?>
+                                            <tr class="select_row">
+                                                <td><input value="<?php echo $banner['ban_id'] ?>" type="checkbox" name="select_info[]" class="select_info"></td>
+                                                <td style="text-align: left"><?php echo $banner['ban_title'] ?></td>
+                                                <td class="hidden-xs hidden-sm" style="text-align: left"><?php echo $banner['ban_description'] ?></td>
+                                                <td class="imgbanner hidden-xs hidden-sm" style="text-align: left"><?php echo $banner['ban_url'] ?></td>
+                                                <td class="hidden-xs" style="text-align: left">
+                                                    <?php
+                                                    $listId = explode(',', $banner['ban_cate_id']);
+                                                    foreach ($listId as $id):
+                                                        echo '-' . $arrCategory[$id]['cate_name'] . '<br>';
+                                                    endforeach;
+                                                    ?>
+                                                </td>
+                                                <td style="text-align: left">
+                                                    <?php
+                                                    $listLoca = explode(',', $banner['ban_location']);
+                                                    foreach ($listLoca as $loca):
+                                                        echo My\General::getBannerLocation()[$loca] . '<br>';
+                                                    endforeach;
+                                                    ?>
+                                                </td>
+                                                <td style="text-align: center"><?php echo My\General::getlistStatus()[$banner['ban_status']] ?></td>
+
+                                                <td>
+                                                    <a class="btn btn-primary btn-xs" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'banner', 'action' => 'edit', 'id' => $banner['ban_id'])); ?>"><i class="icon-pencil"></i> Sửa</a>
+                                                    <a class="btn btn-danger btn-xs delete" data-id="<?php echo $banner['ban_id'] ?>"><i class="icon-trash"></i> Xóa</a>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        endforeach;
+                                    else:
+                                        ?>
+                                        <tr>
+                                            <td colspan="8" style="text-align: center">Hiện không có dữ liệu</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                            <div id='paging' style="padding-top: 15px;">
+                                <?php echo $this->paging; ?>
+                            </div>
+
+
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Banner.del();
+</script>

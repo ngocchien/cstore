@@ -1,0 +1,203 @@
+<?php
+
+use My\General;
+
+$arrMenuTopBottom = unserialize(ARR_MENU_TOP_BOTTOM);
+?>
+<div id="footer">
+    <div class="left-sub">
+        <div class="block-box box-menu-footer">
+            <div class="main">
+                <div class="item item-a">
+                    <div class="title">
+                        Hỗ Trợ Khách Hàng
+                    </div>
+                    <div class="text">
+                        <ul>
+                            <?php
+                            if ($arrMenuTopBottom) {
+                                foreach ($arrMenuTopBottom as $val) {
+                                    if ($val['localtion'] == General::MENU_LOCALTION_BUTTON_1) {
+                                        $url = $val['menu_url'] ? 'href="' . $val['menu_url'] . '"' : NULL;
+                                        ?>
+                                        <li><a <?php echo $url ? $url : 'style="cursor:default;text-decoration: none"' ?> title="" rel="nofollow"><?php echo $val['menu_name'] ?></a></li>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item item-b">
+                    <div class="title">
+                        Tài Khoản Của Bạn
+                    </div>
+                    <div class="text">
+                        <ul>                                  
+                            <?php
+                            if ($arrMenuTopBottom) {
+                                foreach ($arrMenuTopBottom as $val) {
+                                    if ($val['localtion'] == General::MENU_LOCALTION_BUTTON_2) {
+                                        $url = $val['menu_url'] ? 'href="' . $val['menu_url'] . '"' : NULL;
+                                        ?>
+                                        <li><a <?php echo $url ? $url : 'style="cursor:default;text-decoration: none"' ?> title="" rel="nofollow"><?php echo $val['menu_name'] ?></a></li>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="item item-c">
+                    <div class="title">
+                        Về Megavita
+                    </div>
+                    <div class="text">
+                        <ul>
+                            <?php
+                            if ($arrMenuTopBottom) {
+                                foreach ($arrMenuTopBottom as $val) {
+                                    if ($val['localtion'] == General::MENU_LOCALTION_BUTTON_3) {
+                                        $url = $val['menu_url'] ? 'href="' . $val['menu_url'] . '"' : NULL;
+                                        ?>
+                                        <li><a <?php echo $url ? $url : 'style="cursor:default;text-decoration: none"' ?> title="" rel="nofollow"><?php echo $val['menu_name'] ?></a></li>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item item-d">
+                    <div class="title">
+                        Hợp tác & liên kết
+                    </div>
+                    <div class="text">
+                        <ul>
+                            <?php
+                            if ($arrMenuTopBottom) {
+                                foreach ($arrMenuTopBottom as $val) {
+                                    if ($val['localtion'] == General::MENU_LOCALTION_BUTTON_4) {
+                                        $url = $val['menu_url'] ? 'href="' . $val['menu_url'] . '"' : NULL;
+                                        ?>
+                                        <li><a <?php echo $url ? $url : 'style="cursor:default;text-decoration: none"' ?> title="" rel="nofollow"><?php echo $val['menu_name'] ?></a></li>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item item-e">
+                    <div class="title">
+                        Thông tin liên hệ
+                    </div>
+                    <div class="text">
+                        <strong>Công ty TNHH MEGAVITA Việt Nam</strong><br/>
+                        MST: 0312962299 - Tel: 0909469247 - 0908897041<br/>
+                        Địa chỉ: 61C Tú Xương, Phường 7, Quận 3, TP.HCM (có chỗ đậu ô tô)
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div> <!-- END Sản Phẩm Đã Xem -->
+        <!--
+              <div class="block-box prod-hl">
+                  <div class="line"></div>
+                  <div class="main">
+                      <div class="title">Danh Mục Mới Và Nổi Bật</div>
+                  </div>
+                  <ul class="list-inline">
+        <?php
+        /*
+          foreach (unserialize(ARR_CATEGORY_LIST) as $keycategory => $category):
+          if ($keycategory <= 50):
+          ?>
+          <li><a rel="nofollow" href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'categorySlug' => $category['cate_slug'], 'categoryID' => $category['cate_id'])); ?>" title="<?php echo $category['cate_name'] ?>"><span class="icon-arrow"></span><span class="text"><?php echo $category['cate_name']; ?> </span></a></li>
+          <?php
+          endif;
+          endforeach;
+         */
+        ?>
+                  </ul>
+                  <div style="clear: both"></div>
+              </div> 
+        -->
+        <!-- END Sản Phẩm Đã Xem -->
+
+        <div class="block-box block-copy-right">
+            <div class="line"></div>
+            <div class="box">
+                <div class="copyright">
+                    <p><strong>Công ty TNHH MEGAVITA Việt Nam</strong></p>
+                    <p> MST: 0312962299 - Tel: 0909469247 - 0908897041</p>
+                    <p> Địa chỉ: 61C Tú Xương, Phường 7, Quận 3, TP.HCM (có chỗ đậu ô tô)</p>
+
+<!--                    <p>© 2015 - Bản quyền của Công Ty Microlink. Địa chỉ 602/45D Điện Biên Phủ, Phường 22, Quận Bình Thạnh</p>
+                    <p>TPHCM, Việt Nam. Giấy chứng nhận Đăng ký Kinh doanh Số 0309532909 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày 07/08/2012</p>-->
+
+                </div>
+                <div class="item-box">
+                    <div class="pay-block">
+                        <div class="h3">Thanh Toán An Toàn </div>
+                        <div class="content block-center"><img src="<?php echo STATIC_URL; ?>/f/v1/images/pay.jpg" alt=""></div>
+                    </div>
+                    <div class="pay-block">
+                        <!--                        <div class="h3">Chứng nhận SGD TMĐT</div>
+                                                <div class="content block-center"><img src="<?php echo STATIC_URL; ?>/f/v1/images/pay-1.jpg" alt=""></div>-->
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div> 
+        <div class="seo-data"><center><a href="<?php echo $this->serverUrl() . $this->Url('sitemap', array('controller' => 'sitemap', 'action' => 'keyword')) ?>">Keyword</a></center></div>
+
+        <div class="block-box prod-hl">           
+            <div class="list-inline">
+                <?php
+                echo FOOTER_CONTENT;
+                ?>
+            </div>
+            <div style="clear: both"></div>
+        </div> 
+    </div>
+</div>
+<script type="application/ld+json">
+    { "@context" : "http://schema.org",
+    "@type" : "Organization",
+    "url" : "<?php echo $this->serverUrl(); ?>",
+    "contactPoint" : [
+    { "@type" : "ContactPoint",
+    "telephone" : "08 360 279 44",
+    "contactType" : "Chăm sóc khách hàng Công ty TNHH MEGAVITA Việt Nam"
+    } ] }
+</script>
+
+<!--Start of Zopim Live Chat Script-->
+<script type="text/javascript">
+    window.$zopim || (function (d, s) {
+        var z = $zopim = function (c) {
+            z._.push(c)
+        }, $ = z.s =
+                d.createElement(s), e = d.getElementsByTagName(s)[0];
+        z.set = function (o) {
+            z.set.
+                    _.push(o)
+        };
+        z._ = [];
+        z.set._ = [];
+        $.async = !0;
+        $.setAttribute("charset", "utf-8");
+        $.src = "//v2.zopim.com/?3MRH84EbiRi9y9642jJIJnPawTqoyisP";
+        z.t = +new Date;
+        $.
+                type = "text/javascript";
+        e.parentNode.insertBefore($, e)
+    })(document, "script");
+</script>
+<!--End of Zopim Live Chat Script-->

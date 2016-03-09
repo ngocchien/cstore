@@ -1,0 +1,77 @@
+<?php
+$arrTempalte = $this->arrTemplate;
+?>
+<section class="wrapper site-min-height">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">Danh sách template</header>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">                  
+                            <div id="editable-sample_length" class="dataTables_length no-padding">
+                                <a class="btn btn-primary" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'template', 'action' => 'add')); ?>" ><i class="icon-plus-sign-alt"></i> Thêm</a>
+                                <a class="btn btn-danger delete-all-template" href="javascript:;" ><i class="icon-trash "></i> Xóa</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                            <form id="frm" class="form-horizontal" role="form" method="GET">
+                                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 no-padding">
+                                    <div class="dataTables_filter no-padding per-100">
+                                        <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 no-padding-right">
+                                    <button type="submit"  class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <section id="unseen">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    <th class="numeric text-center">#</th>
+                                    
+                                    <th class="numeric text-center visible-lg visible-md visible-sm visible-xs">Tiêu đề</th>
+                                    <th class="numeric text-center hidden-xs">Type template</th>
+                                    <th class="numeric text-center">Is Mobile</th>
+                                    <th class="numeric text-center visible-lg visible-md visible-sm visible-xs">Trạng thái</th>
+                                    <th class="numeric text-center">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($arrTempalte):
+                                    foreach ($arrTempalte as $template):
+                                        ?>
+                                        <tr>
+                                           
+                                            <td  class="numeric producStatus text-center"><?php if($template['status']==1):?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang hiện"><i class="icon-ok color-success"></a><?php endif;if($template['status']==0):?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang ẩn"><i class="icon-minus-sign color-danger"></i></a><?php endif;?></td>
+                                            <td class="visible-lg visible-md visible-sm visible-xs"><?php echo $template['title']; ?></td>
+                                            <td class="numeric producStatus text-center hidden-xs">Template <?php echo $template['template'] ?></td>
+                                            <td class="numeric producStatus text-center"><?php echo $template['is_mobile']==0 ? 'PC ':'Mobile';?></td>
+                                            <td  class="visible-lg visible-md visible-sm visible-xs numeric producStatus text-center"><?php if ($template['status'] == 1): ?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang hiện"><i class="icon-ok color-success"></a><?php endif;
+                                if ($template['status'] == 0): ?><a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang ẩn"><i class="icon-minus-sign color-danger"></i></a><?php endif; ?></td>
+                                            <td class="numeric text-center" width="150">
+                                                <a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'template', 'action' => 'edit', 'id' => $template['tem_id'])); ?>" class="btn btn-primary btn-xs edit"><i class="icon-pencil"></i> Sửa</a>
+                                                <a class="btn btn-danger btn-xs remove-template" data-id="<?php echo $template['tem_id'] ?>"><i class="icon-trash "></i> Xóa</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="5">Hiện tại chưa có dữ liệu.</td></tr>
+<?php endif ?>
+                            </tbody>
+                        </table>
+                    </section>
+<?php echo $this->paging; ?>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Template.index();
+</script>

@@ -1,0 +1,127 @@
+<section class="wrapper site-min-height">  
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-properties')->getMessages(), $this->flashMessenger()->setNamespace('success-edit-properties')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách thuộc tính
+        </header>
+        <div class="panel-body">
+            <div class="adv-table editable-table ">  
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">                  
+                        <div id="editable-sample_length" class="dataTables_length no-padding">
+                            <a class="btn btn-primary" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'add')); ?>" ><i class="icon-plus-sign-alt"></i> Thêm</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                        <form id="frm" class="form-horizontal" role="form" method="GET">
+                            <div class="col-xs-9 no-padding">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 no-padding-right">
+                                <button type="submit" class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <section id="unseen">
+                    <table class="table table-bordered table-striped table-condensed cf">
+                        <thead class="cf">
+                            <tr>
+                                <th class="text-center"><i class="icon-list"></i> ID</th>
+                                <th class="text-center visible-xs visible-sm visible-md visible-lg"><i class="icon-plus-sign-alt"></i> Tên thuộc tính </th>
+                                <th class="text-center hidden-xs"><i class="icon-ok"></i> Ngày tạo</th>
+                                <th class="text-center visible-xs visible-sm visible-md visible-lg"><i class="icon-edit"></i> Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($this->arrPropertiesList):
+                                foreach ($this->arrPropertiesList as $arrPropertiesList):
+                                    ?>
+                                    <tr>
+                                        <td  class="text-center" width="80">
+                                            <?php echo $arrPropertiesList['prop_id']; ?>
+                                        </td>
+                                        <td class="visible-xs visible-sm visible-md visible-lg">
+                                            <a class="tooltips" data-placement="top" >
+                                                <?php
+                                                $temp = substr_count($arrPropertiesList['prop_grade'], ':');
+                                                echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', $temp);
+                                                ?>
+                                                <?php
+                                                if ($temp > 0) {
+                                                    echo '&#x21b3;&nbsp;&nbsp;';
+                                                }
+                                                ?><?php echo $arrPropertiesList['prop_name']; ?>
+                                            </a>
+                                        </td>
+                                        <td class="text-center hidden-xs"><?php echo date('d/m/Y', $arrPropertiesList['prop_created']); ?> </td>
+                                        <td class="text-center visible-xs visible-sm visible-md visible-lg" width="200">
+                                            <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'edit', 'id' => $arrPropertiesList['prop_id'])); ?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Sửa thuộc tính"><i class="icon-pencil"></i> Sửa</a>
+                                            <a  class="btn btn-danger btn-xs remove" data-placement="top" data-original-title="Xóa thuộc tính" rel="<?php echo $arrPropertiesList['prop_id'] ?>"><i class="icon-trash "></i> Xóa</a>
+                                        </td>
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="6" class="text-center">Hiện tại chưa có thuộc tính nào.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div>
+                <div class="row">
+                    <div  class="col-lg-6">
+                        <div class="form-group">
+                            <div  class="col-sm-2 col-md-2 col-xs-2">
+                                <select name="limit" class="form-control" onchange="window.location.href = this.value">
+                                    <option value="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'index', 'limit' => 30, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'index', 'limit' => 100, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'index', 'limit' => 300, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 300 ? "selected" : "" ?>>300</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'index', 'limit' => 500, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 500 ? "selected" : "" ?>>500</option>
+                                    <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'properties', 'action' => 'index', 'limit' => 1000, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 1000 ? "selected" : "" ?>>1000</option>
+                                </select>
+                            </div>
+                            <div class = "col-sm-3" style = "padding-top: 10px">Dòng</div>
+                        </div>
+                    </div>
+                    <div class = "col-lg-6">
+                        <?php echo $this->paging;
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Properties.del();
+</script>

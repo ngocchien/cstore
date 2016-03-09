@@ -1,0 +1,118 @@
+<?php
+$params = $this->params;
+$arrCategory = $this->arrayCategory;
+?>
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-times-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-banner')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+        <?php
+    endif;
+    $param = $this->params;
+    ?>
+    <div class="row" id="frmTags">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header id="frmTitle" class="panel-heading">Thêm Menu</header>
+                <div class="panel-body">
+                    <form role="form" class="form-horizontal" method="POST">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Tiêu đề  </label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <input class="form-control ban_title" type="text" name="ban_title" placeholder="Vui lòng nhập tiêu đề" value="<?php echo $params['ban_title'] ?>">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Vị trí banner </label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <select name="ban_location[]" class="sumo-multiple-select-box"  multiple="multiple">
+                                    <?php
+                                    foreach (My\General::getBannerLocation() as $key => $location):
+                                        ?>
+                                        <option <?php echo $key == $params['ban_location'] ? 'selected="selected"' : '' ?> value="<?php echo $key ?>"><?php echo $location ?></option>
+                                        <?php
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Danh mục sản phẩm </label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <select name="ban_cate_id[]" class="sumo-multiple-select-box" multiple="multiple">
+                                    <?php
+                                    foreach ($arrCategory as $key => $category):
+                                        $depth = substr_count($category['cate_grade'], ':');
+                                        ?>
+                                        <option class="level-<?php echo $depth; ?>" <?php echo $category['cate_id'] == $params['ban_cate_id'] ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $category['cate_name'] ?></option>
+                                        <?php
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Trạng thái </label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <select name="ban_status" class="form-control">
+                                    <?php
+                                    foreach (My\General::getlistStatus() as $key => $value):
+                                        ?>
+                                        <option <?php echo $key == $params['ban_status'] ? 'selected="selected"' : '' ?> value="<?php echo $key ?>"><?php echo $value ?></option>
+                                        <?php
+                                    endforeach;
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Mô tả banner : </label>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <textarea rows="2" class="form-control ban_description" name="ban_description"><?php echo $params['ban_description']; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Html Banner: </label>
+                            <div class="col-lg-10">
+                                <textarea rows="8" class="form-control ban_html" name="ban_html"><?php echo $params['ban_html']; ?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-lg-9">
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
+                                <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
+                                <input value="0" name="is_close" class="is_close" type="hidden" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Banner.add();
+    Banner.submitClose();
+</script>

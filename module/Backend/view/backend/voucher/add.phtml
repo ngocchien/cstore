@@ -1,0 +1,112 @@
+<?php
+$arrRole = $this->arrRole;
+?>
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-times-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-add-voucher')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+    <section class="panel">
+        <header class="panel-heading">Thêm Voucher mới</header>
+        <div class="panel-body">
+
+            <form id="frm" class="form-horizontal tasi-form" role="form" method="POST">
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" for="vouc_type">Loại voucher<span style="color:red">*</span></label>
+                    <div class="col-lg-6">
+                        <select name="vouc_type" id="vouc_type" class="form-control">
+                            <option value="">Vui lòng chọn loại voucher</option>
+                            <option value="1" <?php echo $this->params['vouc_type'] == 1 ? "selected" : ''; ?>>Sử dụng 1 lần</option>
+                            <option value="2" <?php echo $this->params['vouc_type'] == 2 ? "selected" : ''; ?>>Trừ dần vào giá trị</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group money" style="display: none">
+                    <label class="col-lg-2 col-sm-2 control-label" for="money">Số tiền trừ dần:<span style="color:red">*</span></label>
+                    <div class="col-lg-6">
+                        <input id="money" name="money" class="form-control" type="text" placeholder="Vui lòng nhập số tiền " value="<?php echo $this->params['money'] ? $this->params['money'] : ''; ?>" >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" for="type">Loại giá trị<span style="color:red">*</span></label>
+                    <div class="col-lg-10">
+                        <label class="checkbox-inline">
+                            <input type="radio" name="type" value="1" <?php echo $this->params['type'] == 1 ? "selected" : ''; ?>> Giảm theo %
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" name="type" value="2" <?php echo $this->params['type'] == 2 ? "selected" : ''; ?>> Mệnh giá
+                        </label>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" for="value">Giá trị voucher<span style="color:red">*</span></label>
+                    <div class="col-lg-6">
+                        <input id="birthdate" name="value" class="form-control" type="text" placeholder="Vui lòng nhập giá trị voucher" value="<?php echo $this->params['value'] ? $this->params['value'] : ''; ?>">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" for="character">Kí tự đầu</label>
+                    <div class="col-lg-6">
+                        <input id="phoneNumber" name="character" class="form-control" type="text" placeholder="Vui lòng nhập kí tự đầu của mã voucher" value="<?php echo $this->params['character'] ? $this->params['character'] : ''; ?>" >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" for="number">Số lượng<span style="color:red">*</span></label>
+                    <div class="col-lg-6">
+                        <input id="phoneNumber" name="number" class="form-control" type="text" placeholder="Vui lòng nhập số lượng tạo mã code" value="<?php echo $this->params['number'] ? $this->params['number'] : ''; ?>" >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 col-sm-2 control-label" for="password">Thời gian<span style="color:red">*</span></label>
+                    <div class="col-lg-6">
+                        <div class="input-group input-large" data-date-format="dd/mm/yyyy">
+                            <input type="text" class="form-control dpd1" name= "from" id="from" value="<?php echo $this->params['from'] ?>">
+                            <span class="input-group-addon">To</span>
+                            <input type="text" class="form-control dpd2" name= "to" id="to" value="<?php echo $this->params['to'] ?>">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                        <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
+<!--                        <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> -->
+                        <input value="0" name="is_close" class="is_close" type="hidden" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </section>
+</section>
+<script type="text/javascript">
+    Voucher.index();
+</script>

@@ -1,0 +1,51 @@
+<?php
+$successMessage = $this->flashMessenger()->setNamespace('success-edit-profile')->getMessages();
+if ($successMessage) {
+    ?>
+    <div class="alert alert-success alert-block fade in">
+        <button class="close close-sm" type="button" data-dismiss="alert">
+            <i class="fa fa-times">x</i>
+        </button>
+        <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
+        <p>- <?php echo current($successMessage); ?></p>
+    </div>
+<?php } ?>
+<section class="panel">
+    <div class="panel-body bio-graph-info">
+        <h1>Thông tin cá nhân</h1>
+        <div class="row">
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Họ và tên </span>: <?php echo $this->arrUser['user_fullname'] ?></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Địa chỉ </span>: <?php echo $this->arrUser['user_address'] ?></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Giới tính </span>: <?php echo $this->arrUser['user_gender'] == 1 ? 'Nam' : 'Nữ' ?></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Ngày sinh </span>: <?php echo date("d-m-Y", $this->arrUser['user_birthdate']) ?></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Email </span>: <?php echo $this->arrUser['user_email'] ?></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Số điện thoại </span>:  <?php echo $this->arrUser['user_phone'] ?></p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Ngày đăng kí </span>:  <?php echo $this->arrUser['user_created'] ? date('d-m-Y', ($this->arrUser['user_created'])) : '' ?></p>
+            </div>
+
+            <div class="bio-row">
+                <p>
+                    <span style="text-decoration:underline;">Quyền hạn </span>:
+                    <span class="label label-default" style="<?php echo isset($this->arrGroup[$this->arrUser["grou_id"]]["grou_css"]) ? $this->arrGroup[$this->arrUser["grou_id"]]["grou_css"] : ""; ?>" style="width:90px;"><?php echo isset($this->arrGroup[$this->arrUser["grou_id"]]["grou_name"]) ? $this->arrGroup[$this->arrUser["grou_id"]]["grou_name"] : "Không xác định"; ?></span>
+                </p>
+            </div>
+            <div class="bio-row">
+                <p><span style="text-decoration:underline;">Ngày sửa </span>:  <?php echo $this->arrUser['user_updated'] ? date('d-m-Y', ($this->arrUser['user_updated'])) : '' ?></p>
+            </div>
+        </div>
+    </div>
+</section>
+

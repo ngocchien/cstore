@@ -1,0 +1,26 @@
+body{-webkit-print-color-adjust:exact;}
+*{margin: 0 auto; padding: 0;}
+.page-order{overflow: hidden; margin: 0 auto; width: 396px; height: 185px; border: 2px solid #000;  padding-bottom:413px;}
+.page-order .page{ position: relative; height: 300px;}
+.page-order .page .header{margin-top: 1px;}
+.page-order .page .header img{width: 99.5%; display: block; text-align: center;}
+.page-order .page .header_1{width: 100%; }
+.page-order .page .header_1 table{margin: 0px;  border-collapse: collapse;}
+.page-order .page .header_1 table tr td{ background: #fff; font-size: 12px; color: #000; border: 2px solid #000; border-top: none !important; line-height: 20px;}
+.page-order .page .header_1 table tr td:first-child{padding: 0px; margin: 0px;}
+.page-order .page .header_1 table tr td.hour{text-align: left; width:209px; border-left: none !important;border-top: none !important; padding: 0px 5px;}
+.page-order .page .header_1 table tr td.hour .number{font-size: 13px; line-height: 13px;}
+.page-order .page .header_1 table tr td.weight{text-align: center; width:123px}
+.page-order .page .header_1 table tr td.id-invoid{width:181px; text-align: right; padding-right: 8px; border-right: none !important;}
+.page-order .page .header_2{width: 99.5%;  background-color: #fff; overflow: hidden; font-size: 10x; line-height: 30px; }
+.page-order .page .header_2 .left{float: left; width:205px; padding: 8px;}
+.page-order .page .header_2 .left .top{line-height: 17px;font-size: 12px;}
+.page-order .page .header_2 .left .top .id-cus{overflow: hidden; height: 22px;}
+.page-order .page .header_2 .left .address{text-align: justify;font-size: 12px;}
+.page-order .page .header_2 .left .bottom{}
+.page-order .page .header_2 .left .bottom .tracking{width: 369px;height:38px; float: left; word-wrap: break-word; text-align: justify; overflow: hidden; font-size: 13px; line-height: 18px;}
+.text{width: 369px; height: 40px; float: left; word-wrap: break-word; text-align: justify; overflow: hidden; margin-top: 3px;font-size: 12px;line-height: 20px;}
+.page-order .page .header_2 .right{float: left; width: 165px;}
+.page-order .page .header_2 .right .chart{width: 80px;height: 80px;margin-top: 8px;}
+.page-order .page .header_2 .right .barcode{ margin-top: 7px;}
+.page-order .page .header_3{position: absolute; bottom: 20px; left: 0px; color: #fff; height: 19px; font-size: 11px; font-weight: bold; text-align: center; width: 100%; margin-top: 1px; background: #000; line-height: 15px;}

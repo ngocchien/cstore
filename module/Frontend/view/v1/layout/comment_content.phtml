@@ -1,0 +1,153 @@
+<?php
+use My\General;
+$general = new General();
+$arrParentCommentList = $this->arrParentCommentList;
+$arrListCommentChildren = $this->arrListCommentChildren;
+$arrListUserComment = $this->arrListUserComment;
+?>
+<div class="comm">
+    <h2 class="title">Nhận xét của khách hàng về bài viết</h2>
+    <div class='cont'>
+        <div class="tt">Bạn đánh giá bài viết này như thế nào?</div>
+        <div class="form">
+            <div>
+                <span class="errormain"></span>
+            </div>
+            <div class="avatar f-left">
+                <img src="<?php echo (UID) ? ( ((json_decode(AVATAR,true)[0]['thumbImage']['50x50'])) ? (json_decode(AVATAR,true)[0]['thumbImage']['50x50']) : STATIC_URL.'/f/v1/images/no-avatar.jpg' ) : STATIC_URL.'/f/v1/images/no-avatar.jpg' ?>"/>
+            </div>
+            <div class="input f-left">
+                <div class="textarear">
+                    <textarea class="input-comment"></textarea>
+                </div>
+                <div class="input-info  f-left">
+                    <?php if (!UID) { ?>
+                        <div class="f-left"> 
+                            <a href="#login-frame" rel="facebox" class="button login" title="Đăng nhập">Đăng nhập</a>
+                        </div>
+                    <?php } ?>
+                    <div class="f-right">
+                        <div class="name f-left">
+                            <input type="text" class="input input-username" value="<?php echo (FULLNAME) ? FULLNAME : ""; ?>" placeholder="Nhập tên bắt buộc">
+                        </div>
+                        <div class="email f-left">
+                            <input type="text" class="input input-email" value="<?php echo (EMAIL) ? EMAIL : ""; ?>" placeholder="Email"> 
+                        </div>
+
+                        <div class="icon f-left">
+                            <img src="<?php echo STATIC_URL ?>/f/v1/images/icon-smile.jpg"/> 
+                        </div>
+                        <div class="button f-left">
+                            <button class="button send-command" parent="0">Gửi bình luận</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div>                   
+    </div>
+    <div class="comm-list">
+        <?php if(!empty($arrParentCommentList)) :?>
+        <?php foreach ($arrParentCommentList as $keyParent => $valueParent):?>
+        <div class="item">
+            <div class="c-box">
+                <div class="avatar f-left">
+                    <img src="<?php echo (!empty($valueParent['user_id'])) ? (json_decode($arrListUserComment[$valueParent['user_id']]['user_avatar'],true)[0]['thumbImage']['50x50'] ? json_decode($arrListUserComment[$valueParent['user_id']]['user_avatar'],true)[0]['thumbImage']['50x50'] : STATIC_URL.'/f/v1/images/no-avatar.jpg') : STATIC_URL.'/f/v1/images/no-avatar.jpg'?>"/> 
+                </div>
+                <div class="input-info  f-left">
+                    <div class="head">
+                        <div class="name f-left">
+                            <?php echo $valueParent['user_fullname'];?>
+                        </div>
+                        <div class="date-rate f-left">
+                            <span><?php echo $general->formatDateString($valueParent['comm_created']);?></span> 
+                        </div>
+                    </div>
+                    <div class="desc">
+                        <?php echo $valueParent['comm_content'];?>
+                    </div>
+                    <div class="action">
+                        <a title="Trả lời" class="action-com-reply">Trả lời (<?php echo count($arrListCommentChildren[$valueParent['comm_id']]);?>)</a> 
+                        <span class="icon-com-like"><?php echo $valueParent['comm_like'];?><span class="ic" rel="<?php echo $valueParent['comm_id']?>"></span></span>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+                <div style="clear: both"></div>                            
+            </div><!-- END BOX -->
+            <div class="input-reply input-reply">
+                <div class="form">
+                    <div>
+                        <span class="errormain"></span>
+                    </div>
+                    <div class="avatar f-left">
+                        <img src="<?php echo (UID) ? ((json_decode(AVATAR,true)[0]['thumbImage']['50x50']) ? (json_decode(AVATAR,true)[0]['thumbImage']['50x50']) : STATIC_URL.'/f/v1/images/no-avatar.jpg') : STATIC_URL.'/f/v1/images/no-avatar.jpg' ?>"/> 
+                    </div>
+                    <div class="input f-left">
+                        <div class="textarear">
+                            <textarea class="input-comment"></textarea>
+                        </div>
+                        <div class="input-info  f-left">
+                            <div class="f-right">
+                                <div class="name f-left">
+                                    <input type="text" class="input input-username" placeholder="Nhập tên bắt buộc" value="<?php echo (UID) ? FULLNAME : NULL;?>">
+                                </div>
+                                <div class="email f-left">
+                                    <input type="text" class="input input-email" placeholder="Email" value="<?php echo (UID) ? EMAIL : NULL;?>"> 
+                                </div>
+
+                                <div class="icon f-left">
+                                    <img src="<?php echo STATIC_URL ?>/f/v1/images/icon-smile.jpg"/> 
+                                </div>
+                                <div class="button f-left">
+                                    <button class="button send-command"  parent="<?php echo $valueParent['comm_id']?>">Gửi bình luận</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>                   
+            </div>
+            <div class="reply reply<?php echo $valueParent['comm_id']?>">
+                <?php if(!empty($arrListCommentChildren[$valueParent['comm_id']])):?>
+                <?php foreach ($arrListCommentChildren[$valueParent['comm_id']] as $keyChildren => $valueChildren) :?>
+                <div class="item item<?php echo $valueChildren['comm_id'];?>" >
+                    <div class="c-box">
+                        <div class="avatar f-left">
+                            <img src="<?php echo (!empty($valueChildren['user_id'])) ? (json_decode($arrListUserComment[$valueChildren['user_id']]['user_avatar'],true)[0]['thumbImage']['50x50'] ? json_decode($arrListUserComment[$valueChildren['user_id']]['user_avatar'],true)[0]['thumbImage']['50x50'] : STATIC_URL.'/f/v1/images/no-avatar.jpg') : STATIC_URL.'/f/v1/images/no-avatar.jpg'?>"/> 
+                        </div>
+                        <div class="input-info  f-left">
+                            <div class="head">
+                                <div class="name f-left">
+                                    <?php echo $valueChildren['user_fullname'];?>
+                                </div>
+                                <?php if($valueChildren['user_name_group']!=''):?>
+                                <div class="group f-left">
+                                    <?php echo $valueChildren['user_name_group'];?>
+                                </div>
+                                <?php endif;?>
+                                <div class="date-rate f-left">
+                                    <span><?php echo $general->formatDateString($valueChildren['comm_created']);?></span>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <?php echo $valueChildren['comm_content'];?>
+                            </div>
+                            <div class="action">
+                                <a title="Trả lời" class="action-com-reply">Trả lời </a> 
+                                <span class="icon-com-like"><?php echo $valueChildren['comm_like'];?><span class="ic" rel="<?php echo $valueChildren['comm_id']?>"></span></span>
+                            </div>
+                            <div style="clear: both"></div>
+                        </div>
+                        <div style="clear: both"></div>                                       
+                    </div>
+                </div>
+                <?php endforeach;?>
+                <?php endif;?>
+            </div>
+        </div>
+        <?php endforeach; endif;?>
+    </div>
+    <div class="paging">
+        <?php echo $this->pagingComment; ?>
+    </div>
+</div>

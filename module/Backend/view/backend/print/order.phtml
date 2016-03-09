@@ -1,0 +1,309 @@
+'<html>
+    <head>
+    <head>
+        <style>
+            * html .clearfixslide-vnt {height: 1%; /* IE5-6 */}
+            .clearfix {display: inline-block; /* IE7xhtml*/}
+            html[xmlns] .clearfix { display: block; /* O */}
+            .clearfix:after { clear: both;content: ".";display: block; height: 0;isibility: hidden; visibility: hidden;line-height: 0;font-size: 1px;overflow: hidden;}
+            .page-order{overflow: hidden; margin: 0 auto; width: 785px; border: 1px solid #454545; font-size: 14px;}
+            .page-order .text-center{text-align: center;}
+            .page-order table {border-spacing: 0;border-collapse: collapse; display: table;}
+            .page-order .header{margin: 10px 20px; line-height: 20px;}
+            .page-order .header table{width: 100%;}
+            .page-order .title{text-align: center; font-size: 20px; font-weight: bold;}
+            .page-order .info-customer{width: 100%;padding-top: 20px; margin: 0px 25px; line-height: 25px;}
+            .page-order .info-customer table tr td{padding-left:  50px;}
+            .page-order .info-customer table tr td:first-child{padding-left:  0px;}
+            .page-order .info{width: 95%;padding-top: 20px;}
+            .page-order .info .table {width: 95%;max-width: 95%; margin: 0 auto; }
+            .page-order .info .table-bordered td{border: 1px solid #454545; line-height: 25px;}
+            .page-order .info .table-bordered tr:first-child{text-align: center; font-weight: bold;}
+            .page-order .info .table-bordered tr{text-align: center;}
+            .page-order .price{padding-top: 10px;margin: 0px 25px; line-height: 25px;}
+
+            body{ font-size: 12px; line-height: 15px;}
+            .page-order .header{margin: 10px 20px; line-height: 15px;}
+            .page-order .header table{width: 100%;}
+            .page-order .title{text-align: center; font-size: 15px; font-weight: bold;}
+            .page-order .info-customer{width: 100%; margin: 0px 25px; line-height: 15px;padding-top: 10px;}
+            .page-order .info-customer table tr td{padding-left:  50px;width:50%;}
+            .page-order .info-customer table tr td:first-child{padding-left:  0px;}
+
+            .page-order .logo{height: 60%;}
+            .page-order .info .table {width: 95%;max-width: 95%; margin: 0 auto; }
+            .page-order .info .table-bordered td{border: 1px solid #454545; line-height: 15px;}
+            .page-order table {border-collapse: collapse;}
+            .page-order .info .table-bordered tr:first-child{text-align: center; font-weight: bold;}
+            .page-order .text-center{text-align: center;}
+            .page-order .info{width: 95%;padding-top: 10px;}
+            .page-order .price{margin: 0px 25px;padding-top: 10px;line-height: 15px;}
+
+            /* Clearfix */
+            * html .clearfixslide-vnt {height: 1%; /* IE5-6 */}
+            .clearfix {display: inline-block; /* IE7xhtml*/}
+            html[xmlns] .clearfix {display: block; /* O */}
+            .clearfix:after {clear: both;content: ".";display: block; height: 0;visibility: hidden;line-height: 0;font-size: 1px;overflow: hidden;}
+            .page-info{ margin: 0 auto; overflow: hidden; font-size: 15px; line-height: 20px;}
+            .page-info .main{ width:  539px; height: 298px;  border: 1px solid #454545;}
+            .page-info .main .block-1{border: 2px solid #454545;margin:5px 5px;}
+            .page-info .main .block-1 .block-2{border: 1px solid #454545;margin:5px 5px;}
+            .page-info .main .block-1 .block-2 table{margin: 15px 20px;}
+            .page-info .main .block-1 .block-2 .text-center{text-align: center;}
+            .page-info .main .block-1 .block-2 .title{font-size: 19px; text-align: center;}
+            .page-info .main .block-1 .block-2 table tr td .logo {width: 50%; height: 75%; margin-left: 98px; }
+
+
+            body{font-size: 12px;line-height: 15px;}
+            .page-info{  overflow: hidden; font-size: 18px; line-height: 30px;}
+            .page-info .main{ width:  550px; height: 380px;  border: 1px solid #454545; margin:0 auto; }
+            .page-info .main .block-1{border: 2px solid #454545;margin:5px 5px;}
+            .page-info .main .block-1 .block-2{border: 1px solid #454545;margin:5px 5px;}
+            .page-info .main .block-1 .block-2 table{margin: 15px 20px;}
+            .page-info .main .block-1 .block-2 .text-center{text-align: center;}
+            .page-info .main .block-1 .block-2 .title{font-size: 15px; text-align: center;}
+            .page-info .main .block-1 .block-2 table tr td .logo {width: 50%; height: 75%; margin-left: 98px; }
+
+
+        </style>
+    <body>
+        <div class="page-order" style="min-height: 600px">
+            <div class="header">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width: 70%" ><img src="http://static.megavita.vn/f/v1/images/logo-email.png" title="Megavita"></td>
+                            <td style="width: 30%" >
+                                <span><strong>Mã số thuế:</strong></span>
+                                <span> 0312654255-001</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Địa chỉ:</strong> 61C Tú Xương, Phường 7, Quận 3, TP.HCM </td>
+                            <td><strong>Người làm đơn:</strong> ........................</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Điện thoại:</strong> 090 889 7041</td>
+                            <td><strong>Ngày lập:</strong> <?php echo date('d/m/Y', time()) ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Website:</strong> megavita.vn</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="title">ĐƠN ĐẶT HÀNG</div>
+            <div class="info-customer">
+                <table>
+                    <tr>
+                        <td>Tên khách hàng: <?php echo $this->arrUser->fullname ?></td>
+                        <td>Ghi chú: ............................................................... </td>
+                    </tr>
+                    <tr>
+                        <td>Địa chỉ:  <?php echo $this->arrUser->address ?> </td>
+                        <td>Nhân viên bán hàng: ............................................</td>
+                    </tr>
+                    <tr>
+                        <td>Số điện thoại: <?php echo $this->arrUser->phone ?> </td>
+                    </tr>
+                    <?php if (!empty($this->arrUser->note)): ?>
+                        <tr>
+                            <td>Chi chú: <?php echo $this->arrUser->note ?> </td>
+                        </tr>
+                    <?php endif; ?>
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="info">
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 5%">STT</td>
+                        <td style="width: 10%">MSP</td>
+                        <td style="width: 40%">Tên sản phẩm</td>
+                        <td style="width: 5%">Số lượng</td>
+                        <td style="width: 10%">Đơn giá</td>
+                        <td style="width: 10%">Chiết khấu</td>
+                        <td style="width: 10%">Thành tiền</td>
+                    </tr>
+                    <?php
+                    if ($this->arrProducOrder) {
+                        foreach ($this->arrProducOrder as $key => $list) {
+                            $key ++;
+                            echo '<tr>';
+                            echo '<td>' . $key . '</td>';
+                            echo '<td>' . $list['prod_id'] . '</td>';
+                            echo '<td>' . $list['prod_name'] . '</td>';
+                            echo '<td>' . $list['prod_quantity'] . '</td>';
+                            echo '<td>' . number_format($list['prod_price']) . '</td>';
+                            echo '<td>' . number_format($list['discount']) . '%</td>';
+                            echo '<td>' . number_format($list['total_price']) . '</td>';
+                            echo '</tr>';
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+            <div class="price">
+                <table>
+                    <tr>
+                        <td>
+                            <span>Tổng Đơn Hàng: <?php echo number_format($this->arrDetailOrder['orde_total_price'] + (int) $this->arrDetailOrder['vouc_value'] - (int) $this->arrDetailOrder['ship_fee']) . ' VNĐ' ?></span>                            
+                            <span>Bằng chữ: .............................................................................</span>
+                        </td>
+                    </tr>   
+
+                    <?php if (!empty($this->arrDetailOrder['vouc_value'])): ?>
+                        <tr>
+                            <td>
+                                <span>Chiết khẩu: <?php echo "-" . number_format($this->arrDetailOrder['vouc_value']) . ' VNĐ' ?></span>     
+                                <span>Bằng chữ: .............................................................................</span>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php if (!empty($this->arrDetailOrder['ship_fee'])): ?>
+                        <tr>
+                            <td>
+                                <span>Phí vận chuyển: <?php echo empty($this->arrDetailOrder['ship_fee']) ? "Miễn Phí" : "" . number_format($this->arrDetailOrder['ship_fee']) . ' VNĐ' ?></span>                            
+                                <span>Bằng chữ: .............................................................................</span>
+                            </td>
+                        </tr>   
+                    <?php endif; ?>
+                    <tr>
+                        <td>
+                            <span>Tổng Thu: <?php echo number_format($arrDetailOrder['orde_total_price']) . ' VNĐ' ?></span>
+                            <span>Bằng chữ: .............................................................................</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Đã thu : .......................... VNĐ. </span>
+                            <span>Bằng chữ: .............................................................................</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Còn lại : .......................... VNĐ. </span>
+                            <span>Bằng chữ: .............................................................................</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+<?php
+
+function convert_number_to_words($number) {
+
+    $hyphen = ' ';
+    $conjunction = '  ';
+    $separator = ' ';
+    $negative = 'âm ';
+    $decimal = ' phẩy ';
+    $dictionary = array(
+        0 => 'không',
+        1 => 'một',
+        2 => 'hai',
+        3 => 'ba',
+        4 => 'bốn',
+        5 => 'năm',
+        6 => 'sáu',
+        7 => 'bảy',
+        8 => 'tám',
+        9 => 'chín',
+        10 => 'mười',
+        11 => 'mười một',
+        12 => 'mười hai',
+        13 => 'mười ba',
+        14 => 'mười bốn',
+        15 => 'mười năm',
+        16 => 'mười sáu',
+        17 => 'mười bảy',
+        18 => 'mười tám',
+        19 => 'mười chín',
+        20 => 'hai mươi',
+        30 => 'ba mươi',
+        40 => 'bốn mươi',
+        50 => 'năm mươi',
+        60 => 'sáu mươi',
+        70 => 'bảy mươi',
+        80 => 'tám mươi',
+        90 => 'chín mươi',
+        100 => 'trăm',
+        1000 => 'ngàn',
+        1000000 => 'triệu',
+        1000000000 => 'tỷ',
+        1000000000000 => 'nghìn tỷ',
+        1000000000000000 => 'ngàn triệu triệu',
+        1000000000000000000 => 'tỷ tỷ'
+    );
+
+    if (!is_numeric($number)) {
+        return false;
+    }
+
+    if (($number >= 0 && (int) $number < 0) || (int) $number < 0 - PHP_INT_MAX) {
+// overflow
+        trigger_error(
+                'convert_number_to_words only accepts numbers between -' . PHP_INT_MAX . ' and ' . PHP_INT_MAX, E_USER_WARNING
+        );
+        return false;
+    }
+
+    if ($number < 0) {
+        return $negative . convert_number_to_words(abs($number));
+    }
+
+    $string = $fraction = null;
+
+    if (strpos($number, '.') !== false) {
+        list($number, $fraction) = explode('.', $number);
+    }
+
+    switch (true) {
+        case $number < 21:
+            $string = $dictionary[$number];
+            break;
+        case $number < 100:
+            $tens = ((int) ($number / 10)) * 10;
+            $units = $number % 10;
+            $string = $dictionary[$tens];
+            if ($units) {
+                $string .= $hyphen . $dictionary[$units];
+            }
+            break;
+        case $number < 1000:
+            $hundreds = $number / 100;
+            $remainder = $number % 100;
+            $string = $dictionary[$hundreds] . ' ' . $dictionary[100];
+            if ($remainder) {
+                $string .= $conjunction . convert_number_to_words($remainder);
+            }
+            break;
+        default:
+            $baseUnit = pow(1000, floor(log($number, 1000)));
+            $numBaseUnits = (int) ($number / $baseUnit);
+            $remainder = $number % $baseUnit;
+            $string = convert_number_to_words($numBaseUnits) . ' ' . $dictionary[$baseUnit];
+            if ($remainder) {
+                $string .= $remainder < 100 ? $conjunction : $separator;
+                $string .= convert_number_to_words($remainder);
+            }
+            break;
+    }
+
+    if (null !== $fraction && is_numeric($fraction)) {
+        $string .= $decimal;
+        $words = array();
+        foreach (str_split((string) $fraction) as $number) {
+            $words[] = $dictionary[$number];
+        }
+        $string .= implode(' ', $words);
+    }
+
+    return $string;
+}
+?>

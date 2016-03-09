@@ -1,0 +1,152 @@
+<?php
+
+use My\General;
+
+$linkIndex = $this->serverUrl() . $this->Url('frontend', array('controller' => 'index', 'action' => 'index'));
+$brand = implode('--', $this->params['brandSlug']);
+$arrProductList = $this->arrProductList;
+$arrCategoryParentList = $this->arrCategoryParentList;
+$getDetailCategory = $this->getDetailCategory;
+$arrBrandList = $this->arrBrandList;
+$linkCateBrand = $this->LinkCateBrand;
+$BrandDetailListID = array();
+foreach ($this->BrandDetailList as $key => $value) {
+    $BrandDetailListID[] = $value['cate_id'];
+}
+$arrCategoryList = $this->ARR_CATEGORY_LIST;
+?>
+<div id="brcmb">
+    <a style="text-decoration: none;cursor:default" itemprop="url"><span itemprop="title"><?php echo $this->params['brand_name'][0]; ?></span></a>
+
+</div>
+<div id="cont">
+    <div class="box">
+        <div class="tt">
+            <h1  class="tt">  <?php
+                $brandName = $this->params['brand_name'][0];
+                if (!empty($linkCateBrand)):
+                    empty($linkCateBrand['link_meta_title']) ? $brandName = $cateDetailList[0]["cate_name"] . " " . $brandDetailList[0]["cate_name"] : $brandName = $linkCateBrand['link_meta_title'];
+                endif;
+                echo $brandName;
+                ?></h1>
+        </div>
+        <?php if (!empty($this->arrCategoryChildrenList)):
+            ?>
+            <div class="ls-cat">     
+                <div class="ls">
+                    <ul>
+                        <?php
+                        foreach ($this->arrCategoryChildrenList as $key => $value):
+                            if ($value['cate_id'] != $arrDetailCategory['cate_id']):
+                                ?>
+                                <li><a href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'action' => 'index', 'categorySlug' => $value['cate_slug'], 'categoryID' => $value['cate_id'])) ?>"><?php echo $value['cate_name']; ?></a></li>
+                                <?php
+                            endif;
+                        endforeach;
+                        ?>
+                    </ul>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($this->arrTopview)): ?>
+            <div class="sld">
+                <div class="sw-cont">
+                    <div class="swiper-wrapper">
+                        <?php
+                        foreach ($this->arrTopview as $key => $value):
+                            ?>
+                            <div class="swiper-slide"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>"><img src="<?php echo json_decode($value['prod_image'], true)['thumbImage']['83x83'] ?>" title="<?php echo $value['prod_name']; ?>" style="width: 100%"/></a></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php if (!empty($this->arrProductList)): ?>
+        <div class="ls-pro full-title">               
+            <div class="ls">
+                <ul>
+                    <?php foreach ($this->arrProductList as $key => $value): ?>
+                        <li>
+                            <div class="f-l img">
+                                <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>" rel="nofollow"><img src="<?php echo json_decode($value['prod_image'], true)['thumbImage']['83x83']; ?>"/></a>
+                            </div>
+                            <?php if ($value['prod_call_price'] == 1): ?>
+                                <div class="inf">
+                                    <div  class="tt"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>"><?php echo $value['prod_name']; ?></a></div>
+                                    <div class="cr-price">Liên hệ để biết giá</div>
+                                </div>
+                            <?php else: ?>
+                                <div class="inf">
+                                    <div  class="tt"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>"><?php echo $value['prod_name']; ?></a></div>
+                                    <?php if ($value['prod_is_promotion'] == 1): ?><div class="op-price"><?php echo number_format($value['prod_price'], 0, ",", "."); ?> Vnđ</div><?php endif; ?>
+                                    <div class="cr-price"><?php echo ($value['prod_is_promotion'] == 1) ? number_format($value['prod_promotion_price'], 0, ",", ".") : number_format($value['prod_price'], 0, ",", "."); ?> Vnđ</div>
+                                    <?php if ($value['prod_is_promotion'] == 1): ?>
+                                        <div class="percen">
+                                            <?php
+                                            $percent = 100 - ($value['prod_promotion_price'] * 100 / $value['prod_price']);
+                                            echo $percent;
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                            <div class="clear"></div>
+                        </li>  
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <?php
+        if ($this->countPage > 1):
+            if ($this->intPage < $this->countPage):
+                ?>
+                <div class="button"><a href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'action' => 'index', 'categorySlug' => $this->arrDetailCategory['cate_slug'], 'categoryID' => $this->arrDetailCategory['cate_id'], 'page' => ($this->intPage + 1))) ?>"><button class="readmore">Xem Thêm</button></a></div>
+                <?php
+            endif;
+            if ($this->intPage > 1):
+                ?>
+                <div class="button"><a href="<?php echo $this->serverUrl() . $this->Url('category', array('controller' => 'category', 'action' => 'index', 'categorySlug' => $this->arrDetailCategory['cate_slug'], 'categoryID' => $this->arrDetailCategory['cate_id'], 'page' => ($this->intPage - 1))) ?>"><button class="back bt-default">Trở Về</button></a></div>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?php
+    $description = $this->BrandDetailList[0]["cate_description"];
+    //p($description);die;
+    echo (html_entity_decode(trim($description)) != "") ? '<div class="cate-content">' . html_entity_decode($description) . ' </div>' : '';
+    ?>
+
+    <div class="tags">
+        <?php if (!empty($this->arrTags)): ?>
+            <div class="tag-content">
+                <div class="main">
+                    <span>
+                        Từ khóa: 
+                    </span>
+                    <?php
+                    $i = 0;
+                    foreach ($this->arrTags as $key => $value):
+                        ?>
+                        <a href="<?php echo $this->serverUrl() . $this->Url('tags', array('controller' => 'Tags', 'action' => 'index', 'tagsSlug' => $value["tags_slug"], 'tagsID' => $value["tags_id"])) ?>"><?php echo $value['tags_name']; ?></a>
+                        <?php
+                        $i++;
+                        if (count($this->arrTags) != $i)
+                            echo ',';
+                        ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php if (count($this->arrTags) >= 10): ?>
+                <div class="open-tag"><a href="javascript:;">Xem nhiều hơn</a></div>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <div  class="seo-data">
+        <?php foreach ($this->arrBrandList as $value): ?>
+            <a href = "<?php echo $this->serverUrl() . $this->Url('brand', array('brandSlug' => $value['cate_slug'])) ?>"><?php echo $value['cate_name']; ?></a>, 
+        <?php endforeach; ?>
+    </div>
+</div>

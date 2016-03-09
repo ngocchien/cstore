@@ -1,0 +1,110 @@
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-menu')->getMessages(), $this->flashMessenger()->setNamespace('success-add-menu')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách Danh mục
+        </header>
+        <div class="panel-body">    
+            <div class="adv-table editable-table ">  
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-md-4">                  
+                        <div id="editable-sample_length" class="dataTables_length no-padding">
+                            <a class="btn btn-primary" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'menu', 'action' => 'add')); ?>" ><i class="icon-plus-sign-alt"></i> Thêm</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <form id="frm" class="form-horizontal" role="form" method="GET">
+                            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 no-padding">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3 no-padding-right">
+                                <button type="submit" class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <section id="unseen">
+                    <table class="table table-bordered table-striped table-condensed cf">
+                        <thead class="cf">
+                            <tr>
+                                <th class="text-center"><i class="icon-list"></i> ID</th>
+                                <th class="text-center visible-xs visible-md visible-sm visible-lg"><i class="icon-list-alt"></i> Tên Menu</th>
+                                <th class="text-center hidden-xs"> URL </th>
+                                <th class="text-center"> Phiên bản </th>
+                                <th class="text-center visible-xs visible-md visible-sm visible-lg">Trạng thái</th>
+                                <th class="text-center hidden-xs"><i class="icon-ok"></i> Ngày tạo</th>
+                                <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if ($this->arrMenuList):
+                                foreach ($this->arrMenuList as $arrMenuList):
+                                    ?>
+                                    <tr>
+                                        <td  class="text-center" width="80">
+                                            <?php echo $arrMenuList['menu_id']; ?>
+                                        </td>
+                                        <td class="visible-xs visible-md visible-sm visible-lg">
+                                            <a class="tooltips" data-placement="top" >
+                                                <?php echo $arrMenuList['menu_name']; ?>
+                                            </a>
+                                        </td>
+                                        <td class="hidden-xs">
+                                            <a class="tooltips" data-placement="top" >
+                                                <?php echo $arrMenuList['menu_url']; ?>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                           <a class="tooltips" data-placement="top" > <?php echo ($arrMenuList['menu_type']== 0) ? 'Destop' : 'Mobile'; ?></a>
+                                        </td>
+                                        <td class="text-center visible-xs visible-md visible-sm visible-lg" width="100"><?php echo $arrMenuList['menu_status'] ? '<a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang hiện"><i class="icon-ok color-success"></i></a>' : ' <a href="javascript:;" class="tooltips" data-placement="top" data-original-title="Đang ẩn"><i class="icon-minus-sign color-danger"></i></a>'; ?></td>
+                                        <td  class="text-center hidden-xs"><?php echo date('d/m/Y', $arrMenuList['menu_created']); ?></td>
+                                        <td class="text-center" width="200">
+                                            <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'menu', 'action' => 'edit', 'id' => $arrMenuList['menu_id'])); ?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Sửa menu"  rel="<?php echo $arrMenuList['menu_id'] ?>"><i class="icon-pencil"></i> Sửa</a>
+                                            <a  class="btn btn-danger btn-xs remove tooltips" data-placement="top" data-original-title="Xóa menu" rel="<?php echo $arrMenuList['menu_id'] ?>"><i class="icon-trash "></i> Xóa</a>
+                                        </td>
+                                    </tr>
+
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="6" class="text-center">Hiện tại chưa có menu nào.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div>
+                <?php echo $this->paging; ?>
+            </div>
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Menu.index();
+</script>

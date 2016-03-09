@@ -1,0 +1,62 @@
+<section class="wrapper site-min-height">
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách tin nhắn
+        </header>
+        <div class="panel-body">
+            <br>
+            <section id="unseen">
+                <table class="table table-bordered table-striped table-condensed cf">
+                    <thead class="cf">
+                        <tr>
+                            <th class="text-center"><i class="icon-list"></i> STT</th>
+                            <th class="text-center visible-xs visible-md visible-sm visible-lg"><i class="icon-list-alt"></i> Nội dung</th>
+                            <th class="text-center"><i class="icon-user"></i> Khách hàng</th>
+                            <th class="text-center"><i class="icon-list-alt"></i> Ngày tạo</th>
+                            <th class="text-center"><i class="icon-ok"></i> Trạng thái</th>
+                            <th class="text-center visible-xs visible-md visible-sm visible-lg"><i class="icon-edit"></i> Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($this->arrListMessage) {
+                            foreach ($this->arrListMessage as $key => $list) {
+                                $key ++;
+                                ?>
+                                <tr>
+                                    <td class="text-center"><?php echo $key ?></td>
+                                    <td class="text-center"><?php echo $list['mess_title'] ?></td>
+                                    <td class="text-left"><?php echo $list['mess_content'] ?></td>
+                                    <td class="text-center"><?php echo date('d/m/Y', $list['mess_created']) ?></td>
+                                    <td class="text-center">
+                                        <?php
+                                        if ($list['mess_status'] == 0) {
+                                            echo '<strong><span class="label label-warning tooltips" data-placement="top" data-original-title="Chua xem ">Chua xem </span></strong>';
+                                        } else {
+                                            echo '<i class="icon-ok color-success"></i>';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <a rel="<?php echo $list['mess_id'] ?>" class="btn btn-primary btn-xs view-message" data-placement="top" data-original-title="Xem chi tiết"><i class="icon-eye-open"></i> Xem</a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        } else {
+                            echo '<td colspan="6" class="text-center">Hiện tại không có tin nhắn</td>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+        <div>
+            <?php echo $this->paging; ?>
+        </div>
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Message.index();
+</script>

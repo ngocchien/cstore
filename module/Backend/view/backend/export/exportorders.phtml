@@ -1,0 +1,53 @@
+<meta charset='UTF-8'>
+<table border="1">
+    <thead>
+        <tr>
+            <th style="background:#ccc;">Ngày tháng</th>
+            <th style="background:#ccc;">Mã SP</th>
+            <th style="background:#ccc;">Mã DH</th>
+            <th style="background:#ccc;">Tên sản phẩm</td>
+            <th style="background:#ccc;">Tên khách hàng</th>
+            <th style="background:#ccc;">Địa chỉ</th>
+            <th style="background:#ccc;width:50px;">Số lượng</th>
+            <th style="background:#ccc;width:100px;">Đơn giá</th>
+            <th style="background:#ccc;width:100px;">Đơn giá bán chưa CK</th>
+            <th style="background:#ccc;">Thành tiền</th>
+            <th style="background:#ccc;">Hướng vận chuyển</th>
+            <th style="background:#ccc;">Nhân viên bán hàng</th>
+            <th style="background:#ccc;width:100px;">Đơn giá sau chiếc khấu</th>
+        </tr>
+    </thead>
+    <?php 
+    if($this->arrListProduct){
+            foreach($this->arrListProduct as $arrListProduct){
+                $arrCustomer =  json_decode($this->arrOrders[$arrListProduct['orde_id']]['orde_detail']);
+    ?>
+                <tr>
+                    <td style="vertical-align:top;text-align: center;"><?php echo date('d/m/Y',$this->arrOrders[$arrListProduct['orde_id']]['orde_created']); ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo $this->arrProductCode[$arrListProduct['prod_id']]; ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo $this->arrOrders[$arrListProduct['orde_id']]['orde_code'].$this->arrOrders[$arrListProduct['orde_id']]['orde_id'] ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo $arrListProduct['prod_name'] ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo $arrCustomer->fullname ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo $arrCustomer->address ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo $arrListProduct['prod_quantity'] ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo number_format($arrListProduct['prod_price']) ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo number_format($arrListProduct['prod_price']) ?></td>
+                    <td style="vertical-align:top;text-align: center;"><?php echo number_format((int)$arrListProduct['prod_price'] * (int)$arrListProduct['prod_quantity']) ?></td>
+                    <td style="vertical-align:middle;text-align: center;"><?php echo My\General::getMethodShip()[$this->arrOrders[$arrListProduct['orde_id']]['orde_ship']] ?></td>
+                    <td style="vertical-align:middle;text-align: center;">
+                        <?php 
+                            foreach($this->arrUserSaleList as $arrUserSaleList){
+                                if($arrUserSaleList['user_id'] == $this->arrOrders[$arrListProduct['orde_id']]['user_updated']){
+                                    echo $arrUserSaleList['user_fullname'];
+                                    break;
+                                }
+                            }
+                        ?>
+                    </td>
+                    <td style="vertical-align:middle;text-align: center;"><?php echo number_format($arrListProduct['prod_price'] - ($arrListProduct['prod_price'] * $arrListProduct['discount']/100)); ?></td>
+                </tr>
+    <?php     
+        }
+    }
+    ?>
+</table>

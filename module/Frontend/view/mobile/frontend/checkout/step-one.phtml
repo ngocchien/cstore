@@ -1,0 +1,115 @@
+<div id="brcmb">
+    <a href="#"><span>THÔNG TIN GIAO HÀNG</span></a>
+</div>
+<div id="cont">  
+    <form method="POST" >
+        <div class="ls-pro" id="cont-checkout">               
+            <div class="step-one">
+                <div class="chil2">
+                    <div style="width: 90%; margin: 20px auto">
+                        <b>Địa chỉ nhận hàng </b><br/>
+                        <div style="width: 90%; margin: 20px auto">
+
+                            <input class="input" type="text" name="strFullname" placeholder="Họ và tên" value="<?php echo ($params['strFullname']) ? $params['strFullname'] : ((UID) ? FULLNAME : NULL) ?>">
+                            <label style="color: red; display: <?php echo ($this->errors['fullname']) ? : none ?>;" class="error errorCheckoutFullName"><?php
+                                if ($this->errors['fullname']) {
+                                    echo $this->errors['fullname'];
+                                }
+                                ?>
+                            </label>
+                            <input class="input" type="text" name="strEmail" placeholder="Email" value="<?php echo ($params['strEmail']) ? $params['strEmail'] : ((UID) ? EMAIL : NULL) ?>">
+                            <label style="color: red; display: <?php echo ($this->errors['Email']) ? : none ?>;" class="error errorCheckoutEmail"><?php
+                                if ($this->errors['Email']) {
+                                    echo $this->errors['Email'];
+                                }
+                                ?></label>
+                            <input class="input" type="text" name="strPhone" placeholder="Số điện thoại" value="<?php echo ($params['strPhone']) ? $params['strPhone'] : ((UID) ? PHONE : NULL) ?>" />
+                            <label style="color: red; display: <?php echo ($this->errors['phoneNumber']) ? : none ?>;" class="errornumber errorCheckoutPhone"><?php
+                                if ($this->errors['phoneNumber']) {
+                                    echo $this->errors['phoneNumber'];
+                                }
+                                ?></label>
+                            <input class="input" type="text" name="strAddress" placeholder="Địa chỉ" value="<?php echo ($params['strAddress']) ? $params['strAddress'] : ((UID) ? ADDRESS . ',' : NULL) ?><?php echo ($params['strAddress']) ? $params['strAddress'] : ((DISTRICT_ID) ? $arrDistrict['dist_name'] . ',' : NULL) ?><?php echo ($params['strAddress']) ? $params['strAddress'] : ((CITY_ID) ? $arrCity['city_name'] : NULL) ?>">
+                            <label style="color: red; display: <?php echo ($this->errors['address']) ? : none ?>;" class="error errorCheckoutAddress"><?php
+                                if ($this->errors['address']) {
+                                    echo $this->errors['address'];
+                                }
+                                ?></label>
+                            <span style="color: activecaption; margin-left:0px">(Lưu ý: Nhập đầy đủ số nhà, tên đường, quận/huyện, phường xã)</span>
+                            <select name="intCity" class="form-control intCity input" id="inputEmail3" style=" width: 100%; height: 33px">
+                                <option value="0"> --- Chọn Tỉnh / Thành phố ---</option>
+                                <?php foreach ($arrCity as $value): ?>
+                                    <option value="<?php echo $value['city_id']; ?>" <?php if ($value['city_id'] == CITY_ID): ?>selected<?php endif; ?>><?php echo $value['city_name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label style="color: red; display: <?php echo ($this->errors['intCity']) ? : none ?>;" class="error errorCheckoutintCity"><?php
+                                if ($this->errors['intCity']) {
+                                    echo $this->errors['intCity'];
+                                }
+                                ?></label>
+                            <select name="intDist" class="form-control intDist input" id="inputEmail3" style=" width: 100%; height: 33px">
+                                <option value="0">  --- Chọn Quận / Huyện ---</option>
+                                <?php
+                                if (!empty($this->arrDistrict)):
+                                    foreach ($this->arrDistrict as $value):
+                                        ?>
+                                        <option value="<?php echo $value['dist_id']; ?>" <?php if (DISTRICT_ID == $value['dist_id']): ?> selected <?php endif; ?>><?php echo $value['dist_name']; ?></option>
+                                        <?php
+                                    endforeach;
+                                endif;
+                                ?>
+                            </select>
+                            <label style="color: red; display: <?php echo ($this->errors['intDist']) ? : none ?>;" class="error errorCheckoutintDist"><?php
+                                if ($this->errors['intDist']) {
+                                    echo $this->errors['intDist'];
+                                }
+                                ?></label>
+                            <select name="intWard" class="form-control intWard input" id="inputEmail3" style=" width: 100%; height: 33px">
+                                <option value="">  --- Chọn Xã / Phường ---</option>
+                                <?php
+                                if (!empty($this->arrWardList)):
+                                    foreach ($this->arrWardList as $value):
+                                        ?>
+                                        <option value="<?php echo $value['ward_id']; ?>" <?php if (WARD_ID == $value['ward_id']): ?> selected <?php endif; ?>><?php echo $value['ward_name']; ?></option>
+                                        <?php
+                                    endforeach;
+                                endif;
+                                ?>
+                            </select>
+                            <label style="color: red; display: <?php echo ($this->errors['intWard']) ? : none ?>;" class="error errorCheckoutintDist"><?php
+                                if ($this->errors['intWard']) {
+                                    echo $this->errors['intWard'];
+                                }
+                                ?></label>
+
+
+
+
+                            <textarea name="strNote" class="input" rows="3" placeholder="Nhập ghi chú nếu quý khách có nhu cầu hẹn giờ nhận hàng"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="step-one">
+                <div class="chil">
+                    <table>
+                        <tr>
+                            <td style="width: 15%;text-align: center; padding: 45px 0 0 15px"><img src="<?php echo STATIC_URL; ?>/f/mobile/images/ship.PNG" width="70" height="50"></td>
+                            <td style="width: 10%;text-align: center;"><input type="radio" value="3" checked="" name="payment"></td>
+                            <td><b>Thanh toán khi nhận hàng</b><br/>
+                                Nhân viên giao hàng của chúng tôi sẽ thu tiền tại nhà của bạn khi giao hàng
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="button"><button class="readmore">Đặt hàng</button></div>
+        </div>
+    </form>
+</div>
+
+<script>
+    getDistURL = '<?php echo $this->serverUrl() . $this->url('checkout', array('controller' => 'checkout', 'action' => 'get-list-district')); ?>';
+    getWardURL = '<?php echo $this->serverUrl() . $this->url('checkout', array('controller' => 'checkout', 'action' => 'get-list-ward')); ?>';
+    Checkout.index();
+</script>

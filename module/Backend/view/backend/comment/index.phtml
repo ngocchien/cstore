@@ -1,0 +1,96 @@
+<section class="wrapper site-min-height">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <header class="panel-heading">Danh sách Bình luận</header>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-4 col-md-4"></div>
+                        <div class="col-lg-8 col-sm-8 col-md-8">
+                            <form id="frm" class="form-horizontal" role="form" method="GET">
+                                <div class="col-xs-9 col-lg-9 col-md-9 col-sm-9 no-padding">
+                                    <div class="dataTables_filter no-padding per-100">
+                                        <label><input name="s" value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium"></label>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-lg-3 col-md-3 col-sm-3 no-padding-right">
+                                    <button type="submit" class="btn btn-white per-100"><i class="icon-search"></i> Tìm kiếm</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <section id="flip-scroll">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    <th class="numeric text-center"><i class="icon-user"></i> Tên</th>
+                                    <th class="numeric text-center"><i class="icon-envelope-alt"></i> Email</th>
+                                    <th class="numeric text-center hidden-xs hidden-sm"><i class="icon-comment"></i> Nội dung</th>
+                                    <th class="numeric text-center"><i class="icon-flag"></i> Trạng thái</th>
+                                    <th class="numeric text-center hidden-xs hidden-sm">Chưa duyệt</th>
+                                    <th class="numeric text-center"><i class="icon-calendar"></i>  Ngày tạo</th>
+                                    <th class="numeric text-center"><i class="icon-edit"></i> Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($this->arrCommentList):
+                                    foreach ($this->arrCommentList as $arrCommentList):
+                                        ?>
+                                        <tr>
+                                    <input type="hidden" class="commID" value="<?php echo $arrCommentList['comm_id']; ?>">
+                                    <td style="text-align:center;"><?php echo $arrCommentList['user_fullname']; ?></td>
+                                    <td class="numeric userEmail"><?php echo $arrCommentList['user_email']; ?></td>
+                                    <td class="numeric commentContent hidden-xs hidden-sm"><?php echo $arrCommentList['comm_content']; ?></td>
+                                    <td class="numeric commStatus  text-center"><?php if ($arrCommentList['comm_status'] == 0) { ?>Chưa duyệt <?php } else { ?>Đã duyệt <?php } ?></td>
+                                    <td class="numeric prodName text-center"><?php echo isset($arrCommentList['num'])? $arrCommentList['num'] : 0; ?></td>
+                                    <td class="numeric commCreated  text-center"><?php echo date('d/m/Y', $arrCommentList['comm_created']); ?></td>
+                                    <td class="numeric  text-center" width="180">
+                                        <?php if ($arrCommentList['comm_status'] == 0) { ?>
+<!--                                            <a  href="javascript:;"  class="btn btn-success btn-xs  censor"  data-placement="top" data-original-title="Duyệt bình luận" data-id="<?php //echo $arrCommentList['comm_id']; ?>"><i class=" icon-ok"></i> Duyệt</a>                                        -->
+                                        <?php } ?>    
+                                        <a  href="<?php echo isset($arrCommentList['prod_id']) ? $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => 'product_detail', 'productId' => $arrCommentList['prod_id'])) : $this->serverUrl() . $this->Url('content_detail', array('controller' => 'content', 'action' => 'view', 'contslug' => 'content_detail', 'contId' => $arrCommentList['cont_id'])) ?>" target="_bank"  class="btn btn-primary btn-xs"><i class="icon-eye-open"></i> Xem</a>
+                                        <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'edit','id' => $arrCommentList['comm_id'] ))?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Sửa bình luận"" data-id="<?php echo $arrCommentList['comm_id']; ?>"><i class="icon-pencil"></i> Sửa</a>
+                                        <a  href="javascript:;"   class="btn btn-danger btn-xs delete" data-placement="top" data-original-title="Xóa bình luận" data-id="<?php echo $arrCommentList['comm_id']; ?>"><i class="icon-trash "></i> Xóa</a>   
+
+                                    </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="7" class="text-center">Hiện tại chưa có dữ liệu.</td></tr>
+                            <?php endif ?>
+                            </tbody>
+                        </table>
+                    </section>
+                    <div>
+                        <div class="row">
+                            <div  class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <div  class="col-lg-3 col-sm-3 col-md-3 col-xs-3">
+                                        <select name="limit" class="form-control" onchange="window.location.href = this.value">
+                                            <option value="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'index', 'limit' => 30, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'index', 'limit' => 100, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'index', 'limit' => 300, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 300 ? "selected" : "" ?>>300</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'index', 'limit' => 500, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 500 ? "selected" : "" ?>>500</option>
+                                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'comment', 'action' => 'index', 'limit' => 1000, 's' => $this->params["s"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 1000 ? "selected" : "" ?>>1000</option>
+                                        </select>
+                                    </div>
+                                    <div class = "col-sm-3" style = "padding-top: 10px">Dòng</div>
+                                </div>
+                            </div>
+                            <div class = "col-lg-6">
+                                <?php echo $this->paging;
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Comment.index();
+</script>

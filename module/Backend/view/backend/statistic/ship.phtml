@@ -1,0 +1,60 @@
+<section class="panel">
+    <header class="panel-heading">Thống kê hướng vận chuyển</header>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-lg-4">
+                    <div class="searchproduct">
+                        <table class="table table-striped table-bordered" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Tên hình thức</th>
+                                    <th style="text-align:center;">Tổng</th>
+                                    <th style="text-align:center">Thành công</th>
+                                    <th style="text-align:center">Thất bại</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($this->arrShip) {
+                                    foreach ($this->arrShip as $ship) {
+                                        ?>
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <?php
+                                                        switch ($ship['orde_ship']){
+                                                            case "1": echo "Proship"; break;
+                                                            case "2": echo "Giaonhan"; break;
+                                                            case "3": echo "Bưu điện"; break;
+                                                            default : echo "không xác định";
+                                                        }
+                                                ?>
+                                            </td>
+                                            <td style="text-align:center"><?php echo $ship['total'] ?></td>
+                                            <td style="text-align:center"><?php echo $ship['success'] ?></td>
+                                            <td style="text-align:center"><?php echo $ship['fail'] ?></td>                                           
+                                        </tr>
+                                        <?php } ?>
+                                <?php } else {
+                                    ?>
+                                    <tr class="none-product">
+                                        <td colspan="6" style="text-align:center;">Chưa có đơn hàng.</td>
+                                    </tr>
+                                <?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="chart-ship-columm"></div>
+                </div>
+            </div>
+            <div class="col-lg-12 chart-ship-pie" style="margin-top: 40px"></div>
+        </div>
+    </div>
+</section>
+<script>
+    Statistic.index();
+    Statistic.Chart_ship();
+</script>

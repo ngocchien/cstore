@@ -1,0 +1,49 @@
+
+<table class="table table-bordered table-striped table-condensed cf">
+    <thead class="cf">
+        <tr>
+            <th style="width:7%;text-align: center"><i class="icon-list"></i> ID</th>
+            <th style="width:25%;text-align: left"><i class="icon-list-alt"></i> Tên tags</th>
+            <th style="width:25%;text-align: left">Slug</th>
+            <th style="width:18%;text-align: left">Miêu tả</th>
+            <th style="width:10%;text-align: center">Trạng thái</th>
+            <th style="width:15%;text-align: center">Chức năng</th>	
+        </tr>
+    </thead>
+    <tbody style="text-align:center">
+        <?php
+        if ($this->arrTagsList) {
+            foreach ($this->arrTagsList as $arrTagsList) {
+                ?>
+                <tr id="<?php echo $arrTagsList['tags_id'] ?>">
+                    <td style="text-align:center"><?php echo $arrTagsList['tags_id'] ?></td>
+                    <td style="text-align:left"><?php echo $arrTagsList['tags_name'] ?></td>
+                    <td style="text-align:left"><?php echo $arrTagsList['tags_slug'] ?></td>
+                    <td style="text-align:left"><?php echo strip_tags($arrTagsList['tags_description']) ?></td>
+                    <td style="text-align:center">
+                        <?php if ($arrTagsList['tags_status'] == 1) { ?>
+                            <a class="tooltips" data-placement="top" data-original-title="Hoạt động"><i class="icon-ok color-success"></i></a>
+                        <?php } else if ($arrTagsList['tags_status'] == 0) { ?>
+                            <a class="tooltips" data-placement="top" data-original-title="Đã khóa"><i class="icon-minus-sign color-danger"></i></a>
+                        <?php } ?>
+                    </td>
+
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'edit', 'id' => $arrTagsList['tags_id'])); ?>"><i class="icon-pencil"></i> Sửa</a>
+                        <a class="btn btn-danger btn-xs delete" data-id="<?php echo $arrTagsList['tags_id'] ?>"><i class="icon-trash"></i> Xóa</a                
+                    </td>
+                </tr>
+                <?php
+            }
+        } else {
+            ?>
+            <tr>
+                <td colspan="4" style="text-align: center">Hiện không có dữ liệu</td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<div id='paging' style="padding-top: 15px;">
+    <?php echo $this->paging; ?>
+</div>
+

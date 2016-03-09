@@ -1,0 +1,67 @@
+<div id="brcmb">
+    <?php
+    if (count($this->arrCateGradeList) > 0):
+        foreach ($this->arrCateGradeList as $key => $value):
+            ?>
+            <a href="<?php echo $this->serverUrl() . $this->Url('content', array('controller' => 'content', 'action' => 'index', 'categorySlug' => $value["cate_slug"], 'categoryID' => $value["cate_id"])) ?>"><span><?php echo $value['cate_name']; ?></span></a> > 
+            <?php
+        endforeach;
+    endif;
+    ?> 
+</div>
+<div id="cont">            
+    <div class="dt-pro">
+        <div class="hedr">
+            <h1 class="h">
+                <?php echo ucfirst($this->DetaiContent['cont_title']); ?>
+            </h1>
+            <div class="dt-p">
+                <div class="tt"><?php echo $this->DetaiContent['cont_summary']; ?></div>
+                <?php echo $this->DetaiContent['cont_content']; ?>
+            </div>
+            <h2>Có thể bạn chưa biết</h2>
+            <?php if ($this->arrListContent): ?>
+                <div>
+                    <ul>
+                        <?php foreach ($this->arrListContent as $key => $value): ?>
+                            <li>
+                                <a class="cr-bl" href="<?php echo $this->serverUrl() . $this->Url('content_detail', array('controller' => 'content', 'action' => 'view', 'contslug' => $value["cont_slug"], 'contId' => $value["cont_id"])) ?>"><?php echo ucfirst($value['cont_title']); ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div
+            <?php endif; ?>
+        </div>
+    </div>
+
+</div> <?php if (count($arrTags) > 0 || !empty($this->listKeyword)): ?>
+    <div class="tags">
+        <div class="tag-content">
+            <div class="main">
+                <?php
+                foreach ($arrTags as $tags) {
+                    $url = $this->serverUrl() . $this->Url('tags-content', array('controller' => 'TagsContent', 'action' => 'index', 'tagsSlug' => $tags["tags_cont_slug"], 'tagsID' => $tags['tags_cont_id']));
+                    ?>
+                    <a href="<?php echo $url ?>"> <?php echo $tags['tags_cont_name']; ?> </a>
+                    <?php
+                    echo '&nbsp';
+                }
+                ?>
+                <?php if (!empty($this->listKeyword)): ?>
+                    <?php
+                    foreach ($this->listKeyword as $word) {
+                        $url = $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 'keySlug' => $word['word_slug']));
+                        ?>
+                        <a href="<?php echo $url ?>"> <?php echo $word['word_key']; ?> </a>
+                        <?php
+                        echo '&nbsp';
+                    }
+                    ?>
+                <?php endif ?>
+            </div>
+        </div>
+        <?php if ((count($this->arrTags) + count($this->listKeyword)) >= 10): ?>
+            <div class="open-tag"><a href="javascript:;">Xem nhiều hơn</a></div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

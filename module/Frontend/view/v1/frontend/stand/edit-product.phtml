@@ -1,0 +1,154 @@
+<?php
+
+use My\General;
+?>
+<div id="content">
+    <div class="block-head">
+        <div class="menu">
+            <div class="m-level">
+                <div class="title">
+                    <span class="icon i-list"></span> <div class="text">TẤT CẢ DANH MỤC</div>
+                </div>
+                <div class="list">
+                </div>
+            </div>
+        </div>
+        <div class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">            
+            <div class="br-hidden">
+                <div class="item item-end">
+                    <div class="ar-right">
+                        <div class="cont">
+                            <a style="text-decoration: none" itemprop="url"><span itemprop="title">Gian hàng</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="block-content">
+        <?php
+        echo $this->render('frontend/leftmenu-order');
+        ?>
+        <div class="main">
+            <h2 >Thêm sản phẩm vào gian hàng</h2>
+            <div class="panel-body"  id="product">
+                <?php
+                if (!empty($errors)):
+                    ?>
+                    <div class="stand-erorr"><?php echo implode("<br/>", $errors); ?></div>
+                    <?php
+                elseif (empty($errors) && !empty($params["prod_name"])):
+                    ?>
+                    <div class="stand-success">Thêm sản phẩm thành công</div>
+                    <?php
+                endif;
+                ?>
+                <form id="kt" method="POST">
+                    <label>
+                        <span>Tên sản phẩm:</span>
+                        <input type="text" name="prod_name" value="<?php echo empty($params["prod_name"]) ? $arrProduct["prod_name"] : $params["prod_name"] ?>" class="form-control" placeholder="Nhập tên sảm phẩm">
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Giá sản phẩm:</span>
+                        <input type="text" name="prod_price" value="<?php echo empty($params["prod_price"]) ? $arrProduct["prod_price"] : $params["prod_price"] ?>" class="form-control" placeholder="Nhập giá sản phẩm">
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Mô tả về sản phẩm:</span>
+                        <textarea class="editor" name="prod_description"><?php echo empty($params["prod_description"]) ? $arrProduct["prod_description"] : $params["prod_description"] ?></textarea>
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Mô tả chi tiết:</span>
+                        <textarea class="editor" name="prod_detail"><?php echo empty($params["prod_detail"]) ? $arrProduct["prod_detail"] : $params["prod_detail"] ?></textarea>
+                        <div style="clear: both"></div>
+                    </label>
+                    <label>
+                        <span>Hình ảnh chính:</span>
+                        <div>
+                            <div style="margin: 0 0 0 108px;">
+                                <input style=" padding: 10px 0 0 20px;" type="file" name="prod_image" id="prod_image" class="ignore"/>
+                                <div>
+                                    <ul class="image-list">
+                                        <?php
+                                        $arr = json_decode(empty($params['prod_image']) ? $arrProduct["prod_image"] : $params['prod_image'], true);
+                                        if (isset($arr["sourceImage"]) && isset($arr["thumbImage"]["120x120"])) {
+                                            ?>
+                                            <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
+                                                <img class="image" src="<?php echo $arr["thumbImage"]["50x50"] ?>" alt="" style="display: block;margin-bottom: 10px;">
+                                                <span style="display: block;text-align: right;">
+                                                    <a title="Xem" class="view" href="<?php echo $arr["sourceImage"] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a><a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
+                                                    <div id="jsonData"><input name="prod_image" type="hidden" value="<?php echo htmlentities(empty($params['prod_image']) ? $arrProduct["prod_image"] : $params['prod_image']); ?>"></div>
+                                                </span>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                    <div id="progress"></div>
+                                </div>
+                            </div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </label>
+                    <label>
+                        <span>Hình ảnh slide:</span>
+                        <div>
+                            <div style="margin: 0 0 0 108px;">
+                                <input style=" padding: 10px 0 0 20px;" type="file" name="prod_image_sub" id="prod_image_sub" class="ignore"/>
+                                <div>
+                                    <ul class="sub-image-list">
+                                        <?php
+                                        if (isset($params['prod_image_sub']) && count($params['prod_image_sub']) > 0) {
+                                            foreach ($params['prod_image_sub'] as $key => $value) {
+                                                $arr = json_decode($value, true);
+                                                if (isset($arr["sourceImage"]) && isset($arr["thumbImage"]["120x120"])) {
+                                                    ?>
+                                                    <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
+                                                        <img class="image" src="<?php echo $arr["thumbImage"]["50x50"] ?>" alt="" style="display: block;margin-bottom: 10px;">
+                                                        <span style="display: block;text-align: right;">
+                                                            <a title="Xem" class="view" href="<?php echo $arr["sourceImage"] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a><a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
+                                                            <div id="jsonData"><input name="prod_image_sub[]" type="hidden" value="<?php echo htmlentities($value); ?>"></div>
+                                                        </span>
+                                                    </li>
+                                                    <?php
+                                                }
+                                            }
+                                        } else {
+                                            $arr = json_decode($arrProduct['prod_image_sub'], true);
+                                            if (isset($arr) && count($arr) > 0) {
+                                                foreach ($arr as $key => $value) {
+                                                    $arr = json_decode($value, true);
+                                                    if (isset($arr["sourceImage"]) && isset($arr["thumbImage"]["120x120"])) {
+                                                        ?>
+                                                        <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
+                                                            <img class="image" src="<?php echo $arr["thumbImage"]["50x50"] ?>" alt="" style="display: block;margin-bottom: 10px;">
+                                                            <span style="display: block;text-align: right;">
+                                                                <a title="Xem" class="view" href="<?php echo $arr["sourceImage"] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a><a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
+                                                                <div id="jsonData"><input name="prod_image_sub[]" type="hidden" value="<?php echo htmlentities($value); ?>"></div>
+                                                            </span>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                    <div id="sub-progress"></div>
+                                </div>
+                            </div>
+                            <div style="clear: both"></div>
+                        </div>
+                    </label>
+                    <div style="    margin: 0 20px 0 0;" class="text-right"><button type="submit" class="btn-pre">Đăng ký gian hàng</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+<script>
+    stand.upload();
+    stand.editer();
+</script>

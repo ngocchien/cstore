@@ -1,0 +1,46 @@
+<div class="left">
+    <div class="box">
+        <div class="head box-head"> 
+            Tài khoản của bạn
+        </div>
+        <div class="cont">
+            <ul class="menu ">
+                <li class="item active opened">
+                    <a class="<?php echo ( $this->params['__CONTROLLER__'] == 'profile' && ( $this->params['action'] == 'index' || $this->params['action'] == 'edit' ) ) ? 'active' : null; ?>" href="<?php echo $this->serverUrl() . $this->Url('profile', array('controller' => 'profile', 'action' => 'index')) ?>">Thông tin cá nhân</a>
+                </li>
+            </ul>
+        </div>
+        <div class="cont">
+            <ul class="menu ">
+                <li class="item active opened">
+                    <a class="<?php echo ( $this->params['__CONTROLLER__'] == 'order' && ( $this->params['action'] == 'index' || $this->params['action'] == 'edit' ) ) ? 'active' : null; ?>" href="<?php echo $this->serverUrl() . $this->Url('frontend-order', array('controller' => 'order', 'action' => 'index')); ?>">Danh sách đơn hàng</a>
+                </li>
+            </ul>
+        </div>
+        <div class="cont">
+            <ul class="menu ">
+                <li class="item active <?php echo ($this->params['__CONTROLLER__'] == 'stand') ? 'opened' : 'unopened'; ?>">
+                    <a class="<?php echo ( $this->params['__CONTROLLER__'] == 'stand' && ( $this->params['action'] == 'index' ) ) ? 'active' : null; ?>" href="<?php echo $this->serverUrl() . $this->Url('frontend-stand', array('controller' => 'stand', 'action' => 'index')); ?>">Gian hàng của bạn</a>
+                    <?php
+                    if ($this->params['__CONTROLLER__'] == 'stand' && ( $this->params['action'] != 'register' )):
+                        ?>
+                        <ul class="item-sub level1">
+                            <li class="item unopened">
+                                <a class="<?php echo ( $this->params['__CONTROLLER__'] == 'stand' && ( $this->params['action'] == 'edit' ) ) ? 'active' : null; ?>" href="<?php echo $this->serverUrl() . $this->Url('frontend-stand', array('controller' => 'stand', 'action' => 'edit')); ?>">Sửa thông tin gian hàng</a>
+                            </li>
+                            <li class="item unopened">
+                                <a class="<?php echo ( $this->params['__CONTROLLER__'] == 'stand' && ( $this->params['action'] == 'index' ) ) ? 'active' : null; ?>" href="<?php echo $this->serverUrl() . $this->Url('frontend-stand', array('controller' => 'stand', 'action' => 'index')); ?>">Danh sách mặt hàng</a>
+                            </li>
+                            <li class="item unopened">
+                                <a class="<?php echo ( $this->params['__CONTROLLER__'] == 'stand' && ( $this->params['action'] == 'add-product' ) ) ? 'active' : null; ?>" href="<?php echo $this->serverUrl() . $this->Url('frontend-stand', array('controller' => 'stand', 'action' => 'add-product')); ?>">Thêm mặt hàng</a>
+                            </li>
+                        </ul>
+                        <?php
+                    endif;
+                    ?>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,147 @@
+<?php $keyword = $this->arrDataKeyword; ?>
+
+<div id="brcmb">
+    SEARCH > Kết quả tìm kiếm : '<h1 class="hs"><?php echo $this->params['s']; ?></h1>'
+</div>
+
+<div id="cont">
+    <?php if (!empty($this->arrProductList)): ?>
+        <div class="ls-pro full-title">               
+            <div class="ls">
+                <ul>
+                    <?php foreach ($this->arrProductList as $key => $value): ?>
+                        <li>
+                            <div class="f-l img">
+                                <a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>" rel="nofollow"> <img src="<?php echo json_decode($value['prod_image'], true)['thumbImage']['120x120']; ?>"/></a>
+                            </div>
+                            <?php if ($value['prod_call_price'] == 1): ?>
+                                <div class="inf">
+                                    <div  class="tt"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>"><?php echo $value['prod_name']; ?></a></div>
+                                    <div class="cr-price">Liên hệ để biết giá</div>
+                                </div>
+                            <?php else: ?>
+                                <div class="inf">
+                                    <div  class="tt"><a href="<?php echo $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $value['prod_slug'], 'productId' => $value['prod_id'])) ?>"><?php echo $value['prod_name']; ?></a></div>
+                                    <?php if ($value['prod_is_promotion'] == 1): ?><div class="op-price"><?php echo number_format($value['prod_price'], 0, ",", "."); ?> Vnđ</div><?php endif; ?>
+                                    <div class="cr-price"><?php echo ($value['prod_is_promotion'] == 1) ? number_format($value['prod_promotion_price'], 0, ",", ".") : number_format($value['prod_price'], 0, ",", "."); ?> Vnđ</div>
+                                    <?php if ($value['prod_is_promotion'] == 1): ?>
+                                        <div class="percen">
+                                            <?php
+                                            $percent = 100 - ($value['prod_promotion_price'] * 100 / $value['prod_price']);
+                                            echo $percent;
+                                            ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                            <div class="clear"></div>
+                        </li>  
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php
+            if ($this->countPage > 1):
+                if ($this->intPage < $this->countPage):
+                    ?>
+                    <div class="button"><a href="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 's' => $this->params['s'], 'page' => ($this->intPage + 1))) ?>"><button class="readmore">Xem Thêm</button><a></div>
+                                <?php
+                            endif;
+                            if ($this->intPage > 1):
+                                ?>
+                                <div class="button"><a href="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 's' => $this->params['s'], 'page' => ($this->intPage - 1))) ?>"><button class="back bt-default">Trở Về</button></a></div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="ls-pro"> Hiện chưa có sản phẩm nào trong tags : <?php echo $this->tagsDetail['tags_name']; ?> </div>
+                    <?php endif; ?>
+
+
+                    <?php if (!empty($arrContentList)): ?>
+                        <div class="ls-pro">
+                            <h2 class="tt">
+                                Kết quả tìm kiếm bài viết : "<?php echo $this->params['s']; ?>"
+                            </h2>
+                            <div class="ls">
+                                <ul>
+                                    <?php foreach ($arrContentList as $key => $value):
+                                        ?>
+                                        <li style="overflow:hidden">
+                                            <div class="f-l img">
+                                                <a href="<?php echo $this->serverUrl() . $this->Url('content_detail', array('controller' => 'content', 'action' => 'view', 'contslug' => $value['cont_slug'], 'contId' => $value['cont_id'])) ?>" rel="nofollow"> <img src="<?php echo json_decode($value['cont_image'], true)['thumbImage']['224x224'] ?>"/></a>
+                                            </div>
+                                            <div class="inf">
+                                                <div  class="tt"><a class="cr-bl"  href="<?php echo $this->serverUrl() . $this->Url('content_detail', array('controller' => 'content', 'action' => 'view', 'contslug' => $value['cont_slug'], 'contId' => $value['cont_id'])) ?>"><?php echo ucfirst($value['cont_title']); ?></a></div>
+                                                <div class="tt-desc">
+                                                    <?php echo html_entity_decode(strip_tags($value['cont_summary'])); ?>
+                                                    <?php echo html_entity_decode(substr(strip_tags($value['cont_content']), 0, 400)); ?>
+                                                </div>
+                                            </div>
+                                            <?php if (!empty($keyword)): ?>                                                
+                                                <?php
+                                                $lisKey = "";
+                                                for ($j = 0; $j < 4; $j++) {
+                                                    if (empty($keyword[$i]))
+                                                        break;
+                                                    $lisKey.='<a href="' . $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 'keySlug' => General::getSlug($keyword[$i]))) . '">' . $keyword[$i] . '</a>';
+                                                    if ($j != 3)
+                                                        echo ", ";
+                                                    $i++;
+                                                }
+                                                ?>
+                                                <?php if (!empty($lisKey)): ?>
+                                                    <div class="read-more"><b>Xem thêm:</b> <?php echo $lisKey ?>
+                                                    </div>
+                                                <?php endif; ?> 
+                                            <?php endif; ?>
+                                            <div class="clear"></div>
+                                        </li>  
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+
+                    <?php endif; ?>
+                    <div class="tags">
+                        <?php if (!empty($this->arrTagsList) || !empty($this->arrAllKeyword)): ?>
+                            <div class="tag-content">
+                                <div class="main">
+                                    <?php
+                                    $i = 0;
+                                    foreach ($this->arrAllKeyword as $key => $value):
+                                        ?>
+                                        <a href="<?php echo $this->serverUrl() . $this->Url('frontend-search', array('controller' => 'search', 'action' => 'index', 'keySlug' => $value["word_slug"])) ?>"><?php echo $value['word_key']; ?></a>
+                                        <?php
+                                        $i++;
+                                        if (count($this->arrAllKeyword) != $i)
+                                            echo ',';
+                                        ?>
+                                    <?php endforeach; ?>
+
+                                    <?php
+                                    $i = 0;
+                                    foreach ($this->arrTagsList as $key => $value):
+                                        ?>
+                                        <a href="<?php echo $this->serverUrl() . $this->Url('tags', array('controller' => 'tags', 'action' => 'index', 'tagsSlug' => $value["tags_slug"], 'tagsID' => $value["tags_id"])) ?>"><?php echo $value['tags_name']; ?></a>
+                                        <?php
+                                        $i++;
+                                        if (count($this->arrTagsList) != $i)
+                                            echo ',';
+                                        ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <?php if (count($this->arrTags) >= 10 || count($this->arrAllKeyword) >= 10): ?>
+                                <div class="open-tag"><a href="javascript:;">Xem nhiều hơn</a></div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="seo-data">
+                        <?php
+                        foreach ($this->arrBrandList as $key => $value):
+                            ?>
+                            <a style=" font-size: 10px" href="<?php echo $this->serverUrl() . $this->Url('brand', array('controller' => 'brand', 'action' => 'index', 'brandSlug' => $value["cate_slug"])) ?>"><?php echo $value['cate_name']; ?></a>,
+                        <?php endforeach; ?>
+                    </div>
+                    </div>
+

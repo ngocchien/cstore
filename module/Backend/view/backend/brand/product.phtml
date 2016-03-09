@@ -1,0 +1,59 @@
+<?php
+$arrProductList = $this->arrProductList;
+$params = $this->params;
+$id_brand = $params['id_brand'];
+?>
+<div class="col-lg-12">
+    <section id="unseen">
+        <table class="table table-bordered table-striped table-condensed cf">
+            <thead class="cf">
+                <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center"><i class="icon-list"></i> ID</th>
+                    <th><i class="icon-list-alt"></i> Tên sản phẩm</th>
+                    <th class="text-center visible-xs visible-sm visible-md visible-lg"><i class="icon-list-alt"></i> Sắp xếp</th>
+                    <th class="text-center"><i class="icon-edit"></i> Chức năng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if ($arrProductList) {
+                    foreach ($arrProductList as $val) {
+                        ?>
+                        <tr id="<?php echo $val['prod_id']; ?>">
+                            <td class="text-center" width="">
+                                <input type="checkbox" value="<?php echo $val['prod_id']; ?>" name="prod_id[]" />
+                            </td>
+                            <td class="text-center" width="80">
+                                <?php echo $val['prod_id']; ?>                                 
+                            </td>
+                            <td>
+                                <?php echo $val['prod_name']; ?>
+                            </td>
+                            <td class="visible-xs visible-sm visible-md visible-lg">
+                                <input class="form-control input-sm sort" name="sort[<?php echo $val['prod_id']; ?>]" type="text" size="1" style="text-align: center" value="<?php echo (($val['sort_ordering']) ? $val['sort_ordering'] : 0 ) ?>" />
+                            </td>
+                            <td class="text-center">
+                                <a onclick="deleteProduct(<?php echo $id_brand . ',\'' . $val['prod_id'] . '\',' . $params['page']; ?>)" class="btn btn-danger btn-xs remove tooltips" data-placement="top" data-original-title="Xóa sản phẩm">
+                                    <i class="icon-trash "></i> Xóa
+                                </a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Hiện tại chưa có sản phẩm nào.
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </section>
+</div>
+<div class = "col-lg-12">
+    <?php echo $this->paging;
+    ?>
+</div>

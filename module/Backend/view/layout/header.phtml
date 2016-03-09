@@ -1,0 +1,74 @@
+<script>
+    var UID = '<?php echo UID; ?>';
+    var GROUPID = '<?php echo GROU_ID; ?>'
+</script>
+<header class="header white-bg">
+    <div class="sidebar-toggle-box" style="font-size:20px;margin-top:16px;cursor:pointer;">
+        <div id="leftMenuToggle" data-original-title="Ẩn / hiện danh mục" data-placement="right" class="icon-reorder tooltips"></div>
+    </div>
+    <a href="<?php echo $this->serverUrl() . $this->Url('backend', array()); ?>" class="logo" >CSTORE.<span>COM</span></a>
+    <div class="nav notify-row" id="top_menu">
+        <!--  notification start -->
+        <ul class="nav top-menu">
+            <li id="header_inbox_bar" class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <i class="icon-envelope-alt"></i>
+                    <span class="badge bg-important total-mess">
+                        0
+                    </span>
+                </a>
+                <ul class="dropdown-menu extended inbox popup-notify">
+                    <div class="notify-arrow notify-arrow-red"></div>
+                    <li>
+                        <a style="    padding: 0px !important;" href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'message', 'action' => 'mess-current')); ?>"><p class="red">Bạn có <span class="total-mess">0</span> tin nhắn mới</p></a>
+                    </li>
+                    <li>
+                        <a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'message', 'action' => 'index')); ?>">Xem tất cả</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li style="display: none" id="header_notification_bar" class="dropdown" >
+                <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+                    <i class="icon-globe"></i>
+                    <span class="badge bg-warning"></span>
+                </a>
+                <ul class="dropdown-menu extended notification">
+                    <div class="notify-arrow notify-arrow-yellow"></div>
+                    <li>
+                        <p class="yellow"></p>
+                    </li>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>/backend/BuyProduct/buy/">
+                            <span><i class="icon-eye-open"></i></span>
+                            Xem chi tiết
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <!--  notification end -->
+    </div>
+    <div class="top-nav ">
+        <ul class="nav pull-right top-menu">
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <i class="icon-user" style="font-size:18px;color: #5cb85c;"></i>
+                    <span class="username">Xin chào <?php
+                        $arrName = explode(' ', FULLNAME);
+                        echo end($arrName);
+                        ?></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu extended logout">
+                    <div class="log-arrow-up"></div>
+                    <li><a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'profile', 'action' => 'index')); ?>"><i class="icon-suitcase"></i>Cá nhân</a></li>
+                    <!--<li><a href="#"><i class="icon-cog"></i> Cài đặt</a></li>-->
+                    <li><a href="#"><i class="icon-bell-alt"></i> Tin nhắn</a></li>
+                    <li><a href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'auth', 'action' => 'logout')); ?>"><i class="icon-key"></i> Đăng xuất</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>

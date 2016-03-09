@@ -1,0 +1,258 @@
+<?php
+//    p(date('d/m/Y' , (time()-(60*60*24*30))));die;
+?>
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-category')->getMessages());
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="icon-remove"></i>
+            </button>
+            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+    <section class="panel">
+        <header class="panel-heading">
+            Danh sách Đơn hàng
+        </header>
+        <div class="panel-body">    
+            <div class="adv-table editable-table ">  
+                <form id="frm" class="form-horizontal" role="form" method="GET">
+                    <form id="frm" class="form-horizontal" role="form" method="GET">
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-4 col-md-12 col-xs-12">
+
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="prod_code"  value="<?php echo $this->params['prod_code']; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder="Nhập mã sản phẩm"></label>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-md-12 col-xs-12">
+
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="user_fullname"  value="<?php echo $this->params['user_fullname']; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder="Nhập họ tên của khách hàng"></label>
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4 col-sm-4 col-md-12 col-xs-12">
+
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="user_email"  value="<?php echo $this->params['user_email']; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder="Nhập email của khách hàng" ></label>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-md-6 col-xs-12">
+
+                                <div class="dataTables_filter no-padding per-100">
+                                    <label><input  name="user_phone"  value="<?php echo $this->params['user_phone']; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder="Nhập số điện thoại"></label>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-md-6 col-xs-12">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <select id="orde_ship"  name="orde_ship" class="selectbox selectpicker"  data-live-search="true" title="Hình thức vân chuyển">
+
+                                        <option value="" <?php if ($this->params['orde_ship'] == ""): ?> selected <?php endif; ?>>Chọn Tất cả</option>
+                                        <?php foreach (My\General::getMethodShip() as $key => $value): ?>
+                                            <option value="<?php echo $key; ?>" <?php if ($key == $this->params['orde_ship']): ?> selected <?php endif; ?>><?php echo $value; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4 col-sm-4 col-md-6 col-xs-12">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <select id="Sales_id" class="selectbox selectpicker"  multiple="multiple"  data-live-search="true" title="Sale xử lý">
+                                        <?php
+                                        if ($this->params['Sales']) {
+                                            $SaleList = explode(',', $this->params['Sales']);
+                                        }
+                                        ?>
+                                        <option value="0" <?php if (in_array(0, $SaleList)): ?> selected <?php endif; ?>>Chọn Tất cả</option>
+                                        <?php foreach ($this->arrUserSaleList as $value): ?>
+                                            <option value="<?php echo $value['user_id']; ?>" <?php if (in_array($value['user_id'], $SaleList)): ?> selected <?php endif; ?>><?php echo $value['user_fullname']; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <input type="hidden" name="Sales" id ="Sales" value="<?php echo $this->params['Sales'] ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-sm-8 col-md-8 col-xs-12">
+                                <div data-date-format="dd/mm/yyyy" data-date="" class="input-group input-large">
+                                    <input type="text" name="date_from" class="form-control dpd1" placeholder="Từ ngày" value="<?php echo empty($this->params['date_from']) ? date('d/m/Y', (time())) : $this->params['date_from']; ?>">
+                                    <span class="input-group-addon">Đến</span>
+                                    <input type="text" name="date_to" class="form-control dpd2" placeholder="Đến ngày" value="<?php echo empty($this->params['date_to']) ? date('d/m/Y', time()) : $this->params['date_to']; ?>">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <select id="StatusID" class="selectbox selectpicker"  multiple="multiple"  data-live-search="true" title="Trạng thái">
+                                        <?php
+                                        if (isset($this->params['Status']) && $this->params['Status'] != '') {
+                                            $arrStatus = explode(',', $this->params['Status']);
+                                        }
+                                        ?>
+                                        <option value <?php if (in_array('', $arrStatus)): ?> selected <?php endif; ?>>Chọn Tất cả</option>
+                                        <?php foreach (My\General::getStatusOrder() as $key => $value): ?>
+                                            <option value="<?php echo $key; ?>" <?php if (in_array($key, $arrStatus)): ?> selected <?php endif; ?>><?php echo $value; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <input type="hidden" name="Status" id ="Status" value="<?php echo $this->params['Status'] ?>">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12">
+                                <div class="dataTables_filter no-padding per-100">
+                                    <select id="is_acp" name="is_acp" class="selectbox selectpicker" title="Người tạo">
+                                        <option value="-1" <?php echo ((int) $this->params['is_acp'] === -1 || !isset($this->params['is_acp'])) ? "selected" : ""; ?>>Tất Cả</option>
+                                        <option value="0" <?php echo ((int) $this->params['is_acp'] === 0 && isset($this->params['is_acp'])) ? "selected" : "" ?>>Khách hàng</option>
+                                        <option value="1" <?php echo ((int) $this->params['is_acp'] === 1 && isset($this->params['is_acp'])) ? "selected" : "" ?>>Nhân viên</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-sm-8 col-md-8 col-xs-12 floatRight">
+                                <div class="col-lg-6 col-md-9 col-sm-9 col-xs-8 no-padding">
+                                    <div class="dataTables_filter no-padding per-100">
+                                        <label><input  name="s"  value="<?php echo $this->params["s"]; ?>" type="text" aria-controls="editable-sample" class="per-100 input-seaching form-control medium" placeholder="Nhập mã đơn hàng"></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-3 col-sm-3 col-xs-4 no-padding-right">
+                                    <button type="submit" class="btn btn-white per-100" ><i class="icon-search"></i> Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="panel-body">
+                        <a href="#" class="btn-export-orders"><button type="button" class="btn btn-shadow btn-success">Xuất excel</button></a>
+                    </div>
+                    <section id="unseen">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    <th class="text-center"><i class="icon-list"></i> Mã đơn hàng</th>
+                                    <th class="text-center"><i class="icon-list"></i> Mã sản phẩm</th>
+                                    <th class="text-center visible-xs visible-md visible-sm visible-lg"><i class="icon-list-alt"></i> Họ tên khách hàng</th>
+                                    <th class="text-center hidden-sm hidden-xs"><i class="icon-dollar"></i> Tổng tiền 
+                            <div class="co-red text-right" style="color:#F00"><?php echo number_format($this->arrTotalOrder['sum_total_order'], 0, ',', '.'); ?> VNĐ</div>
+                            </th>
+                            <th class="text-center visible-xs visible-md visible-sm visible-lg"> Trạng thái </th>
+                            <th class="text-center"><i class="icon-ok"></i> Ngày đặt hàng</th>
+                            <th class="text-center hidden-xs hidden-sm"><i class="icon-user"></i> Người duyệt </th>
+                            <th class="text-center visible-xs visible-md visible-sm visible-lg"><i class="icon-edit"></i> Chức năng</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ($this->arrOrderList):
+                                    foreach ($this->arrOrderList as $arrOrderList):
+                                        ?>
+                                        <tr>
+                                            <td class="text-center" width="150"><?php echo $arrOrderList['orde_code'] . $arrOrderList['orde_id']; ?></td>
+                                            <td class="text-center" width="150">
+                                                <?php
+                                                if ($this->arrListProductOrder) {
+                                                    $arrListProductOrder = $this->arrListProductOrder[$arrOrderList['orde_id']];
+                                                    if (count($arrListProductOrder) > 0) {
+                                                        $strListProduct = '';
+                                                        foreach ($arrListProductOrder as $arrListOrder) {
+                                                            $strListProduct .= '<a target="_blank" href="' . $this->serverUrl() . $this->Url('product', array('controller' => 'product', 'action' => 'detail', 'productslug' => $arrListOrder["prod_slug"], 'productId' => $arrListOrder['prod_id'])) . '">' . $this->arrListProduct[$arrListOrder['prod_id']] . '</a>, ';
+                                                        }
+                                                        echo rtrim($strListProduct, ', ');
+                                                    }
+                                                }
+                                                ?>
+                                            </td>
+
+                                            <td class="text-left"><span style="text-transform: capitalize;"><?php echo $arrOrderList['user_fullname']; ?></span></td>
+                                            <td class="text-right"><?php echo number_format($arrOrderList['orde_total_price'], 0, ",", "."); ?> VNĐ</td>
+                                            <td class="text-center"><strong>
+                                                    <?php
+                                                    switch ($arrOrderList['is_payment']) {
+                                                        case -1:
+                                                            echo '<span class="label label-danger tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 0:
+                                                            echo '<span class="label label-warning tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 1:
+                                                            echo '<span class="label label-info tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 2:
+                                                            echo '<span class="label label-primary tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 3:
+                                                            echo '<span class="label label-warning tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 4:
+                                                            echo '<span class="label label-success tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 5:
+                                                            echo '<span class="label label-default tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                        case 6:
+                                                            echo '<span class="label label-inverse tooltips" data-placement="top" data-original-title="' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '">' . My\General::getStatusOrder()[$arrOrderList['is_payment']] . '</span>';
+                                                            break;
+                                                    }
+                                                    ?>
+                                                </strong>
+                                            </td>
+                                            <td class="text-center"><?php echo date('d/m/Y H:i:s', $arrOrderList['orde_created']); ?></td>
+                                            <td class="text-center hidden-xs hidden-sm"><?php echo $arrOrderList['user_change_status']; ?></td>
+                                            <td class="text-center visible-xs visible-md visible-sm visible-lg" width="150">
+                                                <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'order', 'action' => 'view', 'id' => $arrOrderList['orde_id'])); ?>"  class="btn btn-primary btn-xs  edit" data-placement="top" data-original-title="Xem thông tin đơn hàng"><i class="icon-eye-open"></i> Xem</a>
+                                                <a  href="javascript:;"  class="btn btn-danger btn-xs  trash" data-placement="top" data-original-title="Xóa đơn hàng này" rel="<?php echo $arrOrderList['orde_id']; ?>"><i class="icon-trash"></i> Xóa</a>
+                                            </td>
+                                        </tr>
+
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr><td colspan="8" class="text-center">Hiện tại chưa có đơn hàng nào.</td></tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </section>
+            </div>
+            <div  class="col-md-6">
+                <div class="form-group">
+                    <div  class="col-xs-6">
+                        <select name="limit" class="form-control" onchange="window.location.href = this.value">
+                            <option value="<?php echo $this->serverUrl() . $this->Url('backend-order-search', array('controller' => 'order', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"], 'user_fullname' => $this->params["user_fullname"], 'user_email' => $this->params["user_email"], 'user_phone' => $this->params["user_phone"], 'limit' => 15, 'Sales' => $this->params["Sales"], 'date_from' => $this->params["date_from"], 'date_to' => $this->params["date_to"], 'Status' => $this->params["Status"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 15 ? "selected" : "" ?>>15</option>
+                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-order-search', array('controller' => 'order', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"], 'user_fullname' => $this->params["user_fullname"], 'user_email' => $this->params["user_email"], 'user_phone' => $this->params["user_phone"], 'limit' => 30, 'Sales' => $this->params["Sales"], 'date_from' => $this->params["date_from"], 'date_to' => $this->params["date_to"], 'Status' => $this->params["Status"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 30 ? "selected" : "" ?>>30</option>
+                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-order-search', array('controller' => 'order', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"], 'user_fullname' => $this->params["user_fullname"], 'user_email' => $this->params["user_email"], 'user_phone' => $this->params["user_phone"], 'limit' => 100, 'Sales' => $this->params["Sales"], 'date_from' => $this->params["date_from"], 'date_to' => $this->params["date_to"], 'Status' => $this->params["Status"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 100 ? "selected" : "" ?>>100</option>
+                            <option value ="<?php echo $this->serverUrl() . $this->Url('backend-order-search', array('controller' => 'order', 'action' => 'index', 'limit' => 15, 's' => $this->params["s"], 'user_fullname' => $this->params["user_fullname"], 'user_email' => $this->params["user_email"], 'user_phone' => $this->params["user_phone"], 'limit' => 200, 'Sales' => $this->params["Sales"], 'date_from' => $this->params["date_from"], 'date_to' => $this->params["date_to"], 'Status' => $this->params["Status"])); ?>" <?php echo!empty($this->params["limit"]) && $this->params["limit"] == 200 ? "selected" : "" ?>>200</option>
+                        </select>
+                    </div>
+                    <div class = "col-xs-6" style = "padding-top: 10px">Dòng</div>
+                    <div style="clear: both"></div>
+                </div>
+            </div>
+            <div class = "col-md-6">
+                <?php echo $this->paging;
+                ?>
+            </div> 
+        </div>
+    </section>
+</section>
+<script type="text/javascript">
+    Order.index();
+</script>

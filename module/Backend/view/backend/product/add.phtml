@@ -1,0 +1,378 @@
+
+<?php
+//$optionBrand = "";
+//$optionCategory = "";
+//foreach ($this->arrCategoryList as $cate) {
+//    if ($cate["cate_type"] == 0) {
+//        $optionMainCategory.= '<option ' . (($this->params["main_cate_id"] == $cate['cate_id']) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
+//        $optionCategory.= '<option ' . ((in_array($cate['cate_id'], $this->params["cate_id"])) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
+//    } else if ($cate["cate_type"] == 1) {
+//        $optionBrand.= '<option  ' . (($this->params["bran_id"] == $cate['cate_id']) ? "selected" : "") . ' value="' . $cate['cate_id'] . '" class="level-' . substr_count($cate['cate_grade'], ":") . '">' . $strSpace . $cate['cate_name'] . '</option>';
+//    }
+//}
+?>
+
+<section class="wrapper site-min-height">
+    <?php if ($this->errors): ?>
+        <div class="alert alert-block alert-danger fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-times-sign"></i> Lỗi!</h4>
+            <?php foreach ($this->errors as $error): ?>
+                <p> - <?php echo $error; ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php
+    $successMessage = $this->flashMessenger()->setNamespace('success-add-product')->getMessages();
+    if ($successMessage):
+        ?>
+        <div class="alert alert-success alert-block fade in">
+            <button class="close close-sm" type="button" data-dismiss="alert">
+                <i class="fa fa-times"></i>
+            </button>
+            <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
+            <p>- <?php echo current($successMessage); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="panel">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <section class="panel">
+                            <header class="panel-heading">Thêm sản phẩm mới</header>
+                            <div class="panel-body">
+                                <form method="POST" role="form" class="form-horizontal tasi-form" id="frm" novalidate="novalidate">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="prod_name" class="col-lg-2 control-label" value="">Tên sản phẩm</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo $this->params["prod_name"] ?>" placeholder="Nhập Tên sản phẩm" class="form-control" name="prod_name" id="prod_name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prod_name" class="col-lg-2 control-label" value="">Mã sản phẩm</label>
+                                            <div class="col-lg-10">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <input type="text" value="<?php echo $this->params["prod_code"] ?>" placeholder="Nhập Mã sản phẩm" class="form-control" name="prod_code" id="prod_name">
+                                                    </div>
+                                                </div>
+                                                <span class="help-block color-danger"><strong>lưu ý</strong>: Nếu không nhập mã hệ thống sẽ tự động tạo ra mã sản phẩm</span>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prod_slug" class="col-lg-2 control-label" value="">URL:</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo $this->params["prod_slug"] ?>" placeholder="Nhập URL" class="form-control" name="prod_slug" id="productURL">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_actived" class="col-lg-2 control-label">Trạng thái</label>
+                                            <div class="col-lg-10">
+                                                <select class="form-control sumo-select-box" id="prod_status" name="prod_actived">    
+                                                    <option value="1" <?php echo isset($this->params['prod_actived']) && $this->params['prod_actived'] == 1 ? 'selected="selected"' : ''; ?>>Hiện</option>
+                                                    <option value="0" <?php echo isset($this->params['prod_actived']) && $this->params['prod_actived'] == 0 ? 'selected="selected"' : ''; ?>>Ẩn</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_status" class="col-lg-2 control-label">Tình trạng</label>
+                                            <div class="col-lg-10">
+                                                <select class="form-control sumo-select-box" id="prod_status" name="prod_status">    
+                                                    <option value="1" <?php echo isset($this->params['prod_status']) && $this->params['prod_status'] == 1 ? 'selected="selected"' : ''; ?>>Còn hàng</option>
+                                                    <option value="0" <?php echo isset($this->params['prod_status']) && $this->params['prod_status'] == 0 ? 'selected="selected"' : ''; ?>>Hết hàng</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="main_cate_id" class="col-lg-2 control-label">Thuộc danh mục chính</label>
+                                            <div class="col-lg-10 width-fix">
+                                                <select name="main_cate_id" class="selectbox selectpicker" data-live-search="true" title="Chọn một danh mục chính" >
+                                                    <?php
+                                                    $mainCate = $this->params['main_cate_id'];
+                                                    foreach ($this->arrCategoryList as $category) {
+                                                        if ($category["cate_type"] == 0) {
+                                                            $depth = substr_count($category['cate_grade'], ':') - 1;
+                                                            $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
+                                                            ?>
+                                                            <option <?php echo ($category['cate_id'] == $mainCate) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="cate_id" class="col-lg-2 control-label">Thuộc danh mục phụ</label>
+                                            <div class="col-lg-10 width-fix">
+                                                <select name="cate_id[]"  multiple="multiple"  class="selectbox selectpicker" data-live-search="true" title="Chọn các danh mục phụ">
+                                                    <?php
+                                                    if (is_array($this->params['cate_id']))
+                                                        $listCate = $this->params['cate_id'];
+                                                    else
+                                                        $listCate = explode(',', $this->params['cate_id']);
+                                                    foreach ($this->arrCategoryList as $category) {
+                                                        if ($category["cate_type"] == 0) {
+                                                            $depth = substr_count($category['cate_grade'], ':') - 1;
+                                                            $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
+                                                            ?>
+                                                            <option <?php echo in_array($category['cate_id'], $listCate) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="bran_id" class="col-lg-2 control-label">Thương hiệu</label>
+                                            <div class="col-lg-10 width-fix">
+                                                <select name="bran_id" class="selectbox selectpicker" data-live-search="true" title="Chọn thương hiệu">
+                                                    <?php
+                                                    $brandID = $this->params['bran_id'];
+                                                    foreach ($this->arrCategoryList as $category) {
+                                                        if ($category["cate_type"] == 1) {
+                                                            $depth = substr_count($category['cate_grade'], ':') - 1;
+                                                            $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
+                                                            ?>
+                                                            <option <?php echo ($category['cate_id'] == $brandID) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <?php if (isset($this->arrProperties) && count($this->arrProperties) > 0): ?>
+                                            <div class="form-group">
+                                                <label for="prop_id" class="col-lg-2 control-label">Thuộc tính</label>
+                                                <div class="col-lg-10">
+                                                    <div class="row prop-data-load">
+                                                        <?php
+                                                        $lv = 0;
+                                                        $optionProperty = array();
+                                                        $namePropertyRoot = array();
+                                                        $select = array();
+                                                        foreach ($this->arrProperties as $key => $value) {
+                                                            if ($value["prop_parent"] == 0) {
+                                                                $lv+= 1;
+                                                                $namePropertyRoot[$lv] = $value['prop_name'];
+                                                            } else {
+                                                                $optionProperty[$lv].= '<option  ' . ((in_array($value['prop_id'], $this->params["prop_id"])) ? "selected" : "") . ' value="' . $value['prop_id'] . '"  class="level-' . substr_count($value['prop_grade'], ":") . '">' . $value['prop_name'] . '</option>';
+                                                            }
+                                                        }
+
+                                                        foreach ($namePropertyRoot as $key => $value) {
+                                                            ?>
+
+                                                            <div class="col-lg-4">
+                                                                <div class="row">
+                                                                    <label class="col-lg-12 control-label text-center"><?php echo $value ?></label>
+                                                                    <div class="col-lg-12">
+                                                                        <!--  multiple="multiple" -->
+                                                                        <select name="prop_id[]" class="sumo-select-box" id="select-box" data-placeholder="Chọn một danh mục" >
+                                                                            <option   value=""> Chọn <?php echo $value ?></option>
+                                                                            <?php echo $optionProperty[$key] ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="form-group">
+                                            <label for="prod_price"  class="col-lg-2 control-label">Loại sản phẩm</label>
+                                            <div class="col-lg-10">
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" value="1"  <?php echo ($this->params["prod_is_promotion"] == 1) ? "checked" : ""; ?> name="prod_is_promotion"/>  Sản phẩm khuyến mãi
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <input type="checkbox" value="1"  <?php echo ($this->params["prod_bestselling"] == 1) ? "checked" : ""; ?> name="prod_bestselling"/>  Sản phẩm bán chạy
+                                                </div>
+                                                <!--                                                <div class="col-lg-4">
+                                                                                                    <input type="checkbox" value="1"  <?php echo ($this->params["prod_call_price"] == 1) ? "checked" : ""; ?> name="prod_call_price"/>  Gọi để biết giá
+                                                                                                </div>-->
+
+                                                <div class="col-lg-4">
+                                                    <select name="prod_type" class="sumo-select-box" id="select-box" data-placeholder="Chọn một danh mục" >
+
+                                                        <option value="Xách Tay" <?php echo ($this->params["prod_type"] == 'Xách Tay') ? "selected" : ""; ?>>Xách Tay</option>
+                                                        <option value="Phân Phối" <?php echo ($this->params["prod_type"] == 'Phân Phối') ? "selected" : ""; ?>> Phân Phối</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prod_price"  class="col-lg-2 control-label">Giá bán  ( VNĐ )</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo ($this->params["prod_price"] != "") ? $this->params["prod_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control" name="prod_price" id="prod_price">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_promotion_price" class="col-lg-2 control-label">Giá khuyến mãi ( VNĐ )</label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo ($this->params["prod_promotion_price"] != "") ? $this->params["prod_promotion_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control" name="prod_promotion_price" id="prod_promotion_price">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_description" class="col-lg-2 control-label">Mô tả ngắn về sản phẩm</label>
+                                            <div class="col-lg-10">
+                                                <textarea rows="6" name="prod_description" id="Sumary" class="form-control editor" style="">
+                                                    <?php echo $this->params['prod_description']; ?>
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_detail" class="col-lg-2 control-label">Chi tiết sản phẩm</label>
+                                            <div class="col-lg-10">
+                                                <textarea rows="20" value="" name="prod_detail" class="form-control editor">
+                                                    <?php echo $this->params['prod_detail']; ?>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tags_name" class="col-lg-2 control-label">Chọn Tags: </label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo $this->params['tags_name']; ?>" placeholder="Nhập tags" class="form-control" name="tags_name" id="tags_name">
+
+                                            </div>
+                                        </div> 
+                                        <div class="form-group">
+                                            <label for="prod_meta_robot" class="col-lg-2 control-label">Meta Robot: </label>
+                                            <div class="col-lg-10">
+                                                <select class="form-control" id="prod_meta_robot" name="prod_meta_robot">    
+                                                    <option value="index,follow" <?php echo isset($this->params['prod_meta_robot']) && $this->params['prod_meta_robot'] == 'index,follow' ? 'selected="selected"' : ''; ?>>Index,Follow</option>
+                                                    <option value="noindex" <?php echo isset($this->params['prod_meta_robot']) && $this->params['prod_meta_robot'] == 'noindex' ? 'selected="selected"' : ''; ?>>Noindex</option>
+                                                    <option value="index" <?php echo isset($this->params['prod_meta_robot']) && $this->params['prod_meta_robot'] == 'index' ? 'selected="selected"' : ''; ?>>Index</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prod_meta_title" class="col-lg-2 control-label">SEO Title: </label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo $this->params['prod_meta_title']; ?>" placeholder="Nhập SEO Title" class="form-control" name="prod_meta_title" id="prod_meta_title">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prod_meta_keyword" class="col-lg-2 control-label">SEO Keywords: </label>
+                                            <div class="col-lg-10">
+                                                <input type="text" value="<?php echo $this->params['prod_meta_keyword']; ?>"  placeholder="Nhập SEO Keywords " class="form-control" name="prod_meta_keyword" id="prod_meta_keyword">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="prod_meta_description" class="col-lg-2 control-label">SEO Description: </label>
+                                            <div class="col-lg-10">
+                                                <textarea placeholder="Nhập SEO Description" class="form-control" name="prod_meta_description" id="prod_meta_description"><?php echo $this->params['prod_meta_description']; ?></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_meta_description" class="col-lg-2 control-label">Hình ảnh chính: </label>
+                                            <div class="col-lg-5">
+                                                <div class="form">
+                                                    <div class="form-group">                                                       
+                                                        <div class="col-lg-12">
+                                                            <div>
+                                                                <input type="file" name="prod_image" id="prod_image" class="ignore"/>
+                                                            </div>
+                                                            <div id="progress"></div>
+                                                            <ul class="image-list">
+                                                                <?php
+                                                                $arr = json_decode($this->params['prod_image'], true);
+                                                                if (isset($arr["sourceImage"]) && isset($arr["thumbImage"]["120x120"])) {
+                                                                    ?>
+                                                                    <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
+                                                                        <img class="image" src="<?php echo $arr["thumbImage"]["50x50"] ?>" alt="" style="display: block;margin-bottom: 10px;">
+                                                                        <span style="display: block;text-align: right;">
+                                                                            <a title="Xem" class="view" href="<?php echo $arr["sourceImage"] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a><a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
+                                                                            <div id="jsonData"><input name="prod_image" type="hidden" value="<?php echo htmlentities($this->params['prod_image']); ?>"></div>
+                                                                        </span>
+                                                                    </li>
+                                                                <?php } ?>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="prod_image_sub" class="col-lg-2 control-label">Hình ảnh slide: </label>
+                                            <div class="col-lg-5">
+                                                <div class="form">
+                                                    <div class="form-group">
+                                                        <div class="col-lg-12">
+                                                            <div>
+                                                                <input type="file" name="prod_image_sub" id="prod_image_sub" class="ignore"/>
+                                                            </div>
+                                                            <div id="sub-progress"></div>
+                                                            <ul class="sub-image-list">
+                                                                <?php
+                                                                if (isset($this->params['prod_image_sub']) && count($this->params['prod_image_sub']) > 0) {
+                                                                    foreach ($this->params['prod_image_sub'] as $key => $value) {
+                                                                        $arr = json_decode($value, true);
+                                                                        if (isset($arr["sourceImage"]) && isset($arr["thumbImage"]["120x120"])) {
+                                                                            ?>
+                                                                            <li class="newImage" style="background: none repeat scroll 0 0 #FFFFFF;border: 1px solid #DDDDDD;border-radius: 2px 2px 2px 2px;box-shadow: 1px 1px 2px #EEEEEE;float: left;margin: 0 5px 5px 0;padding: 5px;list-style:none outside none;margin-bottom:10px;display:inline;">
+                                                                                <img class="image" src="<?php echo $arr["thumbImage"]["50x50"] ?>" alt="" style="display: block;margin-bottom: 10px;">
+                                                                                <span style="display: block;text-align: right;">
+                                                                                    <a title="Xem" class="view" href="<?php echo $arr["sourceImage"] ?>" target="_blank" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAWJJREFUeNqk00soRFEcx/Ez4yIhWSClWNiR0mQjeawssJGVLJTMBnksJNnZeWTDRnntZGdhoWxsJERK2UgTK5mFYrzSXN9TPzVzulPkX5/unXPv/M45/3tvKBqNGpWHRkygFUW4xR5WcWUCKqxjDsZxiA684w55GMIpBhEKCrCD7ZjDK5ZQi0pUYwofWkVXUICdZRI+VnQe13UbOI9p/R5DuRuQiybEMGuCa03ba0OpG+Dp3C7zOUOAvfaY0uy0ANuwN60kx2SuYm3pxQ34xC4qMJzhzz1owQbu3QC7vGVkYwYjms2owb1YRBKbWoUxzn5ONLu9cQF9eECJHmmBVtqJayR+ArIikYhR+gWO1eV61Gl8y96n96IZ+ThSYFpHv3CAc5SpqU96I6uwDTvbKAp1THhOs5J6ieLO+I0auYMGDOhb6Q+b31dMIWcpT6bGM38ru51urGMflyHf981/6luAAQBAI081YdVfOQAAAABJRU5ErkJggg==);"></a><a title="Xóa" class="delete" style="vertical-align: middle;cursor: pointer;display: inline-block;height: 16px;margin-left: 5px;opacity: 0.5;vertical-align: middle;width: 16px;background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK1JREFUeNpi/P//PwMySE9PPwmkzBgwwZqZM2eGogsyYVGITTMIhGATZMGhWA9o22UkV9kAqcPYFDKmpaU9AdLSDKSDrUBLfEBeeM1AAWCEBSLQmR+AFD8Q+wDxFphXgPgSlA0TfwS0WR5fIB6BMZDDAVmcUCyQBKhqACelBrANuBdgQAgpBcohiYsSMuARlL6HJPYQiX0bSn/EZUAukiG4wH0gLsOaEskFAAEGAE+1LkibLuYpAAAAAElFTkSuQmCC);"></a>
+                                                                                    <div id="jsonData"><input name="prod_image_sub[]" type="hidden" value="<?php echo htmlentities($value); ?>"></div>
+                                                                                </span>
+                                                                            </li>
+                                                                            <?php
+                                                                        }
+                                                                    }
+                                                                }
+                                                                ?>
+
+
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
+                                                <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
+                                                <input value="0" name="is_close" class="is_close" type="hidden" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    Product.index();
+    Product.upload();
+</script>
