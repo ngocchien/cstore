@@ -99,3 +99,6 @@ and then **restart Nginx Web Server** through the command
 email: `admin@megavita.vn`
 
 password : `123123`
+
+# cstore
+cstore
