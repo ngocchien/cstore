@@ -31,7 +31,8 @@ class TagsController extends MyController {
     }
 
     public function indexAction() {
-        $params = array_merge($this->params()->fromPost(), $this->params()->fromRoute());;
+        $params = array_merge($this->params()->fromPost(), $this->params()->fromRoute());
+        ;
         $intPage = $this->params()->fromRoute('page', 1);
         $arrCondition = array(
             'not_tags_status' => -1,
@@ -51,11 +52,7 @@ class TagsController extends MyController {
     }
 
     public function addAction() {
-        $params = $this->params()->fromRoute();
-        $serviceTags = $this->serviceLocator->get('My\Models\Tags');
-        $arrCondition = array('not_tags_status' => -1);
-        $arrTagsList = $serviceTags->getList($arrCondition);
-
+        $paramsRoute = $params = $this->params()->fromRoute();
         if ($this->request->isPost()) {
             $params = $this->params()->fromPost();
             $errors = array();
@@ -68,75 +65,68 @@ class TagsController extends MyController {
                 $errors['TagsName'] = 'Tên Tags không được bỏ trống !';
             }
 
-            $strTagsName = trim($params['TagsName']);
-            $strTagsSlug = (empty($params['TagsSlug'])) ? General::getSlug(trim($strTagsName)) : General::getSlug(trim($params['TagsSlug']));
-            $validator = new Validate();
-            $isNotExist = $validator->noRecordExists($strTagsSlug, 'tbl_tags', 'tags_slug', $this->serviceLocator->get('Zend\Db\Adapter\Adapter'), array('field' => 'tags_status', 'value' => '-1'));
-            if (empty($isNotExist)) {
-                $errors['TagsSlug'] = 'Tags này đã tồn tại trong hệ thống !';
-            }
-
             if (empty($errors)) {
-                $arrData = array(
-                    'tags_name' => $strTagsName,
+                $strTagsName = trim($params['TagsName']);
+                $strTagsSlug = General::getSlug($strTagsName);
+
+                $serviceTags = $this->serviceLocator->get('My\Models\Tags');
+                $arrConditionTag = array(
                     'tags_slug' => $strTagsSlug,
-                    'tags_order' => $params['TagsOrder'],
-                    'tags_description' => trim($params['tags_description']),
-                    'tags_meta_title' => trim($params['TagsMetaTitle']),
-                    'tags_meta_keyword' => trim($params['TagsMetaKeyword']),
-                    'tags_meta_description' => trim($params['TagsMetaDescription']),
-                    'tags_meta_social' => trim($params['TagsMetaSocial']),
-                    'user_created' => UID,
-                    'tags_status' => $params['tags_status'],
-                    'tags_position' => $params['tags_position'],
-                    'tags_parent' => $params['parentID'],
-                    'tags_created' => time(),
+                    'not_tags_status' => -1
                 );
-                $intResult = $serviceTags->add($arrData);
 
-                if ($intResult > 0) {
-                    if ($params['parentID'] > 0) {
-                        $detailParent = $serviceTags->getDetail(array('tags_id' => $params['parentID']));
-                        $dataUpdate = array(
-                            'tags_grade' => $detailParent['tags_grade'] . $intResult . ':',
-                            'tags_sort' => $detailParent['tags_sort'] . (sprintf("%04d", $params['TagsOrder'])) . '-' . $intResult . ':',
-                            'tags_status' => $detailParent['tags_status']
-                        );
-                        $serviceTags->edit($dataUpdate, $intResult);
-                    }
-                    if ($params['parentID'] == 0) {
-                        $dataUpdate = array(
-                            'tags_grade' => $intResult . ':',
-                            'tags_sort' => sprintf("%04d", $params['TagsOrder']) . '-' . $intResult . ':',
-                            'tags_status' => $params['tags_status'],
-                        );
-                        $serviceTags->edit($dataUpdate, $intResult);
-                    }
+                $arrTag = $serviceTags->getDetail($arrConditionTag);
 
-                    $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                    $arrLogs = array(
-                        'user_id' => UID,
-                        'logs_controller' => 'Tags',
-                        'logs_action' => 'add',
-                        'logs_time' => time(),
-                        'logs_detail' => 'Thêm Tags có id = ' . $intResult,
-                    );
-                    $serviceLogs->add($arrLogs);
-
-                    $this->flashMessenger()->setNamespace('success-add-tags')->addMessage('Thêm Tags sản phẩm thành công !');
-                    if ($params['is_close'] == 1) {
-                        $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
-                    } else {
-                        $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'add'));
-                    }
-                    //  $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'add'));
+                if (!empty($arrTag)) {
+                    $errors['TagsSlug'] = 'Tags này đã tồn tại trong hệ thống !';
                 }
-                $errors[] = 'Không thể thêm dữ liệu. Hoặc danh mục này đã tồn tại. Xin vui lòng kiểm tra lại';
+
+                if (empty($errors)) {
+                    $arrData = array(
+                        'tags_name' => $strTagsName,
+                        'tags_slug' => $strTagsSlug,
+                        'tags_order' => $params['TagsOrder'],
+                        'tags_description' => trim($params['tags_description']),
+                        'tags_meta_title' => trim($params['TagsMetaTitle']),
+                        'tags_meta_keyword' => trim($params['TagsMetaKeyword']),
+                        'tags_meta_description' => trim($params['TagsMetaDescription']),
+                        'tags_meta_social' => trim($params['TagsMetaSocial']),
+                        'user_created' => UID,
+                        'tags_status' => $params['tags_status'],
+                        'tags_created' => time(),
+                        'tags_status' => $params['tags_status']
+                    );
+                    $intResult = $serviceTags->add($arrData);
+
+                    if ($intResult > 0) {
+
+                        /*
+                         * Write to Logs
+                         */
+
+                        $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
+                        $arrLogs = array(
+                            'user_id' => UID,
+                            'logs_controller' => $paramsRoute['__CONTROLLER__'],
+                            'logs_action' => $paramsRoute['action'],
+                            'logs_time' => time(),
+                            'logs_detail' => 'Thêm Tags có id = ' . $intResult,
+                        );
+                        $serviceLogs->add($arrLogs);
+
+                        $this->flashMessenger()->setNamespace('success-add-tags')->addMessage('Thêm Tags sản phẩm thành công !');
+                        if ($params['is_close'] == 1) {
+                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
+                        } else {
+                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'add'));
+                        }
+                    }
+                    $errors[] = 'Không thể thêm dữ liệu. Hoặc danh mục này đã tồn tại. Xin vui lòng kiểm tra lại';
+                }
             }
         }
         return array(
             'errors' => $errors,
-            'arrTagsList' => $arrTagsList,
             'params' => $params,
         );
     }
@@ -171,7 +161,7 @@ class TagsController extends MyController {
             if ($isNotExist > 0) {
                 $errors['tags_name'] = 'Tags này đã tồn tại trong hệ thống!';
             }
-            $strParent = empty($params['parentID']) ? 0 : $params['parentID'] ;
+            $strParent = empty($params['parentID']) ? 0 : $params['parentID'];
             if (empty($errors)) {
                 $arrData = array(
                     'tags_name' => trim($params['TagsName']),
@@ -278,37 +268,36 @@ class TagsController extends MyController {
 
     public function getproducttagsAction() {
         $this->layout('layout/empty');  //disable layout
-        $params = array_merge($this->params()->fromRoute(), $this->params()->fromPost());       
+        $params = array_merge($this->params()->fromRoute(), $this->params()->fromPost());
         if (!empty($params['ord'])) {
             $serviceSort = $this->serviceLocator->get('My\Models\SortTags');
-            $arrListProd = explode(',',$params['listProd']);
+            $arrListProd = explode(',', $params['listProd']);
             $arrAdd = $params['ord'];
             $listSort = $serviceSort->getList(array('sort_tag' => $params['tags_id']));
-            $arrUse=array();
-            if(!empty($listSort)){
-                foreach ($listSort as $sort){
-                    if(in_array($sort['sort_product'], $arrListProd)){
-                        
-                        if($params['ord'][$sort['sort_product']] != 0)
+            $arrUse = array();
+            if (!empty($listSort)) {
+                foreach ($listSort as $sort) {
+                    if (in_array($sort['sort_product'], $arrListProd)) {
+
+                        if ($params['ord'][$sort['sort_product']] != 0)
                             $intResult = $serviceSort->edit(array('sort_ordering' => $params['ord'][$sort['sort_product']]), $sort['sort_id']);
                         else
-                           $intResult = $serviceSort->delete(array('sort_tag' => $params['tags_id'], 'sort_product' => $sort['sort_product']));       
+                            $intResult = $serviceSort->delete(array('sort_tag' => $params['tags_id'], 'sort_product' => $sort['sort_product']));
                         $arrUse[$sort['sort_product']] = $params['ord'][$sort['sort_product']];
-                        
                     }
                 }
                 $arrAdd = array_diff($params['ord'], $arrUse);
             }
-            foreach($arrAdd as $key => $value){
-                if($value != 0){
+            foreach ($arrAdd as $key => $value) {
+                if ($value != 0) {
                     $arrData = array(
                         'sort_tag' => $params['tags_id'],
                         'sort_product' => $key,
                         'sort_ordering' => $value
                     );
-                 $intResult = $serviceSort->add($arrData);  
+                    $intResult = $serviceSort->add($arrData);
                 }
-            } 
+            }
             return $this->getResponse()->setContent(json_encode(array('success' => 1)));
         }
         $intPage = $this->params()->fromRoute('page', 1);
@@ -320,9 +309,9 @@ class TagsController extends MyController {
             'prod_status' => 1,
             'prod_name_like' => $params['search_name']
         );
-        $arrConditionsSort = array('sort_tag'=>$params['tags_id']);
+        $arrConditionsSort = array('sort_tag' => $params['tags_id']);
         $intTotal = $serviceProduct->getTotal($arrConditions);
-        $arrProducTagstList = $serviceProduct->getListLimitJoinSortTags($arrConditions,$arrConditionsSort, $intPage, $intLimit, 'sort.sort_ordering DESC');
+        $arrProducTagstList = $serviceProduct->getListLimitJoinSortTags($arrConditions, $arrConditionsSort, $intPage, $intLimit, 'sort.sort_ordering DESC');
         $helper = $this->serviceLocator->get('viewhelpermanager')->get('Pagingajax');   //phân trang ajax
         $paging = $helper($params['module'], $params['__CONTROLLER__'], $params['action'], $intTotal, $intPage, $intLimit, 'backend', array('controller' => 'tags', 'action' => 'edit', 'page' => $intPage));
 
@@ -438,6 +427,7 @@ class TagsController extends MyController {
             return $this->getResponse()->setContent(json_encode(array('error' => 1, 'success' => 0, 'message' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
         }
     }
+
     public function deleteAction() {
         if ($this->request->isPost()) {
             $params = $this->params()->fromPost();

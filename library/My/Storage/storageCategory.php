@@ -29,9 +29,8 @@ class storageCategory extends AbstractTableGateway {
             $sql = new Sql($adapter);
             $select = $sql->Select($this->table)
                     ->where('1=1' . $strWhere)
-                    ->order(array('cate_sort ASC' , 'cate_slug ASC' ));
+                    ->order(array('cate_grade ASC'));
             $query = $sql->getSqlStringForSqlObject($select);
-//            p($query);
             return $adapter->query($query, $adapter::QUERY_MODE_EXECUTE)->toArray();
         } catch (\Zend\Http\Exception $exc) {
             if (APPLICATION_ENV !== 'production') {
@@ -40,7 +39,7 @@ class storageCategory extends AbstractTableGateway {
             return array();
         }
     }
-    
+
     public function getListSortBrand($arrCondition = array()) {
         try {
             $strWhere = $this->_buildWhere($arrCondition);
@@ -48,7 +47,7 @@ class storageCategory extends AbstractTableGateway {
             $sql = new Sql($adapter);
             $select = $sql->Select($this->table)
                     ->where('1=1' . $strWhere)
-                    ->order(array('cate_slug ASC' ));
+                    ->order(array('cate_slug ASC'));
             $query = $sql->getSqlStringForSqlObject($select);
             return $adapter->query($query, $adapter::QUERY_MODE_EXECUTE)->toArray();
         } catch (\Zend\Http\Exception $exc) {
@@ -191,8 +190,7 @@ class storageCategory extends AbstractTableGateway {
     public function updateTree($dataUpdate) {
         $adapter = $this->adapter;
         $sql = new Sql($adapter);
-        $query = "update " . $this->table . " set cate_grade = REPLACE(cate_grade,'" . $dataUpdate['cate_grade'] . "','" . $dataUpdate['grade_update'] . "'),cate_status =" . $dataUpdate['cate_status'] . ",cate_sort = REPLACE(cate_sort,'" . $dataUpdate['cate_sort'] . "','" . $dataUpdate['sort_update'] . "') WHERE cate_grade LIKE '" . $dataUpdate['cate_grade'] . "%'";
-//        p($query);die;
+        $query = "update " . $this->table . " set cate_grade = REPLACE(cate_grade,'" . $dataUpdate['cate_grade'] . "','" . $dataUpdate['grade_update'] . "'),cate_status =" . $dataUpdate['cate_status'] . " WHERE cate_grade LIKE '" . $dataUpdate['cate_grade'] . "%'";
         $result = $adapter->query($query, $adapter::QUERY_MODE_EXECUTE);
         $resultSet = new \Zend\Db\ResultSet\ResultSet();
         $resultSet->initialize($result);

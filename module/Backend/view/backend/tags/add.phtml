@@ -44,28 +44,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Thuộc Nhóm   </label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <select name="parentID" class="selectbox selectpicker" data-live-search="true" title="Chọn tag">                   
-                                    <?php foreach ($this->arrTagsList as $key => $arrTagsList) { ?>
-                                        <option value="<?php echo $arrTagsList['tags_id'] ?>" <?php if ($arrTagsList['tags_id'] == $this->params['parentID']) { ?> selected <?php } ?>>
-                                            <?php
-                                            $temp = substr_count($arrTagsList['tags_grade'], ':');
-                                            if ($temp > 0) {
-                                                if ($arrTagsList['tags_parent'] != 0) {
-                                                    echo str_repeat('&nbsp;&nbsp;&nbsp;', $temp);
-                                                    echo '&#x21b3;&nbsp;&nbsp;';
-                                                }
-                                            }
-                                            echo $arrTagsList['tags_name'];
-                                            ?>
-                                        </option>
-<?php } ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label for="tags_order" class="col-lg-2 col-md-2 col-sm-2 control-label">Độ ưu tiên</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
                                 <input class="form-control" type="text" name="TagsOrder" placeholder="Nhập Độ ưu tiên" value="<?php echo $this->params['TagsOrder'] ?>">
@@ -81,22 +59,12 @@
                                 </select>
                             </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="tags_position" class="col-lg-2 col-md-2 col-sm-2 col-sm-2 control-label" value="">Tình trạng</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <select name="tags_position" class="multi-select form-control sumo-select-box">
-                                    <option value="1">Dưới</option>
-                                    <option value="0">Trên</option>
-                                </select>
-                            </div>
-                        </div>
 
                         <div class="form-group">
                             <label for="tags_description" class="col-lg-2 col-md-2 col-sm-2 control-label">Mô tả ngắn về Tags</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
                                 <textarea rows="6" name="tags_description" id="Sumary" class="form-control editor" style="">
-<?php echo $this->params['tags_description']; ?>
+                                    <?php echo $this->params['tags_description']; ?>
                                 </textarea>
                             </div>
                         </div>

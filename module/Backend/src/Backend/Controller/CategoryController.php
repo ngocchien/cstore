@@ -42,10 +42,10 @@ class CategoryController extends MyController {
         $params = $this->params()->fromRoute();
         $intPage = $this->params()->fromRoute('page', 1);
         $arrCondition = array('not_cate_status' => -1, 'cate_type' => 0, 'cate_name_like' => General::clean(trim($this->params()->fromQuery('s'))));
-        $intLimit = $this->params()->fromRoute('limit', 15);
+        $intLimit = $this->params()->fromRoute('limit', 30);
         $serviceCategory = $this->serviceLocator->get('My\Models\Category');
         $intTotal = $serviceCategory->getTotal($arrCondition);
-        $arrCategoryList = $serviceCategory->getListLimit($arrCondition, $intPage, $intLimit, 'cate_sort ASC');
+        $arrCategoryList = $serviceCategory->getListLimit($arrCondition, $intPage, $intLimit, 'cate_grade ASC');
         $helper = $this->serviceLocator->get('viewhelpermanager')->get('Paging');
         $paging = $helper($params['module'], $params['__CONTROLLER__'], $params['action'], $intTotal, $intPage, $intLimit, $route, $params);
         $params = array_merge($params, $this->params()->fromQuery());
@@ -57,7 +57,7 @@ class CategoryController extends MyController {
     }
 
     public function addAction() {
-        $params = $this->params()->fromRoute();
+        $paramsRoute = $params = $this->params()->fromRoute();
         $serviceCategory = $this->serviceLocator->get('My\Models\Category');
         $arrCondition = array('not_cate_status' => -1, 'cate_type' => 0);
         $arrCategoryList = $serviceCategory->getList($arrCondition);
@@ -69,6 +69,7 @@ class CategoryController extends MyController {
             if (empty($params)) {
                 $errors[] = 'Vui lòng nhập đầy đủ các thông tin !';
             }
+
             if (empty($params['CategoryName'])) {
                 $errors['CategoryName'] = 'Tên Danh mục không được để trống !';
             }
@@ -95,7 +96,8 @@ class CategoryController extends MyController {
                     'cate_meta_description' => trim(strip_tags($params['CateMetaDescription'])),
                     'cate_meta_social' => trim(strip_tags($params['CateMetaSocial'])),
                     'user_created' => UID,
-                    'cate_created' => time()
+                    'cate_created' => time(),
+                    'cate_sort' => $params['CateOrder']
                 );
                 $intResult = $serviceCategory->add($arrData);
                 if ($intResult > 0) {
@@ -105,16 +107,14 @@ class CategoryController extends MyController {
                         }
                         $detailParent = $serviceCategory->getDetail(array('cate_id' => $params['parentID']));
                         $dataUpdate = array(
-                            'cate_grade' => $detailParent['cate_grade'] . $intResult . ':',
-                            'cate_sort' => $detailParent['cate_sort'] . (sprintf("%04d", $params['CateOrder'])) . '-' . $intResult . ':',
+                            'cate_grade' => $detailParent['cate_grade'] . sprintf("%04d", $params['CateOrder']) . ':' . sprintf("%04d", $intResult) . ':',
                             'cate_status' => $detailParent['cate_status']
                         );
                         $serviceCategory->edit($dataUpdate, $intResult);
                     }
                     if ($params['parentID'] == 0) {
                         $dataUpdate = array(
-                            'cate_grade' => $intResult . ':',
-                            'cate_sort' => sprintf("%04d", $params['CateOrder']) . '-' . $intResult . ':',
+                            'cate_grade' => sprintf("%04d", $params['CateOrder']) . ':' . sprintf("%04d", $intResult) . ':',
                             'cate_status' => $params['cate_status'],
                         );
                         $serviceCategory->edit($dataUpdate, $intResult);
@@ -123,8 +123,8 @@ class CategoryController extends MyController {
                     $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
                     $arrLogs = array(
                         'user_id' => UID,
-                        'logs_controller' => 'Category',
-                        'logs_action' => 'add',
+                        'logs_controller' => $paramsRoute['__CONTROLLER__'],
+                        'logs_action' => $paramsRoute['action'],
                         'logs_time' => time(),
                         'logs_detail' => 'Thêm Danh mục có id = ' . $intResult,
                     );
@@ -148,7 +148,7 @@ class CategoryController extends MyController {
     }
 
     public function editAction() {
-        $params = $this->params()->fromRoute();
+        $paramsRoute = $params = $this->params()->fromRoute();
         if (empty($params['id'])) {
             $this->redirect()->toRoute('backend', array('controller' => 'category', 'action' => 'index'));
         }
@@ -193,32 +193,30 @@ class CategoryController extends MyController {
                     'cate_meta_social' => trim(strip_tags($params['CateMetaSocial'])),
                     'user_updated' => UID,
                     'cate_status' => $params['cate_status'],
-                    'cate_updated' => time()
+                    'cate_updated' => time(),
                 );
+
                 $intResult = $serviceCategory->edit($arrData, $detailCategory['cate_id']);
+
                 if ($intResult) {
                     if ($detailCategory['cate_parent'] != $intParent || $detailCategory['cate_order'] != $intOrder) {
                         $detailParent = $serviceCategory->getDetail(array('cate_id' => $intParent));
-//                        p($detailParent);die;
                         if (!empty($detailParent)) {
                             $dataUpdate = array(
                                 'cate_grade' => $detailCategory['cate_grade'],
-                                'grade_update' => $detailParent['cate_grade'] . $detailCategory['cate_id'] . ':',
-                                'sort_update' => $detailParent['cate_sort'] . sprintf("%04d", $params['CateOrder']) . '-' . $detailCategory['cate_id'] . ':',
-                                'cate_sort' => $detailCategory['cate_sort'],
+                                'grade_update' => $detailParent['cate_grade'] . sprintf("%04d", $params['CateOrder']) . ':' . sprintf("%04d", $detailCategory['cate_id']) . ':',
                                 'cate_status' => $detailParent['cate_status'],
                                 'parentID' => $params['parentID'],
                             );
                         } else {
                             $dataUpdate = array(
                                 'cate_grade' => $detailCategory['cate_grade'],
-                                'grade_update' => $detailCategory['cate_id'] . ':',
-                                'sort_update' => sprintf("%04d", $params['CateOrder']) . '-' . $detailCategory['cate_id'] . ':',
-                                'cate_sort' => $detailCategory['cate_sort'],
+                                'grade_update' => sprintf("%04d", $intOrder) . ':' . sprintf("%04d", $detailCategory['cate_id']) . ':',
                                 'cate_status' => $params['cate_status'],
                                 'parentID' => $params['parentID'],
                             );
                         }
+
                         $serviceCategory->updateTree($dataUpdate);
                     }
 
@@ -233,8 +231,8 @@ class CategoryController extends MyController {
                     $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
                     $arrLogs = array(
                         'user_id' => UID,
-                        'logs_controller' => 'Category',
-                        'logs_action' => 'edit',
+                        'logs_controller' => $paramsRoute['__CONTROLLER__'],
+                        'logs_action' => $paramsRoute['action'],
                         'logs_time' => time(),
                         'logs_detail' => 'Chỉnh sửa Danh mục có id = ' . $detailCategory['cate_id'],
                     );
