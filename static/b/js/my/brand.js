@@ -20,10 +20,11 @@ var Brand = {
                 $(".is_close").val(0);
             });
         });
-    }, del: function () {
+    },
+    del: function () {
         $(document).ready(function () {
             $('.remove').click(function () {
-                brandID = $(this).attr('rel');
+                var brandID = $(this).attr('rel');
                 if (brandID) {
                     bootbox.confirm('<b>Bạn có muốn xóa thương hiệu này không ???</b>', function (result) {
                         if (result) {
@@ -32,14 +33,16 @@ var Brand = {
                                 url: baseurl + '/backend/brand/delete',
                                 cache: false,
                                 dataType: 'json',
-                                data: {'brandID': brandID},
-                                success: function (result) {
-                                    if (result.success === 1) {
-                                        bootbox.alert('<b>' + result.message + '</b>', function () {
+                                data: {
+                                    brandID: brandID
+                                },
+                                success: function (rs) {
+                                    if (rs.st === 1) {
+                                        bootbox.alert('<b>' + rs.ms + '</b>', function () {
                                             window.location = window.location.href;
                                         });
-                                    } else if (result.error === 1) {
-                                        bootbox.alert('<b>' + result.message + '</b>');
+                                    } else {
+                                        bootbox.alert('<b>' + rs.ms + '</b>');
                                     }
                                 }
                             });

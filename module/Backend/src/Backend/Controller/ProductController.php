@@ -30,7 +30,7 @@ class ProductController extends MyController {
             ),
             'backend:product:add' => array(
                 STATIC_URL . '/b/js/my/??product.js',
-                STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js',
+                STATIC_URL . '/b/js/library/tinymce/tinymce.min.js',
                 STATIC_URL . '/b/js/library/??Nileupload-min.js',
             ),
             'backend:product:edit' => array(
@@ -140,7 +140,16 @@ class ProductController extends MyController {
             'not_tags_status' => -1
         );
         $arrTagList = $serviceTags->getList($arrConditionTag);
-        
+
+        /*
+         * get all Brand
+         */
+        $serviceBrand = $this->serviceLocator->get('My\Models\Brand');
+        $arrConditionBrand = array(
+            'not_bran_status' => -1
+        );
+        $arrBrandList = $serviceBrand->getList($arrConditionBrand);
+
         if ($this->request->isPost()) {
             $params = $this->params()->fromPost();
             $errors = array();
@@ -329,7 +338,8 @@ class ProductController extends MyController {
             'params' => $params,
             'errors' => $errors,
             'arrCategoryList' => $arrCategoryList,
-            'arrTagList' => $arrTagList
+            'arrTagList' => $arrTagList,
+            'arrBrandList' => $arrBrandList
         );
     }
 

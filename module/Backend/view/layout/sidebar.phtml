@@ -43,6 +43,27 @@ $action = $this->getHelperPluginManager()->getServiceLocator()->get('application
                 </li>
             <?php endif; ?>
                 
+                <?php if (!empty($per["brand"]["index"]) || FULL_ACCESS == true): ?>
+                <li class="sub-menu">
+                    <a href="" class="<?php echo $controller === 'brand' ? 'active dcjq-parent' : ''; ?>">
+                        <i class="icon-reorder"></i>
+                        <span>Quản Lý Thương hiệu</span>
+                    </a>
+                    <ul class="sub" style="<?php echo $controller === 'brand' ? 'display: block;' : ''; ?>">
+                        <?php if (!empty($per["brand"]["index"]) || FULL_ACCESS == true): ?>
+                            <li class="<?php echo ($controller === 'brand' && $action === 'index') ? 'active' : ''; ?>">
+                                <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'brand')); ?>">Danh sách Thương hiệu</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (!empty($per["brand"]["add"]) || FULL_ACCESS == true): ?>
+                            <li class="<?php echo ($controller === 'brand' && $action === 'add') ? 'active' : ''; ?>">
+                                <a  href="<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'brand', 'action' => 'add')); ?>">Thêm Thương hiệu mới</a>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </li>
+            <?php endif; ?>
+                
             <?php if (!empty($per["product"]["index"]) || FULL_ACCESS == true): ?>
                 <li class="sub-menu">
                     <a href="" class="<?php echo $controller === 'product' ? 'active dcjq-parent' : ''; ?>">

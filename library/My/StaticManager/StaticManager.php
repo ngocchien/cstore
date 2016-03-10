@@ -35,11 +35,7 @@ class StaticManager {
                 break;
             case 'backend':
                 $this->arrData['css']['defaultCSS'] = STATIC_URL . '/b/css/??bootstrap.min.css,bootstrap-reset.css,font-awesome.min.css,style.css,style-responsive.css,custom.css,table-responsive.css,tasks.css,selectivity-full.min.css';
-                $this->arrData['js']['defaultJS'] = STATIC_URL . '/b/js/library/??jquery-1.11.1.min.js,bootstrap.min.js,jquery.dcjqaccordion.2.7.js,jquery.scrollTo.min.js,jquery.nicescroll.js,respond.min.js,bootbox.min.js,common-scripts.js,selectivity-full.min.js,script.js';
-                break;
-            case 'partner':
-                $this->arrData['css']['defaultCSS'] = STATIC_URL . '/p/css/??bootstrap.min.css,bootstrap-reset.css,font-awesome.min.css,style.css,style-responsive.css,custom.css,table-responsive.css,tasks.css,selectivity-full.min.css';
-                $this->arrData['js']['defaultJS'] = STATIC_URL . '/p/js/library/??jquery-1.11.1.min.js,bootstrap.min.js,jquery.dcjqaccordion.2.7.js,jquery.scrollTo.min.js,jquery.nicescroll.js,respond.min.js,bootbox.min.js,common-scripts.js,selectivity-full.min.js,script.js';
+                $this->arrData['js']['defaultJS'] = STATIC_URL . '/b/js/library/??jquery-1.11.1.min.js,bootstrap.min.js,jquery.dcjqaccordion.2.7.js,jquery.scrollTo.min.js,jquery.nicescroll.js,respond.min.js,bootbox.min.js,jquery.validate.min.js,common-scripts.js,selectivity-full.min.js';
                 break;
             default:
                 $this->arrData['css']['defaultCSS'] = '';

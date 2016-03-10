@@ -19,18 +19,16 @@ class BrandController extends MyController {
         $this->defaultCSS = [
             'backend:brand:add' => 'sumoselect.css,bootstrap-fileupload.css,bootstrap-select.css,style.css',
             'backend:brand:edit' => 'sumoselect.css,bootstrap-fileupload.css,bootstrap-select.css,style.css',
-            'backend:brand:product' => 'sumoselect.css,bootstrap-fileupload.css',
         ];
 
         $this->externalJS = [
-            'backend:category:index' => array(
+            'backend:brand:index' => array(
                 STATIC_URL . '/b/js/my/??brand.js'
             ),
-            'backend:category:add' => array(
+            'backend:brand:add' => array(
                 STATIC_URL . '/b/js/my/??brand.js',
-                STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js',
             ),
-            'backend:category:edit' => array(
+            'backend:brand:edit' => array(
                 STATIC_URL . '/b/js/my/??brand.js',
                 STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js',
             )
@@ -42,8 +40,8 @@ class BrandController extends MyController {
         $intPage = $this->params()->fromRoute('page', 1);
 
         $arrCondition = array(
-            'not_brand_status' => -1,
-            'brand_name_like' => General::clean(trim($this->params()->fromQuery('s')))
+            'not_bran_status' => -1,
+            'bran_name_like' => General::clean(trim($this->params()->fromQuery('s')))
         );
 
         $intLimit = $this->params()->fromRoute('limit', 30);
@@ -253,39 +251,50 @@ class BrandController extends MyController {
         if ($this->request->isPost()) {
             $errors = array();
             $params = $this->params()->fromPost();
+            $intBrandId = (int) $params['brandID'];
 
-            if (empty($params['categoryID'])) {
-                return $this->getResponse()->setContent(json_encode(array('error' => 1, 'success' => 0, 'message' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
+            if (!$intBrandId) {
+                return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
             }
 
-            $serviceCategory = $this->serviceLocator->get('My\Models\Category');
-            $arrCateDetail = $serviceCategory->getDetail(array('cate_id' => $params['categoryID']));
+            $arrCondition = array(
+                'not_bran_status' => -1,
+                'bran_id' => $intBrandId
+            );
+            $serviceBrand = $this->serviceLocator->get('My\Models\Brand');
+            $arrBrand = $serviceBrand->getDetail($arrCondition);
 
-            $arrCondition = array('cate_status' => 1, 'cate_type' => 0, 'categrade' => $arrCateDetail['cate_grade']);
-            $arrCategoryList = $serviceCategory->getListUnlike($arrCondition);
-
-            if (count($arrCategoryList) > 1) {
-                return $this->getResponse()->setContent(json_encode(array('error' => 1, 'success' => 0, 'message' => 'Không xóa được! Danh mục này có nhiều danh mục con! Vui lòng xóa các danh mục con trước !')));
+            if (empty($arrBrand)) {
+                return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Không tìm thấy thông tin thương hiệu trong hệ thống !')));
             }
 
-            $arrData = array('cate_status' => -1, 'user_updated' => UID, 'cate_updated' => time());
+            $arrData = array(
+                'bran_status' => -1,
+                'user_updated' => UID,
+                'bran_updated' => time()
+            );
 
-            $intResult = $serviceCategory->edit($arrData, $params['categoryID']);
+            $intResult = $serviceBrand->edit($arrData, $intBrandId);
 
             if ($intResult) {
+
+                /*
+                 * Write to Logs
+                 */
+
                 $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
                 $arrLogs = array(
                     'user_id' => UID,
                     'logs_controller' => $paramsRoute['__CONTROLLER__'],
                     'logs_action' => $paramsRoute['action'],
                     'logs_time' => time(),
-                    'logs_detail' => 'Xóa Danh mục có id = ' . $params['categoryID'],
+                    'logs_detail' => 'Xóa Thương hiệu có id = ' . $intBrandId,
                 );
                 $serviceLogs->add($arrLogs);
 
-                return $this->getResponse()->setContent(json_encode(array('error' => 0, 'success' => 1, 'message' => 'Xóa Danh mục hoàn tất')));
+                return $this->getResponse()->setContent(json_encode(array('st' => 1, 'ms' => 'Xóa Danh mục hoàn tất')));
             }
-            return $this->getResponse()->setContent(json_encode(array('error' => 1, 'success' => 0, 'message' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
+            return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
         }
     }
 

@@ -131,6 +131,7 @@ class storageBrand extends AbstractTableGateway {
     }
 
     private function _buildWhere($arrCondition) {
+
         $strWhere = '';
 
         if (isset($arrCondition['not_bran_id'])) {

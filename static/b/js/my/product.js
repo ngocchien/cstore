@@ -1,15 +1,96 @@
 var Product = {
     index: function () {
         $(document).ready(function () {
-//            Product.del();
+            $("#frm").validate({
+                ignore: '.ignore',
+                rules: {
+                    prod_name: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 255
+                    },
+                    cate_id: {
+                        required: true,
+                        greaterThanZero: true
+                    },
+                    bran_id: {
+                        required: true,
+                        greaterThanZero: true
+                    },
+                    prod_price: {
+                        required: true,
+                        greaterThanZero: true
+                    },
+                    prod_promotion_price: {
+                        required: true,
+                        greaterThanZero: true
+                    },
+                    prod_description: {
+                        required: true,
+                        minlength: 10
+                    },
+                    prod_detail: {
+                        required: true,
+                        minlength: 20
+                    },
+                    tags_name: {
+                        required: true
+                    },
+                    prod_meta_title: {
+                        required: true
+                    },
+                    prod_meta_keyword: {
+                        required: true
+                    },
+                    prod_meta_description: {
+                        required: true
+                    }
+                },
+                messages: {
+                    prod_name: {
+                        required: 'Xin vui lòng nhập tên sản phẩm.',
+                        minlength: 'Tên sản phẩm tối thiểu từ 3 kí tự trở lên.',
+                        maxlength: 'Tên sản phẩm tối đa 255 kí tự'
+                    },
+                    cate_id: {
+                        required: 'Xin vui lòng chọn Danh mục cho sản phẩm'
+                    },
+                    bran_id: {
+                        required: 'Xin vui lòng chọn Thương hiệu cho sản phẩm'
+                    },
+                    prod_price: {
+                        required: 'Xin vui lòng nhập giá cho sản phẩm',
+                        greaterThanZero: 'Giá sản phẩm phải lớn hơn 0 đ'
+                    },
+                    prod_promotion_price: {
+                        required: 'Xin vui lòng nhập giá khuyến mãi cho sản phẩm',
+                        greaterThanZero: 'Giá khuyến mãi sản phẩm phải lớn hơn 0 đ'
+                    },
+                    prod_description: {
+                        required: 'Xin vui lòng nhập mô tả ngắn cho sản phẩm.',
+                        minlength: 'Mô tả ngắn cho sản phẩm ít nhất phải từ 10 ký tự trở lên.'
+                    },
+                    prod_detail: {
+                        required: 'Xin vui lòng nhập nội dung chi tiết cho sản phẩm.',
+                        minlength: 'Nội dung chi tiết cho sản phẩm ít nhất phải từ 20 ký tự trở lên.'
+                    },
+                    tags_name: {
+                        required: 'Xin vui lòng chọn tag cho sản phẩm.'
+                    },
+                    prod_meta_title: 'Meta title không được bỏ trống.',
+                    prod_meta_keyword: 'Meta Keywork không được bỏ trống.',
+                    prod_meta_description: 'Meta Description không được bỏ trống.'
+                }
+            });
+
             Product.del_all();
             Product.add();
             Product.edit();
             Product.validateNumber();
-
             Product.submitClose();
         });
-    }, submitClose: function () {
+    },
+    submitClose: function () {
         $(".bt-save").each(function (i, tag) {
             $(tag).mouseenter(function () {
                 console.log($(this).attr("name"));
@@ -23,41 +104,6 @@ var Product = {
             });
         });
     },
-//    del: function () {
-//        $(document).ready(function () {
-//            $('.remove').click(function () {
-//
-//                var productID = $(this).data('id');
-//                if (!productID) {
-//                    bootbox.alert('<b>Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại</b>', function () {
-//                        window.location = window.location.href;
-//                    });
-//                }
-//
-//                bootbox.confirm('<b>Bạn có muốn xóa Sản phẩm này không ???</b>', function (result) {
-//                    if (result) {
-//                        $.ajax({
-//                            type: "POST",
-//                            url: baseurl + '/backend/product/delete',
-//                            cache: false,
-//                            dataType: 'json',
-//                            data: {'productID': productID},
-//                            success: function (result) {
-//                                if (result.success === 1) {
-//                                    bootbox.alert('<b>' + result.message + '</b>', function () {
-//                                        window.location = window.location.href;
-//                                    });
-//                                } else if (result.error === 1) {
-//                                    bootbox.alert('<b>' + result.message + '</b>');
-//                                }
-//                            }
-//                        });
-//                    }
-//                });
-//
-//            });
-//        });
-//    },
     del_all: function () {
         $(document).ready(function () {
             $('.remove-all').click(function () {
@@ -100,30 +146,28 @@ var Product = {
         $(document).ready(function () {
             $('.sumo-multiple-select-box').SumoSelect({okCancelInMulti: false});
             $('.sumo-select-box').SumoSelect({okCancelInMulti: false, triggerChangeCombined: false});
-            if ($('textarea').length >= 1) {
-                tinymce.init({
-                    selector: "textarea.editor",
-                    // ===========================================
-                    // INCLUDE THE PLUGIN
-                    // ===========================================
+            tinymce.init({
+                selector: 'textarea',
+                // ===========================================
+                // INCLUDE THE PLUGIN
+                // ===========================================
 
-                    plugins: [
-                        "customColor advlist autolink lists link  image charmap print preview anchor textcolor",
-                        "searchreplace visualblocks code fullscreen",
-                        "insertdatetime media table contextmenu paste jbimages"
-                    ],
-                    // ===========================================
-                    // PUT PLUGIN'S BUTTON on the toolbar
-                    // ===========================================
-                    toolbar: "insertfile undo redo | customColor backcolor  | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink image jbimages | fullscreen",
-                    // ===========================================
-                    // SET RELATIVE_URLS to FALSE (This is required for images to display properly)
-                    // ===========================================
+                plugins: [
+                    "customColor advlist autolink lists link  image charmap print preview anchor textcolor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table contextmenu paste jbimages"
+                ],
+                // ===========================================
+                // PUT PLUGIN'S BUTTON on the toolbar
+                // ===========================================
+                toolbar: "insertfile undo redo | customColor backcolor  | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink image jbimages | fullscreen",
+                // ===========================================
+                // SET RELATIVE_URLS to FALSE (This is required for images to display properly)
+                // ===========================================
 
-                    relative_urls: false
+                relative_urls: false
 
-                });
-            }
+            });
         });
     },
     edit: function () {
@@ -236,32 +280,30 @@ var Product = {
             return false
         }
     },
-    getSelect: function(){
-        $('#cate').change(function() {
-//            alert('aaaaaa');
+    getSelect: function () {
+        $('#cate').change(function () {
             var arrCate = $(this).val();
-            var cate= '';
-            if(jQuery.isEmptyObject(arrCate) == false){
-                var i =0;
-                $.each(arrCate, function(key , value){
+            var cate = '';
+            if (jQuery.isEmptyObject(arrCate) == false) {
+                var i = 0;
+                $.each(arrCate, function (key, value) {
                     cate = cate + value;
                     i += 1;
-                    if(arrCate.length != i)
+                    if (arrCate.length != i)
                         cate = cate + ',';
                 });
-            //console.log($('#cate_id').val());
             }
             $('#cate_id').val(cate);
         });
-        $('#brand').change(function() {
+        $('#brand').change(function () {
             var arrbrand = $(this).val();
-            var cate= '';
-            if(jQuery.isEmptyObject(arrbrand) == false){
-                var i =0;
-                $.each(arrbrand, function(key , value){
+            var cate = '';
+            if (jQuery.isEmptyObject(arrbrand) == false) {
+                var i = 0;
+                $.each(arrbrand, function (key, value) {
                     cate = cate + value;
                     i += 1;
-                    if(arrbrand.length != i)
+                    if (arrbrand.length != i)
                         cate = cate + ',';
                 });
                 console.log(cate);

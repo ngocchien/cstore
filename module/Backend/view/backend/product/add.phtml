@@ -1,6 +1,7 @@
 <?php
 $params = $this->params;
 $arrCategorList = $this->arrCategoryList;
+$arrBrandList = $this->arrBrandList;
 $arrTagList = $this->arrTagList;
 ?>
 
@@ -38,7 +39,7 @@ $arrTagList = $this->arrTagList;
                         <section class="panel">
                             <header class="panel-heading">Thêm sản phẩm mới</header>
                             <div class="panel-body">
-                                <form method="POST" role="form" class="form-horizontal tasi-form" id="frm" novalidate="novalidate">
+                                <form method="POST" role="form" class="form-horizontal tasi-form" id="frm">
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="prod_name" class="col-lg-2 control-label" value="">Tên sản phẩm</label>
@@ -88,7 +89,7 @@ $arrTagList = $this->arrTagList;
                                         <div class="form-group">
                                             <label for="cate_id" class="col-lg-2 control-label">Thuộc danh mục</label>
                                             <div class="col-lg-10 width-fix">
-                                                <select name="cate_id" class="selectbox selectpicker" data-live-search="true" title="Chọn danh mục">
+                                                <select name="cate_id" class="selectbox selectpicker" data-live-search="true" title="Chọn danh mục" id="cate_id">
                                                     <?php
                                                     if (is_array($this->params['cate_id']))
                                                         $listCate = $this->params['cate_id'];
@@ -111,64 +112,19 @@ $arrTagList = $this->arrTagList;
                                         <div class="form-group">
                                             <label for="bran_id" class="col-lg-2 control-label">Thương hiệu</label>
                                             <div class="col-lg-10 width-fix">
-                                                <select name="bran_id" class="selectbox selectpicker" data-live-search="true" title="Chọn thương hiệu">
+                                                <select name="bran_id" class="selectbox selectpicker" data-live-search="true" title="Chọn thương hiệu" id="bran_id">
                                                     <?php
-                                                    $brandID = $this->params['bran_id'];
-                                                    foreach ($this->arrCategoryList as $category) {
-                                                        if ($category["cate_type"] == 1) {
-                                                            $depth = substr_count($category['cate_grade'], ':') - 1;
-                                                            $str = $depth > 0 ? str_repeat('&nbsp;&nbsp;&nbsp;', $depth - 1) . '&rdsh;&nbsp;' : '';
-                                                            ?>
-                                                            <option <?php echo ($category['cate_id'] == $brandID) ? 'selected="selected"' : '' ?> value="<?php echo $category['cate_id'] ?>"><?php echo $str . $category['cate_name'] ?></option>
-                                                            <?php
-                                                        }
-                                                    }
-                                                    ?>
+                                                    foreach ($arrBrandList as $arrBrand) :
+                                                        $brandId = $arrBrand['bran_id'];
+                                                        $brandName = $arrBrand['bran_name'];
+                                                        $selected = $params['bran_id'] == $brandId ? 'selected = "selected"' : '';
+                                                        ?>
+                                                        <option value="<?php $brandId; ?>" <?php echo $selected; ?>><?php echo $brandName; ?></option>
+                                                    <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
-                                        <?php if (isset($this->arrProperties) && count($this->arrProperties) > 0): ?>
-                                            <div class="form-group">
-                                                <label for="prop_id" class="col-lg-2 control-label">Thuộc tính</label>
-                                                <div class="col-lg-10">
-                                                    <div class="row prop-data-load">
-                                                        <?php
-                                                        $lv = 0;
-                                                        $optionProperty = array();
-                                                        $namePropertyRoot = array();
-                                                        $select = array();
-                                                        foreach ($this->arrProperties as $key => $value) {
-                                                            if ($value["prop_parent"] == 0) {
-                                                                $lv+= 1;
-                                                                $namePropertyRoot[$lv] = $value['prop_name'];
-                                                            } else {
-                                                                $optionProperty[$lv].= '<option  ' . ((in_array($value['prop_id'], $this->params["prop_id"])) ? "selected" : "") . ' value="' . $value['prop_id'] . '"  class="level-' . substr_count($value['prop_grade'], ":") . '">' . $value['prop_name'] . '</option>';
-                                                            }
-                                                        }
 
-                                                        foreach ($namePropertyRoot as $key => $value) {
-                                                            ?>
-
-                                                            <div class="col-lg-4">
-                                                                <div class="row">
-                                                                    <label class="col-lg-12 control-label text-center"><?php echo $value ?></label>
-                                                                    <div class="col-lg-12">
-                                                                        <!--  multiple="multiple" -->
-                                                                        <select name="prop_id[]" class="sumo-select-box" id="select-box" data-placeholder="Chọn một danh mục" >
-                                                                            <option   value=""> Chọn <?php echo $value ?></option>
-                                                                            <?php echo $optionProperty[$key] ?>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <?php
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endif; ?>
                                         <div class="form-group">
                                             <label for="prod_price"  class="col-lg-2 control-label">Loại sản phẩm</label>
                                             <div class="col-lg-10">
@@ -178,19 +134,9 @@ $arrTagList = $this->arrTagList;
                                                 <div class="col-lg-4">
                                                     <input type="checkbox" value="1"  <?php echo ($this->params["prod_bestselling"] == 1) ? "checked" : ""; ?> name="prod_bestselling"/>  Sản phẩm bán chạy
                                                 </div>
-                                                <!--                                                <div class="col-lg-4">
-                                                                                                    <input type="checkbox" value="1"  <?php echo ($this->params["prod_call_price"] == 1) ? "checked" : ""; ?> name="prod_call_price"/>  Gọi để biết giá
-                                                                                                </div>-->
-
-                                                <div class="col-lg-4">
-                                                    <select name="prod_type" class="sumo-select-box" id="select-box" data-placeholder="Chọn một danh mục" >
-
-                                                        <option value="Xách Tay" <?php echo ($this->params["prod_type"] == 'Xách Tay') ? "selected" : ""; ?>>Xách Tay</option>
-                                                        <option value="Phân Phối" <?php echo ($this->params["prod_type"] == 'Phân Phối') ? "selected" : ""; ?>> Phân Phối</option>
-                                                    </select>
-                                                </div>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group">
                                             <label for="prod_price"  class="col-lg-2 control-label">Giá bán  ( VNĐ )</label>
                                             <div class="col-lg-10">
@@ -208,7 +154,7 @@ $arrTagList = $this->arrTagList;
                                         <div class="form-group">
                                             <label for="prod_description" class="col-lg-2 control-label">Mô tả ngắn về sản phẩm</label>
                                             <div class="col-lg-10">
-                                                <textarea rows="6" name="prod_description" id="Sumary" class="form-control editor" style="">
+                                                <textarea rows="6" name="prod_description" id="prod_description" class="form-control editor" style="">
                                                     <?php echo $this->params['prod_description']; ?>
                                                 </textarea>
                                             </div>
@@ -217,7 +163,7 @@ $arrTagList = $this->arrTagList;
                                         <div class="form-group">
                                             <label for="prod_detail" class="col-lg-2 control-label">Chi tiết sản phẩm</label>
                                             <div class="col-lg-10">
-                                                <textarea rows="20" value="" name="prod_detail" class="form-control editor">
+                                                <textarea rows="20" value="" name="prod_detail" id="prod_detail" class="form-control editor">
                                                     <?php echo $this->params['prod_detail']; ?>
                                                 </textarea>
                                             </div>
@@ -226,7 +172,6 @@ $arrTagList = $this->arrTagList;
                                             <label for="tags_name" class="col-lg-2 control-label">Chọn Tags: </label>
                                             <div class="col-lg-10">
                                                 <input type="text" value="<?php echo $this->params['tags_name']; ?>" placeholder="Nhập tags" class="form-control" name="tags_name" id="tags_name">
-
                                             </div>
                                         </div> 
                                         <div class="form-group">
