@@ -94,6 +94,27 @@ $('document').ready(function () {
     if ($('.date-mask').length) {
         $('.date-mask').inputmask({"mask": "99/99/9999"});
     }
+    
+    if ($('.date-time-mask').length) {
+        $('.date-time-mask').inputmask({"mask": "99/99/9999 99:99"});
+    }
+
+    if ($('.date-second-mask').length) {
+        $('.date-second-mask').inputmask({"mask": "99/99/9999 99:99:99"});
+    }
+
+    if ($('.price-mask').length) {
+        $('.price-mask').inputmask({
+            alias: 'decimal',
+            radixPoint: ',',
+            groupSeparator: '.',
+            autoGroup: true,
+            rightAlign: false,
+            autoUnmask: true,
+            removeMaskOnSubmit: true,
+            digits: 0
+        });
+    }
 });
 
 function responsiveTable(arrWidth, tableElem, center) {

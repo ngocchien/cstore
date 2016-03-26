@@ -59,12 +59,10 @@ var Product = {
                         required: 'Xin vui lòng chọn Thương hiệu cho sản phẩm'
                     },
                     prod_price: {
-                        required: 'Xin vui lòng nhập giá cho sản phẩm',
-                        greaterThanZero: 'Giá sản phẩm phải lớn hơn 0 đ'
+                        required: 'Xin vui lòng nhập giá cho sản phẩm'
                     },
                     prod_promotion_price: {
-                        required: 'Xin vui lòng nhập giá khuyến mãi cho sản phẩm',
-                        greaterThanZero: 'Giá khuyến mãi sản phẩm phải lớn hơn 0 đ'
+                        required: 'Xin vui lòng nhập giá khuyến mãi cho sản phẩm'
                     },
                     prod_description: {
                         required: 'Xin vui lòng nhập mô tả ngắn cho sản phẩm.',
@@ -81,6 +79,73 @@ var Product = {
                     prod_meta_keyword: 'Meta Keywork không được bỏ trống.',
                     prod_meta_description: 'Meta Description không được bỏ trống.'
                 }
+            });
+
+
+            /*
+             * autocomplete for tags 
+             */
+            var MIN_LENGTH = 3;
+            var listResult = '';
+
+            $('#tags_name').keyup(function () {
+
+                var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua & Deps", "Argentina", "Armenia", "Australia", "Austria",
+                    "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia Herzegovina",
+                    "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Rep",
+                    "Chad", "Chile", "People's Republic of China", "Republic of China", "Colombia", "Comoros", "Democratic Republic of the Congo", "Republic of the Congo",
+                    "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Danzig", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor",
+                    "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gaza Strip",
+                    "The Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary",
+                    "Iceland", "India", "Indonesia", "Iran", "Iraq", "Republic of Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jonathanland",
+                    "Jordan", "Kazakhstan", "Kenya", "Kiribati", "North Korea", "South Korea", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho",
+                    "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
+                    "Marshall Islands", "Mauritania", "Namibia", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palau",
+                    "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russian Federation", "Rwanda", "Samoa",
+                    "San Marino", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia",
+                    "South Africa", "Spain", "Sri Lanka", "Sudan", "Swaziland", "Sweden", "Switzerland", "Syria,", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga",
+                    "Trinidad & Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America",
+                    "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
+                $("#tags_name").shieldAutoComplete({
+                    dataSource: {
+                        data: countries
+                    },
+                    minLength: 1
+                });
+//                var tagName = $.trim($('#tags_name').val());
+//                if (tagName.length < MIN_LENGTH) {
+//                    return false;
+//                }
+//                var listTagsId = $('.listTagsId').val();
+//
+//                $.ajax({
+//                    type: 'POST',
+//                    cache: false,
+//                    dataType: 'json',
+//                    url: getTagURL,
+//                    data: {
+//                        listTagsId: listTagsId,
+//                        tagName: tagName
+//                    },
+//                    beforeSend: function () {
+//
+//                    },
+//                    success: function (rs) {
+//                        if (rs.st == 1) {
+//                            if (!rs.data) {
+//                                return false;
+//                            }
+//
+//                            $.each(rs.data, function (k, v) {
+//                                console.log(v.tags_name);
+//                            });
+//
+//                        } else {
+//                            bootbox.alert(rs.ms);
+//                            return false;
+//                        }
+//                    }
+//                })
             });
 
             Product.del_all();
@@ -152,11 +217,11 @@ var Product = {
                 // INCLUDE THE PLUGIN
                 // ===========================================
 
-                plugins: [
-                    "customColor advlist autolink lists link  image charmap print preview anchor textcolor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table contextmenu paste jbimages"
-                ],
+//                plugins: [
+//                    "customColor advlist autolink lists link  image charmap print preview anchor textcolor",
+//                    "searchreplace visualblocks code fullscreen",
+//                    "insertdatetime media table contextmenu paste jbimages"
+//                ],
                 // ===========================================
                 // PUT PLUGIN'S BUTTON on the toolbar
                 // ===========================================
@@ -280,36 +345,4 @@ var Product = {
             return false
         }
     },
-    getSelect: function () {
-        $('#cate').change(function () {
-            var arrCate = $(this).val();
-            var cate = '';
-            if (jQuery.isEmptyObject(arrCate) == false) {
-                var i = 0;
-                $.each(arrCate, function (key, value) {
-                    cate = cate + value;
-                    i += 1;
-                    if (arrCate.length != i)
-                        cate = cate + ',';
-                });
-            }
-            $('#cate_id').val(cate);
-        });
-        $('#brand').change(function () {
-            var arrbrand = $(this).val();
-            var cate = '';
-            if (jQuery.isEmptyObject(arrbrand) == false) {
-                var i = 0;
-                $.each(arrbrand, function (key, value) {
-                    cate = cate + value;
-                    i += 1;
-                    if (arrbrand.length != i)
-                        cate = cate + ',';
-                });
-                console.log(cate);
-            }
-            $('#brand_id').val(cate);
-            //console.log($('#cate_id').val());
-        });
-    }
 };

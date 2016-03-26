@@ -59,46 +59,6 @@ class storageTags extends AbstractTableGateway {
         }
     }
     
-    public function getListUnlike($arrCondition) {
-        try {
-            $strWhere = $this->_buildWhere($arrCondition);
-            $adapter = $this->adapter;
-            $sql = new Sql($adapter);
-            $select = $sql->Select($this->table)
-                    ->where('1=1' . $strWhere)
-                    ->order(array('tags_sort ASC'));
-            $query = $sql->getSqlStringForSqlObject($select);
-            return $adapter->query($query, $adapter::QUERY_MODE_EXECUTE)->toArray();
-        } catch (\Zend\Http\Exception $exc) {
-            if (APPLICATION_ENV !== 'production') {
-                throw new \Zend\Http\Exception($exc->getMessage());
-            }
-            return array();
-        }
-    }
-    
-    public function updateTree($dataUpdate) {
-        $adapter = $this->adapter;
-        $sql = new Sql($adapter);
-        $query = "update " . $this->table . " set tags_grade = REPLACE(tags_grade,'" . $dataUpdate['tags_grade'] . "','" . $dataUpdate['grade_update']."'),tags_status =".$dataUpdate['tags_status'].",tags_sort = REPLACE(tags_sort,'" . $dataUpdate['tags_sort'] . "','" . $dataUpdate['sort_update']."') WHERE tags_grade LIKE '" . $dataUpdate['tags_grade'] . "%'";
-        $result = $adapter->query($query, $adapter::QUERY_MODE_EXECUTE);
-        $resultSet = new \Zend\Db\ResultSet\ResultSet();
-        $resultSet->initialize($result);
-        $result = $resultSet->count() ? true : false;
-        return $result;
-    }
-    
-    public function updateStatusTree($dataUpdate) {
-        $adapter = $this->adapter;
-        $sql = new Sql($adapter);
-        $query = "update " . $this->table . " set tags_status = ".$dataUpdate['tags_status']." WHERE tags_grade LIKE '" . $dataUpdate['grade_update'] . "%'";
-        $result = $adapter->query($query, $adapter::QUERY_MODE_EXECUTE);
-        $resultSet = new \Zend\Db\ResultSet\ResultSet();
-        $resultSet->initialize($result);
-        $result = $resultSet->count() ? true : false;
-        return $result;
-    }
-
     public function getTotal($arrCondition) {
         try {
             $strWhere = $this->_buildWhere($arrCondition);
@@ -209,8 +169,8 @@ class storageTags extends AbstractTableGateway {
         if (isset($arrCondition['not_tags_status']) && $arrCondition['not_tags_status']) {
             $strWhere .= " AND tags_status != " . $arrCondition['not_tags_status'];
         }
-        if (isset($arrCondition['tags_name_like']) && $arrCondition['tags_name_like']) {
-            $strWhere .= " AND tags_name LIKE '%" . $arrCondition['tags_name_like'] . "%'";
+        if (isset($arrCondition['like_tags_name']) && $arrCondition['like_tags_name']) {
+            $strWhere .= " AND tags_name LIKE '%" . $arrCondition['like_tags_name'] . "%'";
         }
 
         if (isset($arrCondition['tags_meta_desctiption']) && $arrCondition['tag_meta_desctiption']) {
@@ -221,13 +181,10 @@ class storageTags extends AbstractTableGateway {
             $strWhere .= " AND tags_id IN(" . $arrCondition['in_tags_id'] . ")";
         }
         
-        if ($arrCondition['tags_grade'] !== '' && $arrCondition['tags_grade'] !== NULL) {
-            $strWhere .= ' AND tags_grade NOT LIKE "%' . $arrCondition['tags_grade'] . ':%"';
+        if (!empty($arrCondition['not_in_tags_id'])) { 
+            $strWhere .= " AND tags_id NOT IN(" . $arrCondition['not_in_tags_id'] . ")";
         }
-        
-        if ($arrCondition['tagsgrade'] !== '' && $arrCondition['tagsgrade'] !== NULL) {
-            $strWhere .= ' AND tags_grade LIKE "%' . $arrCondition['tagsgrade'] . ':%"';
-        }
+
         return $strWhere;
     }
 

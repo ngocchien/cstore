@@ -36,7 +36,7 @@ $arrTagList = $this->arrTagList;
             <section class="panel">
                 <div class="row">
                     <div class="col-lg-12">
-                        <section class="panel">
+                        <section class="panel panel-primary">
                             <header class="panel-heading">Thêm sản phẩm mới</header>
                             <div class="panel-body">
                                 <form method="POST" role="form" class="form-horizontal tasi-form" id="frm">
@@ -88,7 +88,7 @@ $arrTagList = $this->arrTagList;
 
                                         <div class="form-group">
                                             <label for="cate_id" class="col-lg-2 control-label">Thuộc danh mục</label>
-                                            <div class="col-lg-10 width-fix">
+                                            <div class="col-lg-4 width-fix">
                                                 <select name="cate_id" class="selectbox selectpicker" data-live-search="true" title="Chọn danh mục" id="cate_id">
                                                     <?php
                                                     if (is_array($this->params['cate_id']))
@@ -111,7 +111,7 @@ $arrTagList = $this->arrTagList;
 
                                         <div class="form-group">
                                             <label for="bran_id" class="col-lg-2 control-label">Thương hiệu</label>
-                                            <div class="col-lg-10 width-fix">
+                                            <div class="col-lg-4 width-fix">
                                                 <select name="bran_id" class="selectbox selectpicker" data-live-search="true" title="Chọn thương hiệu" id="bran_id">
                                                     <?php
                                                     foreach ($arrBrandList as $arrBrand) :
@@ -136,18 +136,18 @@ $arrTagList = $this->arrTagList;
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label for="prod_price"  class="col-lg-2 control-label">Giá bán  ( VNĐ )</label>
-                                            <div class="col-lg-10">
-                                                <input type="text" value="<?php echo ($this->params["prod_price"] != "") ? $this->params["prod_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control" name="prod_price" id="prod_price">
+                                            <div class="col-lg-4">
+                                                <input type="text" value="<?php echo ($this->params["prod_price"] != "") ? $this->params["prod_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control price-mask" name="prod_price" id="prod_price">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="prod_promotion_price" class="col-lg-2 control-label">Giá khuyến mãi ( VNĐ )</label>
-                                            <div class="col-lg-10">
-                                                <input type="text" value="<?php echo ($this->params["prod_promotion_price"] != "") ? $this->params["prod_promotion_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control" name="prod_promotion_price" id="prod_promotion_price">
+                                            <div class="col-lg-4">
+                                                <input type="text" value="<?php echo ($this->params["prod_promotion_price"] != "") ? $this->params["prod_promotion_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control price-mask" name="prod_promotion_price" id="prod_promotion_price">
                                             </div>
                                         </div>
 
@@ -168,15 +168,10 @@ $arrTagList = $this->arrTagList;
                                                 </textarea>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="tags_name" class="col-lg-2 control-label">Chọn Tags: </label>
-                                            <div class="col-lg-10">
-                                                <input type="text" value="<?php echo $this->params['tags_name']; ?>" placeholder="Nhập tags" class="form-control" name="tags_name" id="tags_name">
-                                            </div>
-                                        </div> 
+
                                         <div class="form-group">
                                             <label for="prod_meta_robot" class="col-lg-2 control-label">Meta Robot: </label>
-                                            <div class="col-lg-10">
+                                            <div class="col-lg-4">
                                                 <select class="form-control" id="prod_meta_robot" name="prod_meta_robot">    
                                                     <option value="index,follow" <?php echo isset($this->params['prod_meta_robot']) && $this->params['prod_meta_robot'] == 'index,follow' ? 'selected="selected"' : ''; ?>>Index,Follow</option>
                                                     <option value="noindex" <?php echo isset($this->params['prod_meta_robot']) && $this->params['prod_meta_robot'] == 'noindex' ? 'selected="selected"' : ''; ?>>Noindex</option>
@@ -200,6 +195,16 @@ $arrTagList = $this->arrTagList;
                                             <label for="prod_meta_description" class="col-lg-2 control-label">SEO Description: </label>
                                             <div class="col-lg-10">
                                                 <textarea placeholder="Nhập SEO Description" class="form-control" name="prod_meta_description" id="prod_meta_description"><?php echo $this->params['prod_meta_description']; ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tags_name" class="col-lg-2 control-label">Chọn Tags: </label>
+                                            <div class="col-lg-10">
+                                                <div class="form-control">
+                                                    <span class="form-control tagsName" style="display: none"></span>
+                                                    <input type="hidden" name="valueListTag" class="listTagsId" value="">
+                                                </div>
+                                                <input type="text" value="<?php echo $this->params['tags_name']; ?>" placeholder="Nhập tags" class="form-control" name="tags_name" id="tags_name">
                                             </div>
                                         </div>
 
@@ -290,6 +295,7 @@ $arrTagList = $this->arrTagList;
     </div>
 </section>
 <script type="text/javascript">
+    getTagURL = '<?php echo $this->serverUrl() . $this->Url('backend', array('controller' => 'tags', 'action' => 'get-tag')); ?>';
     Product.index();
     Product.upload();
 </script>

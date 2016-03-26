@@ -457,10 +457,39 @@ class TagsController extends MyController {
                     'logs_detail' => 'Xóa tags có id = ' . $intTagId,
                 );
                 $serviceLogs->add($arrLogs);
-                
+
                 return $this->getResponse()->setContent(json_encode(array('st' => 1, 'ms' => 'Xóa Tags hoàn tất')));
             }
             return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
+        }
+    }
+
+    public function getTagAction() {
+        if ($this->request->isPost()) {
+            $params = $this->params()->fromPost();
+
+            $tagName = trim($params['tagName']);
+            $strTagsId = $params['listTagsId'];
+
+            if (empty($tagName)) {
+                return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý! Vui lòng thử lại !')));
+            }
+
+            $arrCondition = array(
+                'like_tags_name' => $tagName,
+                'not_in_tags_id' => $strTagsId,
+                'not_tags_status' => -1
+            );
+
+            $serviceTags = $this->serviceLocator->get('My\Models\Tags');
+            $arrTagsList = $serviceTags->getList($arrCondition);
+
+            $arrReturn = array(
+                'st' => 1,
+                'data' => $arrTagsList
+            );
+
+            return $this->getResponse()->setContent(json_encode($arrReturn));
         }
     }
 

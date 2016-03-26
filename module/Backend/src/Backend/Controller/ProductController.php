@@ -19,10 +19,16 @@ class ProductController extends MyController {
             'backend:product:index' => 'jquery.sumoselect.min.js,bootstrap-select.js',
         ];
         $this->defaultCSS = [
-            'backend:product:add' => 'sumoselect.css,bootstrap-fileupload.css,bootstrap-select.css',
+            'backend:product:add' => 'sumoselect.css,bootstrap-fileupload.css,bootstrap-select.css,all.min.css',
             'backend:product:edit' => 'sumoselect.css,bootstrap-fileupload.css,bootstrap-select.css',
             'backend:product:index' => 'sumoselect.css,bootstrap-select.css',
         ];
+        
+//        $this->externalCSS = [
+//            'backend:product:add' => array(
+//                STATIC_URL . '/b/js/my/??product.js'
+//            ),
+//        ];
 
         $this->externalJS = [
             'backend:product:index' => array(
@@ -30,8 +36,10 @@ class ProductController extends MyController {
             ),
             'backend:product:add' => array(
                 STATIC_URL . '/b/js/my/??product.js',
-                STATIC_URL . '/b/js/library/tinymce/tinymce.min.js',
+                STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js',
                 STATIC_URL . '/b/js/library/??Nileupload-min.js',
+                STATIC_URL . '/b/js/library/autocomplete/??jquery-ui.js',
+                STATIC_URL . '/b/js/library/??shieldui-all.min.js'
             ),
             'backend:product:edit' => array(
                 STATIC_URL . '/b/js/my/??product.js',
@@ -161,11 +169,7 @@ class ProductController extends MyController {
                 $errors['prod_name'] = 'Chưa nhập tên cho sản phẩm !';
             }
 
-            if (empty($params['main_cate_id'])) {
-                $errors['main_cate_id'] = 'Vui lòng chọn một danh mục';
-            }
-
-            if (empty($params['bran_id'])) {
+            if (empty($params['cate_id'])) {
                 $errors['bran_id'] = 'Vui lòng chọn một thương hiệu';
             }
 
