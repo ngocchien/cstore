@@ -1,100 +1,43 @@
 var Tags = {
     index: function () {
         $(document).ready(function () {
-            $('.get-alert').hide();
+            tinymce.init({
+                selector: "textarea.editor",
+                relative_urls: false
+            });
+
             Tags.del();
-            Tags.add();
-            Tags.edit();
             Tags.edit_producttags();
             Tags.edit_product();
-            Tags.submitClose();
             Tags.ord();
         });
-    }, submitClose: function () {
-        $(".bt-save").each(function (i, tag) {
-            $(tag).mouseenter(function () {
-                console.log($(this).attr("name"));
-                if ($(this).attr("name") == "save") {
-                    $(".is_close").val(0);
-                } else if ($(this).attr("name") == "save_close") {
-                    $(".is_close").val(1);
-                }
-            }).mouseleave(function () {
-                $(".is_close").val(0);
-            });
-        });
-    },
-    add: function () {
-        $(document).ready(function () {
-            $('.sumo-multiple-select-box').SumoSelect({okCancelInMulti: false});
-            $('.sumo-select-box').SumoSelect({okCancelInMulti: false, triggerChangeCombined: false});
-            if ($('textarea').length >= 1) {
-                tinymce.init({
-                    selector: "textarea.editor",
-                    // ===========================================
-                    // INCLUDE THE PLUGIN
-                    // ===========================================
-
-                    plugins: [
-                        "customColor advlist autolink lists link image charmap print preview anchor textcolor",
-                        "searchreplace visualblocks code fullscreen",
-                        "insertdatetime media table contextmenu paste jbimages"
-                    ],
-                    // ===========================================
-                    // PUT PLUGIN'S BUTTON on the toolbar
-                    // ===========================================
-                    toolbar: "insertfile undo redo | customColor backcolor  | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages | fullscreen",
-                    // ===========================================
-                    // SET RELATIVE_URLS to FALSE (This is required for images to display properly)
-                    // ===========================================
-
-                    relative_urls: false
-
-                });
-
-            }
-        });
-
-        $(document).ready(function () {
-            $('#cancel').click(function () {
-                validator.resetForm();
-                clearForm($('#frm'));
-            });
-
-        })
     },
     del: function () {
-        $(document).ready(function () {
-            $('.remove').click(function () {
-                TagsID = $(this).attr('rel');
-                if (TagsID) {
-                    bootbox.confirm('<b>Bạn có muốn xóa danh mục này không ???</b>', function (result) {
-                        if (result) {
-                            $.ajax({
-                                type: "POST",
-                                url: baseurl + '/backend/tags/delete',
-                                cache: false,
-                                dataType: 'json',
-                                data: {'TagsID': TagsID},
-                                success: function (result) {
-                                    if (result.st === 1) {
-                                        bootbox.alert('<b>' + result.ms + '</b>', function () {
-                                            window.location = window.location.href;
-                                        });
-                                    } else if (result.st === -1) {
-                                        bootbox.alert('<b>' + result.ms + '</b>');
-                                    }
+        $('.remove').click(function () {
+            var tagsId = $(this).attr('rel');
+            if (tagsId) {
+                bootbox.confirm('<b>Bạn có muốn xóa tags này không ???</b>', function (result) {
+                    if (result) {
+                        $.ajax({
+                            type: "POST",
+                            url: baseurl + '/backend/tags/delete',
+                            cache: false,
+                            dataType: 'json',
+                            data: {'TagsID': tagsId},
+                            success: function (result) {
+                                if (result.st === 1) {
+                                    bootbox.alert('<b>' + result.ms + '</b>', function () {
+                                        window.location = window.location.href;
+                                    });
+                                } else if (result.st === -1) {
+                                    bootbox.alert('<b>' + result.ms + '</b>');
                                 }
-                            });
-                        }
-                    });
-                }
-            });
+                            }
+                        });
+                    }
+                });
+            }
         });
-    },
-    edit: function () {
-        $('.getproduct').load(baseurl + '/backend/tags/getproduct/', {tags_id: tags_id});
-        $('.getproducttags').load(baseurl + '/backend/tags/getproducttags/', {tags_id: tags_id});
     },
     edit_producttags: function () {
         $('.getproducttags').on('click', '.btn-deleteProductTags', function () {
@@ -191,7 +134,7 @@ var Tags = {
                                 $(this).remove();
                                 html += '<tr id="' + prod_id + '">',
                                         html += '<td>' + name + '</td>',
-                                        html += '<td class="text-center"> <input style="text-align: center" size="2" class="data-ord" type="text" data-id ="' + prod_id +'" name="ord[' + prod_id +']" value="0"> </td>',
+                                        html += '<td class="text-center"> <input style="text-align: center" size="2" class="data-ord" type="text" data-id ="' + prod_id + '" name="ord[' + prod_id + ']" value="0"> </td>',
                                         html += '<td style="text-align:center"><a class="btn btn-danger btn-xs btn-deleteProductTags">Loại bỏ <i class="icon-arrow-right"></i></a></td>',
                                         html += '</tr>',
                                         $('.searchproducttags').children('table').children().next().prepend(
@@ -250,7 +193,7 @@ var Tags = {
         $(".bt-update-ord").click(function () {
             var tags_id = $('input[name="tags_id"]').val();
             var listProd = [];
-            $('input.data-ord').each(function() { 
+            $('input.data-ord').each(function () {
                 listProd.push(($(this).attr("data-id")));
             });
             var ord = $('input.data-ord').serialize() + "&tags_id=" + tags_id + "&listProd=" + listProd;

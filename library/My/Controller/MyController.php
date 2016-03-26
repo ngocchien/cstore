@@ -41,7 +41,6 @@ class MyController extends AbstractActionController {
                     return false;
                 }
             }
-
             $instanceStaticManager = new \My\StaticManager\StaticManager($this->resource, $this->serviceLocator);
             $instanceStaticManager
                     ->setJS(array('defaultJS' => $this->defaultJS))

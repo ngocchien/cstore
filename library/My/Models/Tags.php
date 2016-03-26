@@ -8,7 +8,7 @@ class Tags extends ModelAbstract {
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         return new \My\Storage\storageTags($dbAdapter);
     }
-    
+
     public function __construct() {
         $this->setTmpKeyCache('tmpTags');
         parent::__construct();
@@ -17,19 +17,19 @@ class Tags extends ModelAbstract {
     public function getList($arrCondition = array()) {
         return $this->getParentTable()->getList($arrCondition);
     }
-    
+
     public function getListUnlike($arrCondition = array()) {
-        return $this->getParentTable()->getListUnlike($arrCondition,$intCategoryID);
+        return $this->getParentTable()->getListUnlike($arrCondition, $intCategoryID);
     }
-    
-    public function updateTree($dataUpdate){
+
+    public function updateTree($dataUpdate) {
         return $this->getParentTable()->updateTree($dataUpdate);
     }
-    
-    public function updateStatusTree($dataUpdate){
+
+    public function updateStatusTree($dataUpdate) {
         return $this->getParentTable()->updateStatusTree($dataUpdate);
     }
-    
+
     public function getListLimit($arrCondition = array(), $intPage = 1, $intLimit = 15, $strOrder = 'tags_id DESC') {
         $keyCaching = 'getListLimitTag:';
         foreach ($arrCondition as $k => $condition) {

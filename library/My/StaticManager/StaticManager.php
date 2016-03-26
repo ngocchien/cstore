@@ -84,7 +84,7 @@ class StaticManager {
             $this->arrData['js']['defaultJS'] .= $arrData ? ',' . $arrData : '';
         }
         if (is_array($arrData['externalJS'])) {
-            $arrJS = is_array($arrData['externalJS'][$this->strResource]) ? $arrData['externalJS'][$this->strResource] : [$arrData['externalJS'][$this->strResource]];
+            $arrJS = is_array($arrData['externalJS'][$this->strResource]) ? $arrData['externalJS'][$this->strResource] : $arrData['externalJS'];
             $this->arrData['js']['externalJS'] = $arrJS ? $arrJS : [];
         }
         foreach ($arrJS['externalJS'] as $key => $link) {

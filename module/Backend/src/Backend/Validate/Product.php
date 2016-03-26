@@ -3,6 +3,7 @@
 namespace Backend\Validate;
 
 use Zend\Validator;
+use My\General;
 
 class Product {
 
@@ -11,7 +12,7 @@ class Product {
     // mang du lieu sau khi kiem tra
     protected $_arrData;
 
-    public function __construct($arrParam = null) {
+    public function __construct($arrParam = null, $serviceLocator) {
 
         $validatorEmpty = new Validator\NotEmpty();
         $validatorIsInt = new \Zend\I18n\Validator\Int();
@@ -22,6 +23,28 @@ class Product {
         // ========================================
         if (!$validatorEmpty->isValid($arrParam['prod_name'])) {
             $this->_messagesError['prod_name'] = 'Tên sản phẩm không được bỏ trống!';
+        } else {
+            $productSlug = General::getSlug($arrParam['prod_name']);
+            $arrConditionProduct = array(
+                'prod_slug' => $productSlug,
+                'not_prod_status' => -1
+            );
+            if ($arrParam['prod_id']) {
+                $arrConditionProduct['not_prod_id'] = $arrParam['prod_id'];
+            }
+
+            $serviceProduct = new \My\Models\Product($serviceLocator);
+            $arrProduct = $serviceProduct->getDetail($arrConditionProduct);
+
+            if ($arrProduct) {
+                $isExisted = true;
+            } else {
+                $arrParam ['prod_slug'] = $productSlug;
+            }
+        }
+
+        if ($isExisted) {
+            $this->_messagesError ['prod_name'] = 'Tên sản phẩm này đã tồn tại trong hệ thống !';
         }
 
         // ========================================
@@ -80,36 +103,12 @@ class Product {
         if (!$validatorEmpty->isValid($arrParam['prod_image'])) {
             $this->_messagesError['prod_image'] = 'Vui lòng chọn hình cho sản phẩm';
         }
-        
+
+        if (!$validatorEmpty->isValid($arrParam['prod_description'])) {
+            $this->_messagesError['prod_description'] = 'Vui lòng nhập mô tả cho sản phẩm!';
+        }
+
         $this->_arrData = $arrParam;
-    }
-
-    public function isExisted($strValidate, $intID, $strfield, $options) {
-        if (empty($strValidate) || empty($options) || empty($strfield)) {
-            return false;
-        }
-        $arrCondition = array(
-            $strfield => $strValidate,
-            'isDeleted' => 0,
-            'isActived' => 1,
-        );
-
-        $customer = $options->findOneBy($arrCondition);
-        if ($strValidate == 'amyhuong82@gmail.com') {
-            p($customer);
-        }
-        if ($customer) {
-            if ($intID) {   //edit
-                if ($customer->getCustomerId() == (int) $intID) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            return false; //add
-        } else {
-            return false;
-        }
     }
 
     // Kiem tra Error

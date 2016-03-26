@@ -14,10 +14,6 @@ class Logs extends ModelAbstract {
         parent::__construct();
     }
     
-    public function getList($arrCondition = array()) {
-        return $this->getParentTable()->getList($arrCondition);
-    }
-
     public function getListLimit($arrCondition = [], $intPage = 1, $intLimit = 15, $strOrder = 'logs_id ASC') {
         $keyCaching = 'getListLimitLogs:' . $intPage . ':' . $intLimit . ':' . str_replace(' ', '_', $strOrder) . ':' . $this->cache->read($this->tmpKeyCache);
         if (count($arrCondition) > 0) {
@@ -29,27 +25,6 @@ class Logs extends ModelAbstract {
         $arrResult = $this->cache->read($keyCaching);
         if (empty($arrResult)) {
             $arrResult = $this->getParentTable()->getListLimit($arrCondition, $intPage, $intLimit, $strOrder);
-            $this->cache->add($keyCaching, $arrResult, 60 * 60 * 24 * 7);
-        }
-        return $arrResult;
-    }
-
-    public function getTotal($arrCondition) {
-        return $this->getParentTable()->getTotal($arrCondition);
-    }
-
-    public function getDetail($arrCondition) {
-        $keyCaching = 'getDetailLogs:';
-        if (count($arrCondition) > 0) {
-            foreach ($arrCondition as $k => $condition) {
-                $keyCaching .= $k . ':' . $condition . ':';
-            }
-        }
-        $keyCaching .= 'tmp:' . $this->cache->read($this->tmpKeyCache);
-        $keyCaching = crc32($keyCaching);
-        $arrResult = $this->cache->read($keyCaching);
-        if (empty($arrResult)) {
-            $arrResult = $this->getParentTable()->getDetail($arrCondition);
             $this->cache->add($keyCaching, $arrResult, 60 * 60 * 24 * 7);
         }
         return $arrResult;

@@ -5,10 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-namespace Backend\Validate;
 
-use Zend\Validator;
+namespace Backend\Form;
 
-class Category{
+class Product {
     
 }

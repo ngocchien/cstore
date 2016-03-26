@@ -1,33 +1,19 @@
 <?php
-$params = $this->params;
+$arrParams = $this->arrParams;
 $arrCategorList = $this->arrCategoryList;
 $arrBrandList = $this->arrBrandList;
 $arrTagList = $this->arrTagList;
+$errors = $this->errors;
 ?>
 
 <section class="wrapper site-min-height">
-    <?php if ($this->errors): ?>
+    <?php if ($errors['product']): ?>
         <div class="alert alert-block alert-danger fade in">
             <button class="close close-sm" type="button" data-dismiss="alert">
                 <i class="fa fa-times"></i>
             </button>
             <h4><i class="fa fa-times-sign"></i> Lỗi!</h4>
-            <?php foreach ($this->errors as $error): ?>
-                <p> - <?php echo $error; ?></p>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <?php
-    $successMessage = $this->flashMessenger()->setNamespace('success-add-product')->getMessages();
-    if ($successMessage):
-        ?>
-        <div class="alert alert-success alert-block fade in">
-            <button class="close close-sm" type="button" data-dismiss="alert">
-                <i class="fa fa-times"></i>
-            </button>
-            <h4><i class="fa fa-ok-sign"></i> Hoàn tất!</h4>
-            <p>- <?php echo current($successMessage); ?></p>
+            <p> - <?php echo $errors['product']; ?></p>
         </div>
     <?php endif; ?>
 
@@ -45,6 +31,9 @@ $arrTagList = $this->arrTagList;
                                             <label for="prod_name" class="col-lg-2 control-label" value="">Tên sản phẩm</label>
                                             <div class="col-lg-10">
                                                 <input type="text" value="<?php echo $this->params["prod_name"] ?>" placeholder="Nhập Tên sản phẩm" class="form-control" name="prod_name" id="prod_name">
+                                                <?php if ($errors['prod_name']): ?>
+                                                    <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['prod_name']; ?></strong></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -107,6 +96,9 @@ $arrTagList = $this->arrTagList;
                                                     ?>
                                                 </select>
                                             </div>
+                                            <?php if ($errors['cate_id']): ?>
+                                                <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['cate_id']; ?></strong></span>
+                                            <?php endif; ?>
                                         </div>
 
                                         <div class="form-group">
@@ -123,6 +115,32 @@ $arrTagList = $this->arrTagList;
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
+
+                                            <?php if ($errors['bran_id']): ?>
+                                                <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['bran_id']; ?></strong></span>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="tags_id" class="col-lg-2 control-label">Chọn Tags: </label>
+
+                                            <div class="col-lg-4 width-fix">
+                                                <select name="tags_id" class="selectbox selectpicker" multiple="multiple" data-live-search="true" title="Chọn tag cho sản phẩm" id="tags_id">
+                                                    <?php
+                                                    foreach ($arrTagList as $arrTag) :
+                                                        $tagId = $arrTag['tags_id'];
+                                                        $tagName = $arrTag['tags_name'];
+                                                        $selected = $params['tags_id'] == $tagId ? 'selected = "selected"' : '';
+                                                        ?>
+                                                        <option value="<?php $tagId; ?>" <?php echo $selected; ?>><?php echo $tagName; ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+
+                                            <?php if ($errors['tags_id']): ?>
+                                                <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['tags_id']; ?></strong></span>
+                                            <?php endif; ?>
+
                                         </div>
 
                                         <div class="form-group">
@@ -142,6 +160,10 @@ $arrTagList = $this->arrTagList;
                                             <div class="col-lg-4">
                                                 <input type="text" value="<?php echo ($this->params["prod_price"] != "") ? $this->params["prod_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control price-mask" name="prod_price" id="prod_price">
                                             </div>
+
+                                            <?php if ($errors['prod_price']): ?>
+                                                <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['prod_price']; ?></strong></span>
+                                            <?php endif; ?>
                                         </div>
 
                                         <div class="form-group">
@@ -149,6 +171,9 @@ $arrTagList = $this->arrTagList;
                                             <div class="col-lg-4">
                                                 <input type="text" value="<?php echo ($this->params["prod_promotion_price"] != "") ? $this->params["prod_promotion_price"] : 0; ?>" placeholder="Nhập Giá bán" class="form-control price-mask" name="prod_promotion_price" id="prod_promotion_price">
                                             </div>
+                                            <?php if ($errors['prod_promotion_price']): ?>
+                                                <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['prod_promotion_price']; ?></strong></span>
+                                            <?php endif; ?>
                                         </div>
 
                                         <div class="form-group">
@@ -157,6 +182,9 @@ $arrTagList = $this->arrTagList;
                                                 <textarea rows="6" name="prod_description" id="prod_description" class="form-control editor" style="">
                                                     <?php echo $this->params['prod_description']; ?>
                                                 </textarea>
+                                                <?php if ($errors['prod_description']): ?>
+                                                    <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['prod_description']; ?></strong></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
@@ -166,6 +194,9 @@ $arrTagList = $this->arrTagList;
                                                 <textarea rows="20" value="" name="prod_detail" id="prod_detail" class="form-control editor">
                                                     <?php echo $this->params['prod_detail']; ?>
                                                 </textarea>
+                                                <?php if ($errors['prod_detail']): ?>
+                                                    <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['prod_detail']; ?></strong></span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
 
@@ -195,16 +226,6 @@ $arrTagList = $this->arrTagList;
                                             <label for="prod_meta_description" class="col-lg-2 control-label">SEO Description: </label>
                                             <div class="col-lg-10">
                                                 <textarea placeholder="Nhập SEO Description" class="form-control" name="prod_meta_description" id="prod_meta_description"><?php echo $this->params['prod_meta_description']; ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="tags_name" class="col-lg-2 control-label">Chọn Tags: </label>
-                                            <div class="col-lg-10">
-                                                <div class="form-control">
-                                                    <span class="form-control tagsName" style="display: none"></span>
-                                                    <input type="hidden" name="valueListTag" class="listTagsId" value="">
-                                                </div>
-                                                <input type="text" value="<?php echo $this->params['tags_name']; ?>" placeholder="Nhập tags" class="form-control" name="tags_name" id="tags_name">
                                             </div>
                                         </div>
 

@@ -1,18 +1,6 @@
 <section class="wrapper site-min-height">
-    <?php if ($this->errors): ?>
-        <div class="alert alert-block alert-danger fade in">
-            <button class="close close-sm" type="button" data-dismiss="alert">
-                <i class="icon-remove"></i>
-            </button>
-            <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
-            <?php foreach ($this->errors as $error): ?>
-                <p> - <?php echo $error; ?></p>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
     <?php
-    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-tags')->getMessages());
+    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-tags')->getMessages(),$this->flashMessenger()->setNamespace('success-add-tags')->getMessages());
     if ($successMessage):
         ?>
         <div class="alert alert-success alert-block fade in">
@@ -117,5 +105,5 @@
     </section>
 </section>
 <script type="text/javascript">
-    Tags.del();
+    Tags.index();
 </script>

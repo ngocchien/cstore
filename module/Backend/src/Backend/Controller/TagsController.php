@@ -11,23 +11,10 @@ class TagsController extends MyController {
     /* @var $serviceProduct \My\Models\Product */
 
     public function __construct() {
-        $this->defaultJS = [
-            'backend:tags:edit' => 'jquery.validate.min.js,jquery.sumoselect.min.js,bootstrap-select.js',
-            'backend:tags:add' => 'jquery.validate.min.js,jquery.sumoselect.min.js,bootstrap-select.js',
-        ];
-
-        $this->defaultCSS = [
-            'backend:tags:add' => 'sumoselect.css,bootstrap-select.css',
-            'backend:tags:edit' => 'sumoselect.css,bootstrap-select.css',
-        ];
-
-        $this->externalJS = [
-            'backend:tags:edit' => array(STATIC_URL . '/b/js/my/tags.js',
-                STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js',),
-            'backend:tags:index' => STATIC_URL . '/b/js/my/tags.js',
-            'backend:tags:add' => array(STATIC_URL . '/b/js/my/tags.js',
-                STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js',)
-        ];
+        $this->externalJS = array(
+            STATIC_URL . '/b/js/my/tags.js',
+            STATIC_URL . '/b/js/library/tinymce/??tinymce.min.js'
+        );
     }
 
     public function indexAction() {
@@ -51,172 +38,81 @@ class TagsController extends MyController {
     }
 
     public function addAction() {
-        $paramsRoute = $params = $this->params()->fromRoute();
+        $arrParamsRoute = $arrParams = $this->params()->fromRoute();
         if ($this->request->isPost()) {
-            $params = $this->params()->fromPost();
-            $errors = array();
 
-            if (empty($params)) {
-                $errors[] = 'Vui lòng nhập đầy đủ thông tin !';
-            }
+            $arrParams = $this->params()->fromPost();
 
-            if (empty($params['TagsName'])) {
-                $errors['TagsName'] = 'Tên Tags không được bỏ trống !';
-            }
+            $serviceTags = $this->serviceLocator->get('My\Models\Tags');
+            $validation = new \Backend\Validate\Tags($arrParams, $serviceTags);
 
-            if (empty($errors)) {
-                $strTagsName = trim($params['TagsName']);
-                $strTagsSlug = General::getSlug($strTagsName);
+            if (!$validation->isError()) {
+                $arrData = $validation->getData();
 
-                $serviceTags = $this->serviceLocator->get('My\Models\Tags');
-                $arrConditionTag = array(
-                    'tags_slug' => $strTagsSlug,
-                    'not_tags_status' => -1
-                );
+                $intResult = $serviceTags->add($arrData);
+                if ($intResult) {
+                    $arrLogs = General::createLogs($arrParamsRoute, $arrData, $intResult);
+                    $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
+                    $serviceLogs->add($arrLogs);
 
-                $arrTag = $serviceTags->getDetail($arrConditionTag);
-
-                if (!empty($arrTag)) {
-                    $errors['TagsSlug'] = 'Tags này đã tồn tại trong hệ thống !';
+                    $this->flashMessenger()->setNamespace('success-add-tags')->addMessage('Thêm tags thành công!');
+                    return $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
                 }
-
-                if (empty($errors)) {
-                    $arrData = array(
-                        'tags_name' => $strTagsName,
-                        'tags_slug' => $strTagsSlug,
-                        'tags_order' => $params['TagsOrder'],
-                        'tags_description' => trim($params['tags_description']),
-                        'tags_meta_title' => trim($params['TagsMetaTitle']),
-                        'tags_meta_keyword' => trim($params['TagsMetaKeyword']),
-                        'tags_meta_description' => trim($params['TagsMetaDescription']),
-                        'tags_meta_social' => trim($params['TagsMetaSocial']),
-                        'user_created' => UID,
-                        'tags_status' => $params['tags_status'],
-                        'tags_created' => time(),
-                        'tags_status' => $params['tags_status']
-                    );
-                    $intResult = $serviceTags->add($arrData);
-
-                    if ($intResult > 0) {
-
-                        /*
-                         * Write to Logs
-                         */
-
-                        $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                        $arrLogs = array(
-                            'user_id' => UID,
-                            'logs_controller' => $paramsRoute['__CONTROLLER__'],
-                            'logs_action' => $paramsRoute['action'],
-                            'logs_time' => time(),
-                            'logs_detail' => 'Thêm Tags có id = ' . $intResult,
-                        );
-                        $serviceLogs->add($arrLogs);
-
-                        $this->flashMessenger()->setNamespace('success-add-tags')->addMessage('Thêm Tags sản phẩm thành công !');
-                        if ($params['is_close'] == 1) {
-                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
-                        } else {
-                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'add'));
-                        }
-                    }
-                    $errors[] = 'Không thể thêm dữ liệu. Hoặc danh mục này đã tồn tại. Xin vui lòng kiểm tra lại';
-                }
+                $errors['tags'] = 'Xảy ra lỗi trong qua trình xử lý, Vui lòng thử lại sau giây lát!';
             }
+            $errors = $validation->getMessageError();
         }
+
         return array(
             'errors' => $errors,
-            'params' => $params,
+            'arrParams' => $arrParams,
         );
     }
 
     public function editAction() {
-        $paramsRoute = $params = $this->params()->fromRoute();
+        $arrParamsRoute = $arrParams = $this->params()->fromRoute();
 
-        if (empty($params['id'])) {
+        if (empty($arrParams['id'])) {
             return $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
         }
 
-        $intTagsId = (int) $params['id'];
+        $intTagsId = (int) $arrParams['id'];
         $serviceTags = $this->serviceLocator->get('My\Models\Tags');
-        $detailTags = $serviceTags->getDetail(array('tags_id' => $intTagsId));
+        $arrCondition = array(
+            'tags_id' => $intTagsId,
+            'not_tags_status' => -1
+        );
+        $detailTags = $serviceTags->getDetail($arrCondition);
 
         if (empty($detailTags)) {
             return $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
         }
 
         if ($this->request->isPost()) {
-            $params = $this->params()->fromPost();
+            $arrParams = $this->params()->fromPost();
+            $arrParams['tags_id'] = $intTagsId;
+            $validation = new \Backend\Validate\Tags($arrParams, $serviceTags);
 
-            if (empty($params)) {
-                $errors[] = 'Vui lòng nhập đầy đủ các thông tin !';
-            }
+            if (!$validation->isError()) {
+                $arrData = $validation->getData();
+                $intResult = $serviceTags->edit($arrData, $intTagsId);
+                if ($intResult) {
+                    /*
+                     * Save Logs
+                     */
+                    $arrLogs = General::createLogs($arrParamsRoute, $arrData, $intTagsId);
+                    $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
+                    $serviceLogs->add($arrLogs);
 
-            if (empty($params['TagsName'])) {
-                $errors['TagsName'] = 'Tên Tags không được để trống !';
-            }
-
-            if (empty($errors)) {
-                $strTagsName = trim($params['TagsName']);
-                $strTagsSlug = General::getSlug($strTagsName);
-
-                $arrCondition = array(
-                    'tags_slug' => $strTagsSlug,
-                    'not_tags_status' => -1,
-                    'not_tags_id' => $intTagsId
-                );
-
-                $arrTagsExist = $serviceTags->getDetail($arrCondition);
-
-                if (!empty($arrTagsExist)) {
-                    $errors['tags_name'] = 'Tags này đã tồn tại trong hệ thống!';
+                    $this->flashMessenger()->setNamespace('success-edit-tags')->addMessage('Chỉnh sửa tags thành công!');
+                    return $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
                 }
-
-                if (empty($errors)) {
-                    $arrData = array(
-                        'tags_name' => trim($params['TagsName']),
-                        'tags_slug' => $strTagsSlug,
-                        'tags_order' => $params['TagsOrder'],
-                        'tags_description' => trim($params['tags_description']),
-                        'tags_meta_title' => trim(strip_tags($params['TagsMetaTitle'])),
-                        'tags_meta_keyword' => trim(strip_tags($params['TagsMetaKeyword'])),
-                        'tags_meta_description' => trim(strip_tags($params['TagsMetaDescription'])),
-                        'tags_meta_social' => trim(strip_tags($params['TagsMetaSocial'])),
-                        'user_updated' => UID,
-                        'tags_status' => $params['tags_status'],
-                        'tags_updated' => time()
-                    );
-                    $intResult = $serviceTags->edit($arrData, $intTagsId);
-
-                    if ($intResult) {
-
-                        /*
-                         * Write to Logs
-                         */
-
-                        $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                        $arrLogs = array(
-                            'user_id' => UID,
-                            'logs_controller' => $paramsRoute['__CONTROLLER__'],
-                            'logs_action' => $paramsRoute['action'],
-                            'logs_time' => time(),
-                            'logs_detail' => 'Chỉnh sửa Tags có id = ' . $intTagsId,
-                        );
-                        $serviceLogs->add($arrLogs);
-
-                        $this->flashMessenger()->setNamespace('success-edit-tags')->addMessage('Chỉnh sửa Tags thành công !');
-                        if ($params['is_close'] == 1) {
-                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'index'));
-                        } else {
-                            $this->redirect()->toRoute('backend', array('controller' => 'tags', 'action' => 'edit', 'id' => $intTagsId));
-                        }
-                    }
-                    $errors[] = 'Không thể chỉnh sửa dữ liệu. Hoặc tên Tags đã tồn tại. Xin vui lòng kiểm tra lại';
-                }
+                $errors['tags'] = 'Xảy ra lỗi trong quá trình xử lý! Vui lòng thử lại sau giây lát!';
             }
+            $errors = $validation->getMessageError();
         }
         return array(
-            'params' => $params,
+            'arrParams' => $arrParams,
             'errors' => $errors,
             'detailTags' => $detailTags,
         );
@@ -409,15 +305,15 @@ class TagsController extends MyController {
     }
 
     public function deleteAction() {
-        $paramsRoute = $this->params()->fromRoute();
+        $arrParamsRoute = $this->params()->fromRoute();
         if ($this->request->isPost()) {
-            $params = $this->params()->fromPost();
+            $arrParams = $this->params()->fromPost();
 
-            if (empty($params['TagsID'])) {
+            if (empty($arrParams['TagsID'])) {
                 return $this->getResponse()->setContent(json_encode(array('st' => -1, 'ms' => 'Xảy ra lỗi trong quá trình xử lý. Xin vui lòng thử lại')));
             }
 
-            $intTagId = (int) $params['TagsID'];
+            $intTagId = (int) $arrParams['TagsID'];
 
             /*
              *  Kiểm tra có tồn tại tag với id truyền với trong DB hay không
@@ -449,13 +345,7 @@ class TagsController extends MyController {
                  */
 
                 $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                $arrLogs = array(
-                    'user_id' => UID,
-                    'logs_controller' => $paramsRoute['__CONTROLLER__'],
-                    'logs_action' => $paramsRoute['action'],
-                    'logs_time' => time(),
-                    'logs_detail' => 'Xóa tags có id = ' . $intTagId,
-                );
+                $arrLogs = General::createLogs($arrParamsRoute, $arrData, $intTagId);
                 $serviceLogs->add($arrLogs);
 
                 return $this->getResponse()->setContent(json_encode(array('st' => 1, 'ms' => 'Xóa Tags hoàn tất')));

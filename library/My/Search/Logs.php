@@ -71,10 +71,12 @@ class Logs extends SearchAbstract {
         $mapping->setProperties([
             'logs_user_id' => ['type' => 'integer', 'index' => 'not_analyzed'],
             'user_id' => ['type' => 'integer', 'index' => 'not_analyzed'],
+            'logs_module' => ['type' => 'string', 'store' => 'yes', 'index_analyzer' => 'translation_index_analyzer', 'search_analyzer' => 'translation_search_analyzer', 'term_vector' => 'with_positions_offsets'],
             'logs_controller' => ['type' => 'string', 'store' => 'yes', 'index_analyzer' => 'translation_index_analyzer', 'search_analyzer' => 'translation_search_analyzer', 'term_vector' => 'with_positions_offsets'],
             'logs_action' => ['type' => 'string', 'store' => 'yes', 'index_analyzer' => 'translation_index_analyzer', 'search_analyzer' => 'translation_search_analyzer', 'term_vector' => 'with_positions_offsets'],
             'logs_time' => ['type' => 'long', 'index' => 'not_analyzed'],
             'logs_detail' => ['type' => 'string', 'store' => 'yes', 'index_analyzer' => 'translation_index_analyzer', 'search_analyzer' => 'translation_search_analyzer', 'term_vector' => 'with_positions_offsets'],
+            'logs_id_number' => ['type' => 'integer', 'index' => 'not_analyzed']
         ]);
         $mapping->send();
     }

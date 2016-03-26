@@ -23,7 +23,7 @@ class ProductController extends MyController {
             'backend:product:edit' => 'sumoselect.css,bootstrap-fileupload.css,bootstrap-select.css',
             'backend:product:index' => 'sumoselect.css,bootstrap-select.css',
         ];
-        
+
 //        $this->externalCSS = [
 //            'backend:product:add' => array(
 //                STATIC_URL . '/b/js/my/??product.js'
@@ -129,12 +129,14 @@ class ProductController extends MyController {
 
     public function addAction() {
 
-        $paramsRoute = $params = $this->params()->fromRoute();
+        $arrParamsRoute = $arrParams = $this->params()->fromRoute();
+
+        $serviceLocator = $this->serviceLocator;
 
         /*
          * get Category
          */
-        $serviceCategory = $this->serviceLocator->get('My\Models\Category');
+        $serviceCategory = $serviceLocator->get('My\Models\Category');
         $arrConditionCategory = array(
             'not_cate_status' => -1,
         );
@@ -143,7 +145,7 @@ class ProductController extends MyController {
         /*
          * get Tags
          */
-        $serviceTags = $this->serviceLocator->get('My\Models\Tags');
+        $serviceTags = $serviceLocator->get('My\Models\Tags');
         $arrConditionTag = array(
             'not_tags_status' => -1
         );
@@ -152,194 +154,38 @@ class ProductController extends MyController {
         /*
          * get all Brand
          */
-        $serviceBrand = $this->serviceLocator->get('My\Models\Brand');
+        $serviceBrand = $serviceLocator->get('My\Models\Brand');
         $arrConditionBrand = array(
             'not_bran_status' => -1
         );
         $arrBrandList = $serviceBrand->getList($arrConditionBrand);
 
         if ($this->request->isPost()) {
-            $params = $this->params()->fromPost();
-            $errors = array();
-            if (empty($params)) {
-                $errors[] = 'Vui lòng nhập đầy đủ các thông tin !';
-            }
+            $arrParams = $this->params()->fromPost();
+            $validationProduct = new \Backend\Validate\Product($arrParams, $serviceLocator);
 
-            if (empty($params['prod_name'])) {
-                $errors['prod_name'] = 'Chưa nhập tên cho sản phẩm !';
-            }
-
-            if (empty($params['cate_id'])) {
-                $errors['bran_id'] = 'Vui lòng chọn một thương hiệu';
-            }
-
-            if (empty($params['prod_price']) && $params['prod_price'] < 0) {
-                $errors['prod_price'] = 'Vui lòng nhập giá sản phẩm';
-            }
-
-            if ((empty($params['prod_promotion_price']) || $params['prod_promotion_price'] < 1) && $params['prod_is_promotion'] == 1) {
-                $errors['prod_promotion_price'] = 'Vui lòng nhập giá khuyến mãi';
-            }
-
-            if (empty($params['prod_description'])) {
-                $errors['prod_description'] = 'Mô tả về sản phẩm không được bỏ trống !';
-            }
-
-            if (empty($params['prod_detail'])) {
-                $errors['prod_detail'] = 'Nội dung về sản phẩm không được bỏ trống !';
-            }
-
-
-            foreach ($params['tags_name'] as $key => $value) {
-                $tags = $value . ',';
-            }
-
-            $prop_id = "";
-            foreach ($params['prop_id'] as $key => $value) {
-                if (trim($value) != "") {
-                    if (count($params['prop_id']) == $key + 1) {
-                        $prop_id.= $value;
-                    } else {
-                        $prop_id.= $value . ',';
-                    }
-                }
-            }
-
-            $cate_id = "";
-            foreach ($params['cate_id'] as $key => $value) {
-                if (trim($value) != "") {
-                    if (count($params['cate_id']) == $key + 1) {
-                        $cate_id .= $value;
-                    } else {
-                        $cate_id .= $value . ',';
-                    }
-                }
-            }
-
-            $serviceProduct = $this->serviceLocator->get('My\Models\Product');
-            $prodSlug = ($params['prod_slug'] != "") ? General::getSlug($params['prod_slug']) : General::getSlug($params['prod_name']);
-            $isNotExist = $serviceProduct->getTotal(array('prod_slug' => $prodSlug, 'not_prod_status' => -1));
-
-            if ($isNotExist > 0) {
-                $errors['prod_name'] = 'Sản phẩm đã tồn tại trong hệ thống !';
-            }
-
-            if (empty($params['prod_image'])) {
-                $errors['prod_image'] = 'Vui lòng chọn hình chính cho sản phẩm !';
-            }
-
-            if (empty($params['prod_image_sub'])) {
-                $errors['prod_image_sub'] = 'Vui lòng chọn hình slide cho sản phẩm !';
-            }
-
-            if (!empty($params['prod_code'])) {
-                $isNotExist = $serviceProduct->getTotal(array('prod_code' => $params['prod_code'], 'not_prod_status' => -1));
-                if ($isNotExist > 0) {
-                    $errors['prod_code'] = 'Mã sản phẩm đã tồn tại trong hệ thống';
-                }
-            }
-
-
-            $tags = "";
-            if (!empty($params['tags_name'])) {
-                $expTag = explode(",", $params['tags_name']);
-                if (count($expTag) > 0) {
-                    foreach ($expTag as $key => $value) {
-                        if (!empty($value)) {
-                            $isExist = $serviceTags->getDetail(array('tags_name' => $value, 'not_tags_status' => -1));
-                            if (empty($isExist)) {
-                                $arrDataTags = array(
-                                    'tags_name' => trim($value),
-                                    'tags_slug' => General::getSlug(trim($value)),
-                                    'tags_order' => 0,
-                                    'tags_created' => time(),
-                                    'tags_status' => 1,
-                                    'user_created' => UID,
-                                    'tags_status' => 1,
-                                    'tags_parent' => 0,
-                                );
-                                $id = $serviceTags->add($arrDataTags);
-                                $serviceTags->edit(array('tags_grade' => $id . ':'), $id);
-                                $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                                $arrLogs = array(
-                                    'user_id' => UID,
-                                    'logs_controller' => 'Product',
-                                    'logs_action' => 'add',
-                                    'logs_time' => time(),
-                                    'logs_detail' => 'Thêm tags mới id = ' . $id,
-                                );
-                                $serviceLogs->add($arrLogs);
-
-                                $tags.=$id . ",";
-                            } else {
-                                $tags.=$isExist["tags_id"] . ",";
-                            }
-                        }
-                    }
-                    $tags = substr($tags, 0, -1);
-                }
-            }
-
-            if (empty($errors)) {
-                $arrData = array(
-                    'prod_name' => htmlentities($params['prod_name']),
-                    'prod_slug' => $prodSlug,
-                    'prod_price' => $params['prod_price'],
-                    'prod_detail' => \My\Minifier\HtmlMin::minify($params['prod_detail']),
-                    'cate_id' => implode(',', $params['Category']),
-                    'user_created' => UID,
-                    'prop_id' => $prop_id,
-                    'tags_id' => $tags,
-                    'prod_call_price' => ($params['prod_price'] == 0 || empty($params['prod_price'])) ? 1 : 0, //$params['prod_call_price']
-                    'prod_is_promotion' => empty($params['prod_is_promotion']) ? 0 : $params['prod_is_promotion'],
-                    'bran_id' => $params['bran_id'],
-                    'main_cate_id' => $params['main_cate_id'],
-                    'cate_id' => $cate_id,
-                    'prod_promotion_price' => $params['prod_promotion_price'],
-                    'prod_description' => \My\Minifier\HtmlMin::minify($params['prod_description']),
-                    'prod_bestselling' => empty($params['prod_bestselling']) ? 0 : $params['prod_bestselling'],
-                    'prod_meta_title' => htmlentities($params['prod_meta_title']),
-                    'prod_meta_keyword' => htmlentities($params['prod_meta_keyword']),
-                    'prod_meta_description' => ($params['prod_meta_description']),
-                    'prod_meta_robot' => ($params['prod_meta_robot']),
-                    'prod_image' => $params['prod_image'],
-                    'prod_image_sub' => json_encode($params['prod_image_sub']),
-                    'prod_status' => $params['prod_status'],
-                    'prod_actived' => $params['prod_actived'],
-                    'prod_created' => time(),
-                    'prod_type' => $params['prod_type']
-                );
+            if (!$validationProduct->isError()) {
+                $serviceProduct = $serviceLocator->get('My\Models\Product');
+                $arrData = $validationProduct->getData();
                 $intResult = $serviceProduct->add($arrData);
-                $detailProduct = $serviceProduct->getDetail(array('prod_id' => $intResult));
-                $detailProduct['prod_name_like'] = $detailProduct['prod_name'];
-                $arrDocument[] = new \Elastica\Document($intResult, $detailProduct);
-                $instanceProduct = new \My\Search\Products();
-                $result = $instanceProduct->add($arrDocument);
-                if ($result > 0) {
-                    $prodCode = empty($params['prod_code']) ? $intResult : $params['prod_code'];
-                    $serviceProduct->edit(['prod_code' => $prodCode], $intResult);
-
-                    $serviceLogs = $this->serviceLocator->get('My\Models\Logs');
-                    $arrLogs = array(
-                        'user_id' => UID,
-                        'logs_controller' => 'Product',
-                        'logs_action' => 'add',
-                        'logs_time' => time(),
-                        'logs_detail' => 'Thêm sản phẩm mới id = ' . $intResult,
-                    );
+                if ($intResult) {
+                    /*
+                     * Save log
+                     */
+                    $arrLogs = General::createLogs($arrParamsRoute, $arrParams, $intResult);
+                    $serviceLogs = $serviceLocator->get('My\Models\Logs');
                     $serviceLogs->add($arrLogs);
-                    $this->flashMessenger()->setNamespace('success-add-product')->addMessage('Thêm sản phẩm thành công !');
-                    if ($params['is_close'] == 1) {
-                        $this->redirect()->toRoute('backend', array('controller' => 'product', 'action' => 'index'));
-                    } else {
-                        $this->redirect()->toRoute('backend', array('controller' => 'product', 'action' => 'add'));
-                    }
+
+                    $this->flashMessenger()->setNamespace('success-add-product')->addMessage('Thêm sản phẩm thành công!');
+                    return $this->redirect()->toRoute('backend', array('controller' => 'product', 'action' => 'index'));
                 }
-                $errors[] = 'Không thể thêm dữ liệu. Hoặc sản phẩm đã tồn tại. Xin vui lòng kiểm tra lại';
+                $errors['product'] = 'Xảy ra lỗi trong qua trình xử lý, Vui lòng thử lại sau giây lát!';
             }
+
+            $errors = $validationProduct->getMessageError();
         }
         return array(
-            'params' => $params,
+            'arrParams' => $arrParams,
             'errors' => $errors,
             'arrCategoryList' => $arrCategoryList,
             'arrTagList' => $arrTagList,

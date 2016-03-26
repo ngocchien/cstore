@@ -4,14 +4,19 @@ namespace My\Models;
 
 class Product extends ModelAbstract {
 
+    public function __construct($serviceLocator) {
+        
+        if ($serviceLocator) {
+            $this->setServiceLocator($serviceLocator);
+        }
+
+        $this->setTmpKeyCache('tmpProduct');
+        parent::__construct();
+    }
+
     private function getParentTable() {
         $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         return new \My\Storage\storageProduct($dbAdapter);
-    }
-
-    public function __construct() {
-        $this->setTmpKeyCache('tmpProduct');
-        parent::__construct();
     }
 
     public function getList($arrCondition = array()) {

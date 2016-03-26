@@ -1,31 +1,21 @@
+<?php
+$arrParams = $this->arrParams;
+$errors = $this->errors;
+$arrTags = $this->detailTags;
+?>
 <section class="wrapper site-min-height">
     <div class="get-alert"></div>
-    <?php if ($this->errors): ?>
+    <?php if ($errors['tags']): ?>
         <div class="alert alert-block alert-danger fade in">
             <button class="close close-sm" type="button" data-dismiss="alert">
                 <i class="icon-remove"></i>
             </button>
             <h4><i class="icon-remove-sign"></i> Lỗi!</h4>
-            <?php foreach ($this->errors as $error): ?>
-                <p> - <?php echo $error; ?></p>
-            <?php endforeach; ?>
+            <p> - <?php echo $errors['tags']; ?></p>
         </div>
     <?php endif; ?>
 
-    <?php
-    $successMessage = array_merge($this->flashMessenger()->setNamespace('success-edit-tags')->getMessages());
-    if ($successMessage):
-        ?>
-        <div class="alert alert-success alert-block fade in">
-            <button class="close close-sm" type="button" data-dismiss="alert">
-                <i class="icon-remove"></i>
-            </button>
-            <h4><i class="icon-ok-sign"></i> Hoàn tất!</h4>
-            <p>- <?php echo current($successMessage); ?></p>
-        </div>
-    <?php endif; ?>
-
-    <div class="row" id="frmAddCity">
+    <div class="row">
         <div class="col-lg-12">
             <section class="panel">
                 <header id="frmTitle" class="panel-heading">Chỉnh sửa Tags sản phẩm</header>
@@ -34,20 +24,17 @@
                         <div class="form-group">
                             <label class="col-lg-2 col-md-2 col-sm-2 control-label"> Tên Tags sản phẩm </label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsName" value = "<?php echo $this->detailTags['tags_name'] ?>">
+                                <input class="form-control" type="text" name="tags_name" value = "<?php echo $arrParams['tags_name'] ? $arrParams['tags_name'] : $arrTags['tags_name']; ?>">
+                                <?php if ($errors['tags_name']): ?>
+                                    <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['tags_name']; ?></strong></span>
+                                <?php endif; ?>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="tags_slug" class="col-lg-2 col-md-2 col-sm-2 control-label">URL</label>
-                            <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsSlug" placeholder="Nhập URL" value="<?php echo $this->detailTags['tags_slug'] ?>">
-                            </div>
-                        </div>
+                        
                         <div class="form-group">
                             <label for="tags_order" class="col-lg-2 col-md-2 col-sm-2 control-label">Độ ưu tiên</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsOrder" value="<?php echo $this->detailTags['tags_order']; ?>">
+                                <input class="form-control" type="text" name="tags_order" value="<?php echo $arrParams['tags_order'] ? $arrParams['tags_order'] : $arrTags['tags_order']; ?>">
                             </div>
                         </div>
 
@@ -55,54 +42,53 @@
                             <label for="tags_status" class="col-lg-2 col-md-2 col-sm-2 col-sm-2 control-label" value="">Trạng thái</label>
                             <div class="col-lg-10">
                                 <select name="tags_status" class="multi-select form-control sumo-select-box">
-                                    <option value="1" <?php if ($this->detailTags['tags_status'] == 1): ?>selected="selected"<?php endif; ?>>Hiển thị</option>
-                                    <option value="0" <?php if ($this->detailTags['tags_status'] == 0): ?>selected="selected"<?php endif; ?>>Ẩn</option>
+                                    <option value="1" <?php if ($arrTags['tags_status'] == 1): ?>selected="selected"<?php endif; ?>>Hiển thị</option>
+                                    <option value="0" <?php if ($arrTags['tags_status'] == 0): ?>selected="selected"<?php endif; ?>>Ẩn</option>
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="tags_description" class="col-lg-2 col-md-2 col-sm-2 control-label">Mô tả ngắn về Tags</label>
                             <div class="col-lg-10">
-                                <textarea rows="6" name="tags_description" id="Sumary" class="form-control editor" style="">
-                                    <?php echo isset($this->params["tags_description"]) ? $this->params["tags_description"] : $this->detailTags["tags_description"]; ?>
-                                </textarea>
+                                <textarea rows="6" name="tags_description" id="Sumary" class="form-control editor"><?php echo isset($arrParams["tags_description"]) ? $arrParams["tags_description"] : $arrTags["tags_description"]; ?></textarea>
+                                <?php if ($errors['tags_description']): ?>
+                                    <span class="help-block color-danger"><strong> <i class="icon-exclamation-sign"></i> <?php echo $errors['tags_description']; ?></strong></span>
+                                <?php endif; ?>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="tags_meta_title" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Title</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsMetaTitle" placeholder="Nhập SEO Meta Title" value ="<?php echo $this->detailTags['tags_meta_title'] ?>">
+                                <input class="form-control" type="text" name="tags_meta_title" placeholder="Nhập SEO Meta Title" value ="<?php echo $arrParams['tags_meta_title'] ? $arrParams['tags_meta_title'] : $arrTags['tags_meta_title'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="tags_meta_keyword" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Keyword</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsMetaKeyword" placeholder="Nhập SEO Meta Keyword" value ="<?php echo $this->detailTags['tags_meta_keyword'] ?>">
+                                <input class="form-control" type="text" name="tags_meta_keyword" placeholder="Nhập SEO Meta Keyword" value ="<?php echo $arrParams['tags_meta_keyword'] ? $arrParams['tags_meta_keyword'] : $arrTags['tags_meta_keyword'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="tags_meta_description" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Description</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsMetaDescription" placeholder="Nhập SEO Meta Description" value ="<?php echo $this->detailTags['tags_meta_description'] ?>">
+                                <input class="form-control" type="text" name="tags_meta_description" placeholder="Nhập SEO Meta Description" value ="<?php echo $arrParams['tags_meta_description'] ? $arrParams['tags_meta_description'] : $arrTags['tags_meta_description'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="tags_meta_social" class="col-lg-2 col-md-2 col-sm-2 control-label">SEO Meta Social</label>
                             <div class="col-lg-10 col-md-10 col-sm-10">
-                                <input class="form-control" type="text" name="TagsMetaSocial" placeholder="Nhập SEO Meta Social" value ="<?php echo $this->detailTags['tags_meta_social'] ?>">
+                                <input class="form-control" type="text" name="tags_meta_social" placeholder="Nhập SEO Meta Social" value ="<?php echo $arrParams['tags_meta_social'] ? $arrParams['tags_meta_social'] : $arrTags['tags_meta_social'] ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-lg-offset-3 col-lg-10">
-                                <button type="submit" id="done" class="btn btn-success bt-save" name="save"><i class="icon-save"></i> Lưu</button>  
-                                <button type="submit" id="done" class="btn btn-success bt-save" name="save_close"><i class="icon-save"></i> Lưu & Thoát</button> 
-                                <input value="0" name="is_close" class="is_close" type="hidden" />
+                                <button type="submit" id="done" class="btn btn-success bt-save"><i class="icon-save"></i> Lưu</button>  
                             </div>
                         </div>
                     </form>
@@ -119,6 +105,7 @@
                 </div>
             </section>
         </div>
+        
         <div class="col-lg-6 col-md-6 col-sm-6">
             <section class="panel">
                 <header class="panel-heading">Danh sách sản phẩm</header>
@@ -127,20 +114,9 @@
                 </div>
             </section>
         </div>
+        
     </div>
 </section>
 <script>
-
-    search_product = '';    //để search = null để phân trang
-    search_producttags = '';
-    tags_id = <?php echo $this->params['id']; ?>;
-    function loadPage(page, action) {
-        if (action == 'getproduct' || action == 'searchproduct')
-            $('.' + action).load(baseurl + '/backend/tags/' + action + '/page/' + page, {tags_id: tags_id, search_name: search_product});
-        else if (action == 'getproducttags' || action == 'searchproducttags')
-            $('.' + action).load(baseurl + '/backend/tags/' + action + '/page/' + page, {tags_id: tags_id, search_name: search_producttags});
-    }
-    ;
-
     Tags.index();
 </script>

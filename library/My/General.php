@@ -5,15 +5,6 @@ namespace My;
 class General {
 
     const TITLE_META = " | CSTORE - Đồ chơi Công nghệ";
-    const CAT_TINTUC = 1;
-    const CAT_ADS = 2;
-    const CAT_PR = 3;
-    const TYPE_NEWS = 1;
-    const TYPE_VIDEO = 2;
-    const COMMENT_TYPE_GOPY = 1;
-    const COMMENT_TYPE_HOIDAP = 2;
-    const HN = 22;
-    const HCM = 29;
     const MEMBER = 1;
     const ADMINISTRATOR = 2;
     const MODERATOR = 3;
@@ -24,14 +15,8 @@ class General {
     const MR = 1;
     const MRS = 2;
     const PREFIX_IN = '';
-    const ORDER_CODE = 'MG';
-    //define so tien thu ho nho nhat
-    const MIN_FEE_COLLECTION = 17000;
-    //phi thu tien tai nha
-    const PAYMENT_FEE = 0.94;
-    const CHANGE_LBS_KG = 0.45359237;
+    const ORDER_CODE = 'CS';
     //1:chuyển khoản || 2 : thanh toán qua bảo kim || 3 : trả tiền khi nhận hàng
-
     const PAYMENT_TRANSFER = 1;
     const PAYMENT_BAOKIM = 2;
     const PAYMENT_RECEIVED = 3;
@@ -44,7 +29,7 @@ class General {
     const ORDER_STATUS_PAID = 4; // da thu tien
     const ORDER_STATUS_RETURN = 5; //Khách trả lại hàng
     const ORDER_STATUS_WAITING = 6; //Chờ hàng về
-//    delivery
+    //delivery
     const MENU_LOCALTION_TOP = 1;
     const MENU_LOCALTION_BUTTON_1 = 2;
     const MENU_LOCALTION_BUTTON_2 = 3;
@@ -111,15 +96,6 @@ class General {
         return $url;
     }
 
-    public static function getMethodShip() {
-        return array(
-            1 => 'Vận chuyển bằng Proship',
-            2 => 'Vận chuyển bằng Giaonhan247 ',
-            3 => 'Vận chuyển bằng Bưu điện',
-            4 => 'Mua Thuốc Tốt tự giao'
-        );
-    }
-
     public static function getStatusOrder() {
         return array(
             self::ORDER_STATUS_BENDING => 'Chờ kiểm duyệt ',
@@ -133,62 +109,11 @@ class General {
         );
     }
 
-    public static function arrSortStatus() {
-        return array(
-            '1' => '0',
-            '2' => '1',
-            '3' => '6',
-            '4' => '2',
-            '5' => '3',
-            '6' => '4',
-            '7' => '5',
-            '8' => '-1'
-        );
-    }
-
     public static function getStatusStore() {
         return array(
             '1' => 'Còn hàng',
             '0' => 'Hết hàng',
         );
-    }
-
-    public static function getStatusProdOrder() {
-        return array(
-            '-1' => 'Chưa duyệt ',
-            '0' => 'Hết hàng',
-            '1' => 'Còn hàng',
-        );
-    }
-
-    public static function getUnitProduct() {
-        return array(
-            '1' => 'Gam ',
-            '2' => 'Tuýp',
-            '3' => 'Ml',
-            '4' => 'Viên',
-            '5' => 'Hộp',
-            '6' => 'Chai',
-        );
-    }
-
-    public static function getStatusAdvisory() {
-        return array(
-            '1' => 'Đã mua',
-            '2' => 'Hẹn gọi lại',
-            '3' => 'Chỉ tham khảo',
-            '4' => 'Thông tin sai',
-            '5' => 'Hẹn tới shop',
-        );
-    }
-
-    public static function getCatalogType($type) {
-        $arrType = self::listCatalogType();
-        if (isset($arrType[$type])) {
-            return $arrType[$type];
-        } else {
-            throw new \Zend\Http\Exception('Cannot get category type');
-        }
     }
 
     public static function getlistStatus() {
@@ -226,15 +151,6 @@ class General {
         );
     }
 
-    public static function formatDateM_D_Y($d) {
-        $temp = explode('/', $d);
-        $D = $temp[0];
-        $M = $temp[1];
-        $Y = $temp[2];
-        $date = $M . '/' . $D . '/' . $Y;
-        return $date;
-    }
-
     public static function getMenuLocation() {
         return array(
             self::MENU_LOCALTION_TOP => 'Trên cùng',
@@ -246,15 +162,6 @@ class General {
         );
     }
 
-    public static function getClassIcon() {
-        return array(
-            'i-like ic-like' => 'Like',
-            'i-ship ic-ship' => 'Vận chuyển',
-            'i-payment ic-pay' => 'Thanh toán',
-            'i-payback ic-reload' => 'Đổi trả',
-        );
-    }
-
     //permission
     public static function getRole($roleID) {
         $arrRole = self::listRole();
@@ -263,15 +170,6 @@ class General {
         }
 
         return false;
-    }
-
-    public static function mixArray($arrBefore = array()) {
-        $arrAfter = [];
-        for ($i = 0; $i < count($arrBefore); $i++) {
-            $temp = $arrBefore[array_rand($arrBefore)];
-            $arrAfter[] = $temp;
-        }
-        return $arrAfter;
     }
 
     public static function getGender() {
@@ -320,21 +218,6 @@ class General {
     // Returns all background color names
     public static function getBackgroundColors() {
         return array_keys(self::$background_colors);
-    }
-
-    public static function randomDiscountCode($namespace = '') {
-        static $guid = '';
-        $uid = uniqid("", true);
-        $data = $namespace . $_SERVER['REQUEST_TIME'] . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['REMOTE_PORT'] . time();
-        $hash = strtoupper(hash('ripemd160', $uid . $guid . md5($data)));
-        $guid = substr($hash, 0, 5) .
-                '-' .
-                substr($hash, 5, 5) .
-                '-' .
-                substr($hash, 10, 5) .
-                '-' .
-                substr($hash, 15, 5);
-        return $guid;
     }
 
     public static function randomDigits($length = 6) {
@@ -546,9 +429,9 @@ class General {
 //        if (in_array('isdev', $_SERVER['argv'])) {
 //            $port = 9200;
 //        }
-        
+
         $port = '9200';
-        
+
         $client = new \Elastica\Client(
                 array('servers' => array(
                 array('host' => 'localhost', 'port' => $port),
@@ -772,67 +655,6 @@ class General {
         return $result;
     }
 
-    public static function getOrderCode($orderID, $createdDate) {
-        $strOrderCode = '';
-        if (!$orderID || !$createdDate) {
-            return $strOrderCode;
-        }
-        $strOrderCode = 'AM' . date('dmy', $createdDate) . '-' . $orderID;
-        return $strOrderCode;
-    }
-
-    public static function calculateFeeCollection($totalRemainPrice, $domesticShippingFee) {
-        $feeCollection = 0;
-        if ($totalRemainPrice <= 0 || $domesticShippingFee <= 0) {
-            return $feeCollection;
-        }
-        $feeCollection = $totalRemainPrice * 0.011;
-
-        if ($feeCollection * EXCHANGE_RATE < self::MIN_FEE_COLLECTION) {
-            $feeCollection = number_format(self::MIN_FEE_COLLECTION / EXCHANGE_RATE, 2);
-        }
-
-        $feeCollection = round($feeCollection, 2);
-
-        return $feeCollection;
-    }
-
-    public static function calculateTransactionFee($prepaidPercent, $totalEstimatedOrder) {
-        $transactionFee = 0;
-        $prepaidPercent = (int) $prepaidPercent;
-        $totalEstimatedOrder = (float) $totalEstimatedOrder;
-        if ($prepaidPercent && $totalEstimatedOrder) {
-            switch ($prepaidPercent) {
-                case 50:
-                    $transactionFee = round($totalEstimatedOrder * 3.5 / 100, 2);
-                    break;
-                case 80:
-                    $transactionFee = round($totalEstimatedOrder * 2 / 100, 2);
-                    break;
-                default:
-                    $transactionFee = 0;
-                    break;
-            }
-        }
-        return (float) $transactionFee;
-    }
-
-    /**
-     * @param array $arrOrder
-     * @return float $totalOrder
-     */
-    public static function calculateTotalOrder($arrOrder) {
-        $totalOrder = 0;
-        if ($arrOrder) {
-            $totalOrder = (float) $arrOrder['total_order'];
-            $intPercent = (int) $arrOrder['vat_percent'];
-
-            $vatFee = (float) round($totalOrder * $intPercent / 100, 2);
-            $totalOrder += $vatFee;
-        }
-        return (float) $totalOrder;
-    }
-
     public static function getRealIpAddr() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet
             $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -843,32 +665,6 @@ class General {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         return $ip;
-    }
-
-    /**
-     * @param array $arrDiscountCode
-     * @param string|int|float $totalServiceFee
-     * @return float $discountPrice
-     * 
-     * $totalServiceFee = $totalShippingFee + $totalImportFee + $totalOtherCharge
-     */
-    public static function calculateDiscountPriceByCode($arrDiscountCode, $totalServiceFee) {
-        $discountPrice = 0;
-        $totalServiceFee = (float) $totalServiceFee;
-        if (is_array($arrDiscountCode) && $totalServiceFee) {
-            switch ($arrDiscountCode['discount_type']) {
-                case 1:
-                    $discountPrice = round($totalServiceFee * $arrDiscountCode['discount_percent'] / 100, 2);
-                    break;
-                case 2:
-                    $discountPrice = $arrDiscountCode['discount_value'];
-                    break;
-                default:
-                    $discountPrice = 0;
-                    break;
-            }
-        }
-        return (float) $discountPrice;
     }
 
     public static function crawler($strURL = '', $strCookiePath = '', $arrHeader = array(), $arrData = array()) {
@@ -919,52 +715,6 @@ class General {
         }
 
         return $records;
-    }
-
-    /**
-     * setFlashMessenger
-     * @param string $strTrackingNumber
-     * @return string URL matching carrier
-     */
-    public static function detectShippingCarrierByTracking($strTrackingNumber) {
-        $arrTrackingURL = array(
-            array(
-                'url' => 'http://wwwapps.ups.com/WebTracking/processInputRequest?TypeOfInquiryNumber=T&InquiryNumber1=',
-                'reg' => '/\b(1Z ?[0-9A-Z]{3} ?[0-9A-Z]{3} ?[0-9A-Z]{2} ?[0-9A-Z]{4} ?[0-9A-Z]{3} ?[0-9A-Z]|[\dT]\d\d\d ?\d\d\d\d ?\d\d\d)\b/i'
-            ),
-            array(
-                'url' => 'https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=',
-                'reg' => '/\b((420 ?\d\d\d\d\d ?)?(91|94|01|03|04|70|23|13)\d\d ?\d\d\d\d ?\d\d\d\d ?\d\d\d\d ?\d\d\d\d( ?\d\d)?)\b/i'
-            ),
-            array(
-                'url' => 'https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=',
-                'reg' => '/\b((M|P[A-Z]?|D[C-Z]|LK|EA|V[A-Z]|R[A-Z]|CP|CJ|LC|LJ) ?\d\d\d ?\d\d\d ?\d\d\d ?[A-Z]?[A-Z]?)\b/i'
-            ),
-            array(
-                'url' => 'https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=',
-                'reg' => '/^E\D{1}\d{9}\D{2}$|^9\d{15,21}$/i'
-            ),
-            array(
-                'url' => 'http://www.fedex.com/Tracking?language=english&cntry_code=us&tracknumbers=',
-                'reg' => '/\b((96\d\d\d\d\d ?\d\d\d\d|96\d\d|\d\d\d\d) ?\d\d\d\d ?\d\d\d\d( ?\d\d\d)?)\b/i'
-            ),
-            array(
-                'url' => 'http://www.ontrac.com/trackres.asp?tracking_number=',
-                'reg' => '/\b((C|D)\d\d\d\d\d\d\d\d\d\d\d\d\d\d)\b/i'
-            ),
-            array(
-                'url' => 'http://www.dhl.com/content/g0/en/express/tracking.shtml?brand=DHL&AWB=',
-                'reg' => '/\b(\d\d\d\d ?\d\d\d\d ?\d\d)\b/i'
-            ),
-        );
-        foreach ($arrTrackingURL as $item) {
-            $match = array();
-            preg_match($item['reg'], $strTrackingNumber, $match);
-            if (count($match)) {
-                return $item['url'] . $match[0];
-            }
-        }
-        return '';
     }
 
     /**
@@ -1035,62 +785,18 @@ class General {
         return $arrReturn;
     }
 
-    public static function arrCateInput($array = array(), $id = 0) {
-        $arr = array();
-        foreach ($array as $key => $value) {
-            if ($value["cate_parent"] == $id) {
-                if ($id == 0) {
-                    if (count(General::arrCateInput($array, $value["cate_id"])) > 0) {
-                        $arr[] = array("cate_link" => $value["cate_link"], "cate_name" => $value["cate_name"], "cate_grade" => $value["cate_grade"], "cate_id" => $value["cate_id"], "cate_slug" => $value["cate_slug"], "parent" => General::arrCateInput($array, $value["cate_id"]));
-                    } else {
-                        $arr[] = array("cate_link" => $value["cate_link"], "cate_name" => $value["cate_name"], "cate_grade" => $value["cate_grade"], "cate_id" => $value["cate_id"], "cate_slug" => $value["cate_slug"]);
-                    }
-                } else {
-                    if (count(General::arrCateInput($array, $value["cate_id"])) > 0) {
-                        $arr[] = array("cate_link" => $value["cate_link"], "cate_name" => $value["cate_name"], "cate_grade" => $value["cate_grade"], "cate_id" => $value["cate_id"], "cate_slug" => $value["cate_slug"], "parent" => General::arrCateInput($array, $value["cate_id"]));
-                    } else {
-                        $arr[] = array("cate_link" => $value["cate_link"], "cate_name" => $value["cate_name"], "cate_grade" => $value["cate_grade"], "cate_id" => $value["cate_id"], "cate_slug" => $value["cate_slug"]);
-                    }
-                }
-            }
-        }
-        return $arr;
-    }
+    public static function createLogs($arrParamsRoute, $arrParams, $intId) {
+        $arrData = array(
+            'user_id' => UID,
+            'logs_module' => $arrParamsRoute['module'],
+            'logs_controller' => $arrParamsRoute['__CONTROLLER__'],
+            'logs_action' => $arrParamsRoute['action'],
+            'logs_time' => time(),
+            'logs_detail' => json_encode($arrParams),
+            'logs_id_number' => $intId
+        );
 
-    public static function arrCateOutput($array = array(), $level = 1, $idActive = 0) {
-        $arr = array("result" => "", "is_active" => false);
-        foreach ($array as $value) {
-            if (count($value["parent"]) > 0) {
-                $arrData = General::arrCateOutput($value["parent"], $level + 1, $idActive);
-                $curActive = (($idActive == $value["cate_id"]) ? true : $arrData["is_active"]);
-                $arr["is_active"] = ($arr["is_active"] == false) ? $curActive : true;
-                $arr["result"].= '<li class="item ' . (($curActive) ? 'opened' : 'unopened' ) . '"><a  href="' . $value["cate_link"] . '"> ' . $value["cate_name"] . '</a><ul class="item-sub level' . $level . '">' . $arrData["result"] . '</ul></li>';
-            } else {
-                $curActive = (($idActive == $value["cate_id"]) ? true : $arrData["is_active"]);
-                $arr["is_active"] = ($arr["is_active"] == false) ? $curActive : true;
-                $arr["result"].='<li class="item ' . (($curActive) ? 'opened' : 'unopened' ) . '"><a href="' . $value["cate_link"] . '"> ' . $value["cate_name"] . '</a></li>';
-            }
-        }
-        return $arr;
-    }
-
-    public static function arrCateOutput1($array = array(), $level = 1, $idActive = 0, $cateID = array()) {
-        $arr = array("result" => "", "is_active" => false);
-        foreach ($array as $value) {
-            if (count($value["parent"]) > 0) {
-                $arrData = General::arrCateOutput1($value["parent"], $level + 1, $idActive, $cateID);
-                $curActive = (($idActive == $value["cate_id"]) ? true : $arrData["is_active"]);
-                $arr["is_active"] = ($arr["is_active"] == false) ? $curActive : true;
-                $arr["result"].= '<li class="item ' . (($curActive) ? 'opened' : 'unopened' ) . '"><a  href="' . $value["cate_link"] . '"> ' . $value["cate_name"] . '</a><ul class="item-sub level' . $level . '">' . $arrData["result"] . '</ul></li>';
-            } else {
-                if (in_array($value['cate_id'], $cateID)) {
-                    $curActive = (($idActive == $value["cate_id"]) ? true : $arrData["is_active"]);
-                    $arr["is_active"] = ($arr["is_active"] == false) ? $curActive : true;
-                    $arr["result"].='<li class="item ' . (($curActive) ? 'opened' : 'unopened' ) . '"><a href="' . $value["cate_link"] . '"> ' . $value["cate_name"] . '</a></li>';
-                }
-            }
-        }
-        return $arr;
+        return $arrData;
     }
 
 }
